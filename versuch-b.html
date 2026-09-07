@@ -82,27 +82,27 @@
   /* ---------------------------------------------------------------- Shader */
   var vsFaden =
     'attribute vec2 aPos;' +
-    'attribute vec2 aPar;' +            /* x = Helligkeit, y = Hitze */
+    'attribute vec3 aPar;' +            /* x = Helligkeit, y = Hitze */
     'uniform vec2 uRes;' +
     'uniform float uPunkt;' +
-    'varying float vA; varying float vH;' +
+    'varying float vA; varying float vH; varying float vAuf;' +
     'void main(){' +
     '  vec2 n = (aPos / uRes) * 2.0 - 1.0;' +
     '  gl_Position = vec4(n.x, -n.y, 0.0, 1.0);' +
     '  gl_PointSize = uPunkt;' +
-    '  vA = aPar.x; vH = aPar.y;' +
+    '  vA = aPar.x; vH = aPar.y; vAuf = aPar.z;' +
     '}';
 
   var fsFaden =
     'precision mediump float;' +
-    'varying float vA; varying float vH;' +
+    'varying float vA; varying float vH; varying float vAuf;' +
     'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
     'void main(){' +
     '  vec3 kalt = vec3(0.13, 0.42, 0.98);' +
     '  vec3 violett = vec3(0.58, 0.26, 0.98);' +
     '  vec3 gold = vec3(1.00, 0.74, 0.28);' +
     '  vec3 c = vH < 0.5 ? mix(kalt, violett, vH * 2.0) : mix(violett, gold, (vH - 0.5) * 2.0);' +
-    '  float a = vA * uStaerke * mix(1.0, vH, uHitzeTor);' +
+    '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
     '    a *= smoothstep(0.5, 0.0, d) * 0.55;' +
@@ -183,7 +183,7 @@
       qx = new Float32Array(N), qy = new Float32Array(N),
       vx = new Float32Array(N), vy = new Float32Array(N),
       hz = new Float32Array(N), lf = new Float32Array(N), lm = new Float32Array(N);
-  var daten = new Float32Array(N * 8);   /* 2 Ecken je Faden, je (x,y,a,h) */
+  var daten = new Float32Array(N * 10);  /* 2 Ecken je Faden, je (x,y,a,h,auf) */
 
   var W = 0, H = 0, dpr = 1;
 
@@ -193,6 +193,41 @@
       py[i] = qy[i] = rnd() * H;
       vx[i] = vy[i] = 0; hz[i] = 0;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
+    }
+  }
+
+  /* ---------------------------------------------------- Das Bild als Feld --
+     Was liegt, ist bisher totes Pigment. Hier bekommt es eine Wirkung: ein
+     grobes Dichteraster, das beim Auftragen mitgeschrieben wird. Daraus
+     folgen zwei Regeln — die Fäden fließen an vorhandenen Strähnen ENTLANG
+     statt quer darüber, und wo schon viel liegt, nimmt die Fläche weniger an.
+     Damit reagiert das System auf seinen eigenen bisherigen Zustand und nicht
+     nur auf die Hand. Das Raster ist grob und in Zellen gedacht; eine
+     Größenänderung des Fensters lässt es deshalb unangetastet. */
+  var GX = 80, GY = 60;
+  var dich = new Float32Array(GX * GY);
+  var dichG = new Float32Array(GX * GY);   /* geglättet, dafür stabile Gefälle */
+  var glaettZaehler = 0;
+
+  function dichteAbtasten(x, y) {
+    var u = x / W * GX - 0.5, v = y / H * GY - 0.5;
+    var i = Math.floor(u), j = Math.floor(v);
+    if (i < 1 || j < 1 || i >= GX - 2 || j >= GY - 2) return null;
+    var fu = u - i, fv = v - j, k = j * GX + i;
+    var d00 = dichG[k], d10 = dichG[k+1], d01 = dichG[k+GX], d11 = dichG[k+GX+1];
+    var d = (d00*(1-fu) + d10*fu)*(1-fv) + (d01*(1-fu) + d11*fu)*fv;
+    if (d < 0.004) return null;
+    return { d: d,
+             gx: (dichG[k+1] - dichG[k-1]) * 0.5,
+             gy: (dichG[k+GX] - dichG[k-GX]) * 0.5 };
+  }
+
+  function rasterGlaetten() {
+    for (var j = 1; j < GY - 1; j++) {
+      for (var i = 1; i < GX - 1; i++) {
+        var k = j * GX + i;
+        dichG[k] = (dich[k] * 4 + dich[k-1] + dich[k+1] + dich[k-GX] + dich[k+GX]) / 8;
+      }
     }
   }
 
@@ -454,8 +489,27 @@
         continue;
       }
 
-      var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib;
-      var nvy = (vy[i] + (ay - vy[i]) * 4.2 * dt) * reib;
+      var zaeh = 1;
+      if (0) {
+        var F = dichteAbtasten(x, y);
+        if (F) {
+          var gl2 = Math.sqrt(F.gx*F.gx + F.gy*F.gy);
+          if (gl2 > 1e-5) {
+            /* Entlang der Höhenlinie, nicht quer dazu: neue Züge flechten
+               sich in vorhandene ein, statt sie zu überfahren. Die Richtung
+               folgt dem, was der Faden ohnehin vorhat — sonst kämpfen Bild
+               und Wirbel gegeneinander. */
+            var tx = -F.gy / gl2, ty = F.gx / gl2;
+            if (tx * vx[i] + ty * vy[i] < 0) { tx = -tx; ty = -ty; }
+            var st = 520 * Math.min(1, F.d);
+            ax += tx * st; ay += ty * st;
+          }
+          zaeh = Math.exp(-2.5 * Math.min(1, F.d) * dt);   /* dicke Farbe bremst */
+        }
+      }
+
+      var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib * zaeh;
+      var nvy = (vy[i] + (ay - vy[i]) * 4.2 * dt) * reib * zaeh;
       vx[i] = nvx; vy[i] = nvy;
 
       qx[i] = x; qy[i] = y;
@@ -494,13 +548,29 @@
       if (alt2 < 0.6) a *= alt2 / 0.6;
       var tx = px[i] - sx * SCHWEIF, ty = py[i] - sy * SCHWEIF;
 
-      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i];
-      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;        daten[j++] = hz[i];
+      /* Wie viel Farbe nimmt die Fläche hier noch an? Wo schon viel liegt,
+         wenig — sonst läuft alles zu. Und was aufgetragen wird, wandert ins
+         Raster, damit es beim nächsten Zug lenkt. */
+      var auf = 1;
+      if (0 && schreibt) {
+        var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
+        if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
+          var gk = gv * GX + gu;
+          auf = 1 - Math.min(0.92, dich[gk] * 1.1);
+          if ((i & 7) === 0) {
+            dich[gk] += a * hz[i] * auf * 0.115;
+            if (dich[gk] > 1.6) dich[gk] = 1.6;
+          }
+        }
+      }
+
+      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i]; daten[j++] = auf;
+      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;   daten[j++] = hz[i]; daten[j++] = auf;
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
     gl.bufferData(gl.ARRAY_BUFFER, daten, gl.DYNAMIC_DRAW);
-    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 16, 0);
-    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 2, gl.FLOAT, false, 16, 8);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 20, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 3, gl.FLOAT, false, 20, 8);
   }
 
   function faedenZeichnen(staerke, punkt, tor) {
@@ -543,8 +613,8 @@
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
     gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
-    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 16, 0);
-    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 2, gl.FLOAT, false, 16, 8);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 20, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 3, gl.FLOAT, false, 20, 8);
     faedenZeichnen(0.55, 1.0, 0);  /* Fäden  */
     faedenZeichnen(0.22, 7.0, 0);  /* Glühen */
   }
@@ -558,6 +628,7 @@
     var n = 0;
     while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
+    if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();
     requestAnimationFrame(rahmen);
   }

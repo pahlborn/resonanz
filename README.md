@@ -8,13 +8,15 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch D — Das Bild lenkt**](https://pahlborn.github.io/resonanz/versuch-d.html) · die Fläche antwortet mit
 * [**Versuch C — Der Wirbel unter dem Finger**](https://pahlborn.github.io/resonanz/versuch-c.html) · die Spur ist das Bild
 * [**Versuch B — Normalzustand**](https://pahlborn.github.io/resonanz/versuch-b.html) · leicht und häufig
 * [**Versuch A — Höhepunkt**](https://pahlborn.github.io/resonanz/versuch-a.html) · selten und heftig
 
 Kreisen, nicht zeichnen — und dann dem Wirbel folgen, den man erzeugt hat.
 Bei C wird stattdessen gekringelt: Der Wirbel sitzt unter dem Finger und malt
-eine Spur, wohin man auch geht. Hört man auf zu kringeln, versiegt die Farbe.
+eine Spur, wohin man auch geht. Hört man auf zu kringeln, versiegt die Farbe. In D wirkt zusätzlich das schon
+Gemalte zurück.
 Zwei Finger kurz auftippen versucht Vollbild.
 
 Auf dem iPad: Adresse in Safari öffnen, dann **Teilen → Zum Home-Bildschirm**.

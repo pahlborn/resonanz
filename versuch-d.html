@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz A</title>
+<title>Resonanz D</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -25,13 +25,13 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-<p id="hinweis">Kreise mit dem Finger</p>
+<p id="hinweis">Kringle — und sieh, was das Bild damit macht</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch A (Höhepunkt — selten und heftig)
+     Resonanz — Versuch D (Das Bild lenkt — die Fläche antwortet mit)
 
      Zwei Schichten:
 
@@ -56,11 +56,11 @@
      ==================================================================== */
 
   var STIMMUNG = {
-    sigma:   1.8,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
-    stoerung:1.4,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
-    zerfall: 0.30, /* Grundzerfall, auch wenn man alles richtig macht */
-    aufbau:  1.3,  /* Wie schnell Treffer Energie sammeln           */
-    schwelle:0.34 /* Ab wann Farbe liegen bleibt                   */
+    sigma:   3.2,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
+    stoerung:0.7,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
+    zerfall: 0.14, /* Grundzerfall, auch wenn man alles richtig macht */
+    aufbau:  1.7,  /* Wie schnell Treffer Energie sammeln           */
+    schwelle:0.20 /* Ab wann Farbe liegen bleibt                   */
   };
 
   /* --- Deterministische Grundlage: fester Zeitschritt, gesäter Zufall.
@@ -355,17 +355,17 @@
       var ab = Math.exp(-6 * dt); hvx *= ab; hvy *= ab; drehrate *= ab;
     }
     if (unten) {
-      var g = Math.min(1, dt / 0.55);
+      var g = Math.min(1, dt / 0.6);
       m1x += (hx - m1x) * g; m1y += (hy - m1y) * g;
-      if (0 > 0) {
-        var g2 = Math.min(1, dt / 0);
+      if (0.6 > 0) {
+        var g2 = Math.min(1, dt / 0.6);
         mx += (m1x - mx) * g2; my += (m1y - my) * g2;
       } else { mx = m1x; my = m1y; }
     }
     if (unten && aktiverKern) {
       var K = aktiverKern;
       var omH, treiben, d;
-      if (0) {
+      if (1) {
         /* Der Wirbel sitzt unter dem Finger. Getaktet wird mit dem Kringeln —
            der Drehrate der eigenen Bewegungsrichtung. Damit braucht es keinen
            Mittelpunkt, den man umkreisen muss, und die Farbe ist dort, wo die
@@ -400,13 +400,13 @@
            eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
            weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
         if (K.s > K.fest) K.fest = K.s;
-        var folge = 1.4 * (1 - 0.94 * K.fest);
-        var zx = 0 ? hx : mx, zy = 0 ? hy : my;
+        var folge = 9.0;
+        var zx = 1 ? hx : mx, zy = 1 ? hy : my;
         K.x += (zx - K.x) * folge * dt;
         K.y += (zy - K.y) * folge * dt;
-        var rZiel = 0 ? 0.34 * Math.min(W, H)
-                  : Math.min(0.34 * Math.min(W, H), Math.max(90, d * 1.25));
-        K.r += (rZiel - K.r) * 0.25 * dt * (1 - 0.9 * K.fest);
+        var rZiel = 1 ? 0.13 * Math.min(W, H)
+                  : Math.min(0.13 * Math.min(W, H), Math.max(90, d * 1.25));
+        K.r += (rZiel - K.r) * 0.25 * dt * 1.0;
       } else {
         K.s -= STIMMUNG.zerfall * K.s * dt;
       }
@@ -490,7 +490,7 @@
       }
 
       var zaeh = 1;
-      if (0) {
+      if (1) {
         var F = dichteAbtasten(x, y);
         if (F) {
           var gl2 = Math.sqrt(F.gx*F.gx + F.gy*F.gy);
@@ -532,7 +532,7 @@
         if (K.s < 0.05) continue;
         var ex = px[i] - K.x, ey = py[i] - K.y;
         var d = Math.sqrt(ex*ex + ey*ey);
-        var nah = 1 - Math.min(1, d / (K.r * 2.2));
+        var nah = 1 - Math.min(1, d / (K.r * 1.35));
         var w = K.s * nah * nah;
         if (w > h) h = w;
       }
@@ -552,7 +552,7 @@
          wenig — sonst läuft alles zu. Und was aufgetragen wird, wandert ins
          Raster, damit es beim nächsten Zug lenkt. */
       var auf = 1;
-      if (0 && schreibt) {
+      if (1 && schreibt) {
         var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
         if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
           var gk = gv * GX + gu;
@@ -593,8 +593,8 @@
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
       gl.viewport(0, 0, BW, BH);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   /* deckend, nicht addierend */
-      faedenZeichnen(0.0400, 1.0, 1);
-      faedenZeichnen(0.0400 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
+      faedenZeichnen(0.1400, 1.0, 1);
+      faedenZeichnen(0.1400 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
       gl.blendFunc(gl.ONE, gl.ONE);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
@@ -628,7 +628,7 @@
     var n = 0;
     while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
-    if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
+    if (1 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();
     requestAnimationFrame(rahmen);
   }

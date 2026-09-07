@@ -284,6 +284,35 @@ nach der geraden Strecke    0.73  — die Farbe versiegt, ohne zu sterben
 Auf dem Bild stehen danach zwei gemalte Züge dort, wo gekringelt wurde, und
 die gerade Strecke dazwischen ist fast leer. Genau so soll es sein.
 
+### 13. Das Bild lenkt
+
+Mit C wurde die Bedienung praktikabel — es entstehen Bilder, die jemand
+gemacht hat. Was fehlte, sah man nicht: **Jeder Zug wusste nichts von den
+anderen.** Die Farbe, die schon lag, war totes Pigment; sie veränderte nichts.
+Damit war Resonanz ein hübscher Pinsel, kein Gegenüber — und genau das steht
+in der Vorgabe an drei Stellen: „Ein System mit Stimmung", §12 *Systemzustand
+statt Memory-Feature*, EPIC 07 *Kopplung & Rückkopplung*.
+
+**Versuch D** baut das, mit einem groben Dichteraster (80 × 60 Zellen), das
+beim Auftragen mitgeschrieben wird. Daraus folgen zwei Regeln:
+
+1. **Die Fäden fließen an vorhandenen Strähnen entlang**, nicht quer darüber —
+   die Kraft zeigt entlang der Höhenlinie des Rasters, in die Richtung, die
+   der Faden ohnehin verfolgt. Neue Züge flechten sich ein, statt zu überfahren.
+2. **Wo schon viel liegt, nimmt die Fläche weniger an.** Damit beantwortet
+   sich nebenbei die alte offene Frage, was passiert, wenn die Fläche voll ist:
+   Sie läuft nicht zu, sie sättigt und wehrt sich.
+
+Der erste Anlauf war wirkungslos, und die Messung hat es gezeigt: Das Raster
+erreichte nur eine Dichte von 0,147, die Lenkkraft lag damit bei 44 px/s gegen
+mehrere hundert aus dem Wirbel. Mit sechsfacher Aufnahme erreicht es 0,382 und
+rund 1 700 von 4 800 Zellen. Erst dann ist im Vergleichsbild zu sehen, was
+gemeint ist: Bei D laufen helle Fäden durch die Kreuzung zweier Züge hindurch,
+bei C wird dieselbe Stelle zum Brei.
+
+Das Raster ist in Zellen gedacht, nicht in Bildpunkten; eine Größenänderung
+des Fensters lässt es deshalb unangetastet.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -343,7 +372,7 @@ Eine Fläche. Sonst nichts.
 Ein Motor, sechs Zahlen Unterschied. Zwei getrennte Dateien statt eines
 Schalters, damit in der App keine Bedienoberfläche entsteht.
 
-| | **A — Höhepunkt** | **B — Normalzustand** | **C — Wandernder Wirbel** |
+| | **A — Höhepunkt** | **B — Normalzustand** | **C / D — unter dem Finger** |
 |---|---|---|---|
 | Taktfenster (σ) | 1,8 | 3,2 | 3,2 |
 | Störung bei Danebengreifen | 1,4 | 0,7 | 0,7 |
@@ -357,7 +386,9 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
 C hat dieselbe Stimmung wie B. Anders ist nur, wo der Wirbel sitzt und woran
-der Takt gemessen wird — damit der Vergleich etwas aussagt.
+der Takt gemessen wird. **D ist C mit genau einer Änderung: Das schon Gemalte
+wirkt zurück** — es lenkt die Fäden und begrenzt die Aufnahme. Eine Änderung je
+Fassung, damit der Vergleich etwas aussagt.
 
 ### Technisches
 

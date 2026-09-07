@@ -393,6 +393,47 @@ Drei Wege stehen offen, keiner ist entschieden:
 Der Tester hat den Punkt ausdrücklich zurückgestellt. Er ist hier
 festgehalten, damit er nicht verlorengeht.
 
+### 16. Die zweite Handschrift
+
+Einwand nach E: „Wir haben Kreisel. In der Vorgabe siehst du, dass das erst der
+Beginn ist. Es gibt Linien und begonnene Kreise, welche sich in andere
+Richtungen fortbewegen lassen. An Linien hängen Lichtpunkte, gleich mit
+Galaxien."
+
+Richtig — mit einer Bedingung, die dagegengehalten wurde: **Mehr Formen sind
+nicht dasselbe wie mehr Sprache.** Werden Linien, Bögen und Lichtpunkte einfach
+als weitere Dinge eingebaut, die das System ausspucken kann, wird Resonanz ein
+Formenkatalog, und genau dann zerfällt, was sie von jedem Partikelspielzeug
+unterscheidet. Jede neue Form muss von einer unterscheidbaren Bewegung
+**verdient** sein.
+
+Zwei Bewegungseigenschaften lagen brach und ergeben genau das Gewünschte:
+
+| Bewegung | Was daraus wird |
+|---|---|
+| gerichtet, wenig gekrümmt — der Zug, der bisher nichts tat | ein **Filament**: ein dünner, farbiger Strang statt eines Wirbels |
+| verweilen auf dieser Bahn | ein **Knoten**: ein weißglühender Lichtpunkt, der auf dem Strang sitzt |
+
+Aus der einzigen Bewegung, die bisher tot war, wird damit die zweite
+Handschrift. Filamentfäden bringen ihre eigene Hitze mit, behalten sie, und
+lassen sich vom Wirbelfeld und von der Hand kaum verbiegen — sonst zerfließt
+der Strang, kaum dass er liegt.
+
+Gemessen, drei Gesten nacheinander auf einer Fläche:
+
+```
+kringeln            Wirbel 1,00   Linienwert 0,24   Knoten 0   feste Fäden     0
+ziehen              Wirbel 0,00   Linienwert 0,37   Knoten 0   feste Fäden 2 213
+ziehen + anhalten   Wirbel 0,00   Linienwert 1,00   Knoten 1   feste Fäden 2 441
+```
+
+Die drei Gesten bleiben sauber getrennt: Beim Kringeln bleibt der Linienwert
+unter der Schwelle, beim Ziehen entsteht kein Wirbel. Beim ersten Anlauf waren
+die Stränge kreidig weiß und zu breit — Hitze von 0,55–0,95 auf 0,26–0,52
+gesenkt und die seitliche Streuung halbiert, damit der Strang Farbe hat und
+der Knoten allein weißglüht. Erst dadurch entsteht eine Rangfolge statt einer
+Fläche.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -465,6 +506,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+F ist E plus die zweite Handschrift (Ziehen macht Linien, Anhalten Knoten).
 E ist D plus zwei Stimmen (Drehrichtung färbt, Schleifengröße malt).
 C hat dieselbe Stimmung wie B. Anders ist nur, wo der Wirbel sitzt und woran
 der Takt gemessen wird. **D ist C mit genau einer Änderung: Das schon Gemalte

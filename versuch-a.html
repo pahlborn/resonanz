@@ -183,7 +183,7 @@
       qx = new Float32Array(N), qy = new Float32Array(N),
       vx = new Float32Array(N), vy = new Float32Array(N),
       hz = new Float32Array(N), lf = new Float32Array(N), lm = new Float32Array(N),
-      tn = new Float32Array(N);
+      tn = new Float32Array(N), fest = new Uint8Array(N);
   var daten = new Float32Array(N * 12);  /* 2 Ecken je Faden, je (x,y,a,h,auf,ton) */
 
   var W = 0, H = 0, dpr = 1;
@@ -192,7 +192,7 @@
     for (var i = 0; i < N; i++) {
       px[i] = qx[i] = rnd() * W;
       py[i] = qy[i] = rnd() * H;
-      vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0;
+      vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
     }
   }
@@ -354,6 +354,56 @@
   var hinweis = document.getElementById('hinweis'), versteckt = false;
   function verstecken(){ if(!versteckt){versteckt=true;hinweis.style.opacity='0';} }
 
+  /* --------------------------------------------------- Filament und Knoten --
+     Der gerichtete, wenig gekrümmte Zug tat bisher nichts. Er ist die zweite
+     Handschrift: Ein dünner Strang aus Fäden legt sich entlang der Bahn und
+     lässt sich vom Wirbelfeld kaum verbiegen. Wer auf dieser Bahn verweilt,
+     setzt einen Knoten — einen Lichtpunkt, der auf dem Strang sitzt.
+     Beides ist verdient, nicht geschenkt: gerade heißt gerade, und Verweilen
+     heißt wirklich anhalten. */
+  var spawnZeiger = 0, knotenLadung = 0, letzteHX = 0, letzteHY = 0;
+  var linienWert = 0, knotenAktiv = 0;
+
+  function setzen(x, y, gx, gy, hitze, dauer) {
+    var i = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
+    px[i] = x; py[i] = y; vx[i] = gx; vy[i] = gy;
+    hz[i] = hitze; tn[i] = aktiverKern ? aktiverKern.ton : 0.5;
+    fest[i] = 1; lm[i] = dauer; lf[i] = dauer;
+  }
+
+  function filamente(dt) {
+    if (!unten) { knotenLadung = 0; linienWert = 0; knotenAktiv = 0;
+                  letzteHX = hx; letzteHY = hy; return; }
+
+    var tempoH = Math.sqrt(hvx*hvx + hvy*hvy);
+    var gerade = 1 - Math.min(1, Math.abs(drehrate) / 1.7);
+    var bewegt = Math.min(1, tempoH / 190);
+    linienWert = gerade * bewegt;
+
+    if (linienWert > 0.34) {
+      var n = Math.round(30 * linienWert);
+      for (var k = 0; k < n; k++) {
+        var u = k / n;
+        var sx = letzteHX + (hx - letzteHX) * u + (rnd() - 0.5) * 3.5;
+        var sy = letzteHY + (hy - letzteHY) * u + (rnd() - 0.5) * 3.5;
+        setzen(sx, sy, hvx * (0.90 + 0.14 * rnd()), hvy * (0.90 + 0.14 * rnd()),
+               0.26 + 0.26 * linienWert, 1.3 + 0.7 * rnd());
+      }
+    }
+
+    /* Verweilen: wirklich anhalten, nicht nur langsamer werden. */
+    if (tempoH < 55 && gerade > 0.3) knotenLadung += dt; else knotenLadung = 0;
+    knotenAktiv = knotenLadung > 0.14 ? 1 : 0;
+    if (knotenAktiv) {
+      for (var m = 0; m < 16; m++) {
+        var w = rnd() * 6.2832, rr = 3 + 15 * Math.sqrt(rnd());
+        setzen(hx + Math.cos(w) * rr, hy + Math.sin(w) * rr,
+               Math.cos(w) * 9, Math.sin(w) * 9, 0.94, 1.6 + 0.8 * rnd());
+      }
+    }
+    letzteHX = hx; letzteHY = hy;
+  }
+
   /* ------------------------------------------------------------- Mechanik */
   var schreibt = 0;
 
@@ -441,7 +491,7 @@
       }
       if (Q.s > maxS) maxS = Q.s;
     }
-    schreibt = maxS > STIMMUNG.schwelle ? 1 : 0;
+    schreibt = (maxS > STIMMUNG.schwelle || (0 && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
   }
 
   function mediumRechnen(dt) {
@@ -452,6 +502,7 @@
     for (var i = 0; i < N; i++) {
       lf[i] -= dt;
       if (lf[i] <= 0) {
+        fest[i] = 0;
         if (rnd() < 0.34) {
           var j = (rnd() * N) | 0;
           px[i] = px[j] + (rnd() - 0.5) * 26; py[i] = py[j] + (rnd() - 0.5) * 26;
@@ -484,7 +535,7 @@
 
       /* Die Hand schiebt immer, unabhängig von jeder Resonanz. Das ist die
          Rückmeldung, die dem ersten Prüfstück gefehlt hat. */
-      if (unten) {
+      if (unten && !fest[i]) {
         var dx = x - hx, dy = y - hy;
         var dd = dx*dx + dy*dy;
         if (dd < 22500) {
@@ -504,6 +555,8 @@
         lf[i] = lm[i];
         continue;
       }
+
+      if (fest[i]) { ax *= 0.14; ay *= 0.14; }
 
       var zaeh = 1;
       if (0) {
@@ -543,6 +596,8 @@
     for (var i = 0; i < N; i++) {
       /* Hitze: nah an einem starken Kern wird es hell. */
       var h = 0, tonZiel = -1;
+      if (fest[i]) { h = hz[i]; }
+      else
       for (var c = 0; c < kerne.length; c++) {
         var K = kerne[c];
         if (K.s < 0.05) continue;
@@ -552,7 +607,7 @@
         var w = K.s * nah * nah;
         if (w > h) { h = w; tonZiel = K.ton; }
       }
-      hz[i] += (h - hz[i]) * 0.16;
+      if (!fest[i]) hz[i] += (h - hz[i]) * 0.16;
       if (tonZiel >= 0) tn[i] += (tonZiel - tn[i]) * 0.10;
 
       var sx = vx[i], sy = vy[i];
@@ -643,7 +698,7 @@
     letzterRahmen = t;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); mediumRechnen(DT); rest -= DT; n++; }
+    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
     if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();

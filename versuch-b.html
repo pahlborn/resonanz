@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Resonanz B</title>
+<style>
+  :root{ --grund:#05070C; }
+  html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
+  html{overflow:hidden;overscroll-behavior:none;touch-action:none;}
+  body{position:fixed;inset:0;overflow:hidden;overscroll-behavior:none;touch-action:none;}
+  canvas{
+    position:fixed; inset:0; width:100%; height:100%; display:block;
+    background:var(--grund); touch-action:none;
+    -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  #hinweis{
+    position:fixed; left:0; right:0; bottom:max(22px, env(safe-area-inset-bottom));
+    text-align:center; pointer-events:none;
+    font:400 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing:.22em; text-transform:uppercase; color:#4B5A72;
+    transition:opacity 1.2s ease;
+  }
+</style>
+</head>
+<body>
+<canvas id="feld"></canvas>
+<p id="hinweis">Kreise mit dem Finger</p>
+<script>
+(function () {
+  'use strict';
+
+  /* ======================================================================
+     Resonanz — Versuch B (Normalzustand — leicht und häufig)
+
+     Zwei Schichten:
+
+       MEDIUM        Vierzehntausend Fäden, die immer antworten. Wer die
+                     Fläche berührt, schiebt sie — ausnahmslos, sofort.
+                     Sie leuchten nach ihrer Geschwindigkeit und sind in
+                     Ruhe unsichtbar.
+
+       NIEDERSCHLAG  Was liegen bleibt. Geschrieben wird nur, solange der
+                     Wirbel in Resonanz ist. Danebengegriffenes wirbelt
+                     sichtbar und verschwindet spurlos.
+
+     Die Selektivität sitzt nicht zwischen Nichts und Etwas, sondern
+     zwischen zwei Antworten: Der Wirbel sammelt sich oder er zerfällt.
+     Beides ist zu sehen, nur eines schreibt.
+
+     Das Vorbild ist die Schaukel. Man kann sie nicht in beliebigem Takt
+     anschieben — man schiebt im Takt oder man bremst sie. Der Takt ist
+     dabei nicht versteckt: Er ist die Drehzahl des Wirbels, den man selbst
+     erzeugt hat, und die sieht man. Solange wenig Energie da ist, nimmt der
+     Kern fast jeden Takt an; mit wachsender Energie wird er wählerisch.
+     ==================================================================== */
+
+  var STIMMUNG = {
+    sigma:   3.2,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
+    stoerung:0.7,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
+    zerfall: 0.14, /* Grundzerfall, auch wenn man alles richtig macht */
+    aufbau:  1.7,  /* Wie schnell Treffer Energie sammeln           */
+    schwelle:0.20 /* Ab wann Farbe liegen bleibt                   */
+  };
+
+  /* --- Deterministische Grundlage: fester Zeitschritt, gesäter Zufall.
+         Kostet jetzt nichts und wäre später kaum nachzurüsten. ---------- */
+  var SEED = (Math.random() * 4294967296) >>> 0;
+  function mulberry32(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};}
+  var rnd = mulberry32(SEED);
+  var DT = 1/120, MAX_SUB = 4;
+
+  var N = 14000;            /* Fäden */
+  var SCHWEIF = 0.125;      /* Länge des Schweifs in Sekunden Bewegung */
+  var KERNE_MAX = 3;
+
+  var cv = document.getElementById('feld');
+  var gl = cv.getContext('webgl2', { alpha:false, antialias:false, premultipliedAlpha:false, preserveDrawingBuffer:false })
+        || cv.getContext('webgl',  { alpha:false, antialias:false, premultipliedAlpha:false, preserveDrawingBuffer:false });
+  if (!gl) { document.getElementById('hinweis').textContent = 'WebGL fehlt'; return; }
+
+  /* ---------------------------------------------------------------- Shader */
+  var vsFaden =
+    'attribute vec2 aPos;' +
+    'attribute vec2 aPar;' +            /* x = Helligkeit, y = Hitze */
+    'uniform vec2 uRes;' +
+    'uniform float uPunkt;' +
+    'varying float vA; varying float vH;' +
+    'void main(){' +
+    '  vec2 n = (aPos / uRes) * 2.0 - 1.0;' +
+    '  gl_Position = vec4(n.x, -n.y, 0.0, 1.0);' +
+    '  gl_PointSize = uPunkt;' +
+    '  vA = aPar.x; vH = aPar.y;' +
+    '}';
+
+  var fsFaden =
+    'precision mediump float;' +
+    'varying float vA; varying float vH;' +
+    'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
+    'void main(){' +
+    '  vec3 kalt = vec3(0.13, 0.42, 0.98);' +
+    '  vec3 violett = vec3(0.58, 0.26, 0.98);' +
+    '  vec3 gold = vec3(1.00, 0.74, 0.28);' +
+    '  vec3 c = vH < 0.5 ? mix(kalt, violett, vH * 2.0) : mix(violett, gold, (vH - 0.5) * 2.0);' +
+    '  float a = vA * uStaerke * mix(1.0, vH, uHitzeTor);' +
+    '  if (uPunktModus > 0.5) {' +
+    '    float d = length(gl_PointCoord - vec2(0.5));' +
+    '    a *= smoothstep(0.5, 0.0, d) * 0.55;' +
+    '  }' +
+    '  gl_FragColor = vec4(c * a, a);' +
+    '}';
+
+  var vsQuad =
+    'attribute vec2 aXY; varying vec2 vUV;' +
+    'void main(){ vUV = aXY * 0.5 + 0.5; gl_Position = vec4(aXY, 0.0, 1.0); }';
+  var fsQuad =
+    'precision mediump float; varying vec2 vUV; uniform sampler2D uTex;' +
+    'void main(){ gl_FragColor = texture2D(uTex, vUV); }';
+
+  function shader(typ, quelle) {
+    var s = gl.createShader(typ); gl.shaderSource(s, quelle); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  function programm(vs, fs) {
+    var p = gl.createProgram();
+    gl.attachShader(p, shader(gl.VERTEX_SHADER, vs));
+    gl.attachShader(p, shader(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+    return p;
+  }
+
+  var pFaden = programm(vsFaden, fsFaden), pQuad = programm(vsQuad, fsQuad);
+  var lPos = gl.getAttribLocation(pFaden, 'aPos'), lPar = gl.getAttribLocation(pFaden, 'aPar');
+  var uRes = gl.getUniformLocation(pFaden, 'uRes'),
+      uPunkt = gl.getUniformLocation(pFaden, 'uPunkt'),
+      uStaerke = gl.getUniformLocation(pFaden, 'uStaerke'),
+      uPunktModus = gl.getUniformLocation(pFaden, 'uPunktModus'),
+      uHitzeTor = gl.getUniformLocation(pFaden, 'uHitzeTor');
+  var lXY = gl.getAttribLocation(pQuad, 'aXY'), uTex = gl.getUniformLocation(pQuad, 'uTex');
+
+  var vboFaden = gl.createBuffer();
+  var vboQuad = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+
+  /* ------------------------------------------------------ Niederschlag-FBO */
+  var fbo = null, tex = null, BW = 0, BH = 0;
+  function fboBauen(w, h, erhalten) {
+    var altTex = tex, altFbo = fbo;
+    tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    fbo = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+
+    /* Beim Drehen des iPads wird der Puffer neu angelegt. Das Bild soll das
+       überleben — es ist das Werk, nicht ein Zwischenstand. */
+    if (erhalten && altTex) {
+      gl.viewport(0, 0, w, h);
+      gl.disable(gl.BLEND);
+      gl.useProgram(pQuad);
+      gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
+      gl.enableVertexAttribArray(lXY); gl.vertexAttribPointer(lXY, 2, gl.FLOAT, false, 0, 0);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, altTex);
+      gl.uniform1i(uTex, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    if (altTex) { gl.deleteTexture(altTex); gl.deleteFramebuffer(altFbo); }
+    BW = w; BH = h;
+  }
+
+  /* ------------------------------------------------------------- Das Medium */
+  var px = new Float32Array(N), py = new Float32Array(N),
+      qx = new Float32Array(N), qy = new Float32Array(N),
+      vx = new Float32Array(N), vy = new Float32Array(N),
+      hz = new Float32Array(N), lf = new Float32Array(N), lm = new Float32Array(N);
+  var daten = new Float32Array(N * 8);   /* 2 Ecken je Faden, je (x,y,a,h) */
+
+  var W = 0, H = 0, dpr = 1;
+
+  function saeen() {
+    for (var i = 0; i < N; i++) {
+      px[i] = qx[i] = rnd() * W;
+      py[i] = qy[i] = rnd() * H;
+      vx[i] = vy[i] = 0; hz[i] = 0;
+      lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
+    }
+  }
+
+  /* -------------------------------------------------------------- Die Kerne */
+  function Kern() { this.x=0; this.y=0; this.om=0; this.s=0; this.r=170; this.fest=0; }
+  var kerne = []; for (var k = 0; k < KERNE_MAX; k++) kerne.push(new Kern());
+
+  function kernWaehlen(x, y) {
+    var beste = null, dist = 1e9;
+    for (var i = 0; i < kerne.length; i++) {
+      var K = kerne[i];
+      if (K.s < 0.02) continue;
+      var d = Math.hypot(K.x - x, K.y - y);
+      if (d < dist) { dist = d; beste = K; }
+    }
+    if (beste && dist < 260) return beste;
+    for (var j = 0; j < kerne.length; j++) if (kerne[j].s < 0.02) {
+      var N2 = kerne[j];
+      N2.x = x; N2.y = y; N2.om = 0; N2.s = 0.001; N2.fest = 0;
+      return N2;
+    }
+    var schwach = kerne[0];
+    for (var m = 1; m < kerne.length; m++) if (kerne[m].s < schwach.s) schwach = kerne[m];
+    schwach.x = x; schwach.y = y; schwach.om = 0; schwach.s = 0.001; schwach.fest = 0;
+    return schwach;
+  }
+
+  /* -------------------------------------------------------------- Eingabe */
+  var unten = false, hx = 0, hy = 0, hvx = 0, hvy = 0, letzteZeit = 0, druck = 1;
+  var mx = 0, my = 0;   /* Mitte der Bewegung, geglättet */
+  var aktiverKern = null, aktive = 0;
+
+  function anfassen(e) {
+    aktive++;
+    if (aktive === 2) zweiZeit2 = performance.now();
+    if (aktive > 1) { e.preventDefault(); return; }
+    unten = true; hx = e.clientX; hy = e.clientY; hvx = hvy = 0;
+    mx = hx; my = hy;
+    letzteZeit = performance.now();
+    aktiverKern = kernWaehlen(hx, hy);
+    verstecken();
+    e.preventDefault();
+  }
+  function bewegen(e) {
+    if (!unten || aktive > 1) { e.preventDefault(); return; }
+    var pkte = (e.getCoalescedEvents && e.getCoalescedEvents()) || [e];
+    for (var i = 0; i < pkte.length; i++) {
+      var t = performance.now();
+      var dt = (t - letzteZeit) / 1000;
+      if (dt <= 0.0008) continue;
+      if (dt > 0.05) dt = 0.05;
+      letzteZeit = t;
+      var nx = pkte[i].clientX, ny = pkte[i].clientY;
+      var ivx = (nx - hx) / dt, ivy = (ny - hy) / dt;
+      hvx += (ivx - hvx) * 0.4; hvy += (ivy - hvy) * 0.4;
+      hx = nx; hy = ny;
+    }
+    /* Druck ist Zugabe, nie Voraussetzung — ein Finger liefert auf dem iPad
+       keine Kraft, nur der Pencil. */
+    druck = (e.pointerType === 'pen' && e.pressure > 0) ? (0.7 + 0.6 * e.pressure) : 1;
+    e.preventDefault();
+  }
+  function vollbild() {
+    try {
+      var d = document, el = d.documentElement;
+      if (d.fullscreenElement || d.webkitFullscreenElement) {
+        (d.exitFullscreen || d.webkitExitFullscreen || function(){}).call(d);
+      } else {
+        (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+      }
+    } catch (x) { /* im Rahmen oft nicht erlaubt - dann eben nicht */ }
+  }
+
+  var zweiZeit2 = 0;
+  function loslassen(e) {
+    if (aktive === 2 && performance.now() - zweiZeit2 < 600) vollbild();
+    aktive = Math.max(0, aktive - 1);
+    if (aktive === 0) { unten = false; hvx = hvy = 0; aktiverKern = null; }
+    e.preventDefault();
+  }
+  cv.addEventListener('pointerdown', anfassen, {passive:false});
+  cv.addEventListener('pointermove', bewegen, {passive:false});
+  cv.addEventListener('pointerup', loslassen, {passive:false});
+  cv.addEventListener('pointercancel', loslassen, {passive:false});
+  document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+  /* Ohne das rutscht auf dem iPad die Seite unter dem Finger weg, statt dass
+     der Finger das Feld anregt — besonders innerhalb eines eingebetteten
+     Rahmens. Der Zug muss hier verbraucht werden. */
+  document.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive:false });
+
+  var hinweis = document.getElementById('hinweis'), versteckt = false;
+  function verstecken(){ if(!versteckt){versteckt=true;hinweis.style.opacity='0';} }
+
+  /* ------------------------------------------------------------- Mechanik */
+  var schreibt = 0;
+
+  function kerneRechnen(dt) {
+    if (unten) { var g = Math.min(1, dt / 0.55); mx += (hx - mx) * g; my += (hy - my) * g; }
+    if (unten && aktiverKern) {
+      var K = aktiverKern;
+      var rx = hx - K.x, ry = hy - K.y;
+      var d = Math.sqrt(rx*rx + ry*ry);
+      if (d > 14 && d < 420) {
+        /* Winkelgeschwindigkeit der Hand um den Kern */
+        var omH = (hvx * (-ry / d) + hvy * (rx / d)) / d;
+
+        /* Übereinstimmung mit dem Takt, den der Wirbel schon hat. Solange
+           wenig Energie da ist, nimmt er fast jeden Takt an — der erste
+           Kreis setzt das Tempo. Mit wachsender Energie wird er wählerisch. */
+        var delta = omH - K.om;
+        var breite = STIMMUNG.sigma * (1.0 + 2.6 * Math.exp(-6.0 * K.s));
+        var treffer = Math.exp(-(delta * delta) / (2 * breite * breite));
+
+        K.om += (omH - K.om) * Math.min(1, 7.0 * treffer * dt);
+        if (K.om > 22) K.om = 22; if (K.om < -22) K.om = -22;
+
+        var antrieb = Math.min(Math.abs(omH), 12) * 0.12 * druck;
+        K.s += (STIMMUNG.aufbau * treffer * antrieb
+              - STIMMUNG.stoerung * (1 - treffer) * K.s
+              - STIMMUNG.zerfall * K.s) * dt;
+
+        /* Der Kern zieht zur Mitte der Bewegung, nicht zur Hand — sonst
+           eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
+           weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
+        if (K.s > K.fest) K.fest = K.s;
+        var folge = 1.4 * (1 - 0.94 * K.fest);
+        K.x += (mx - K.x) * folge * dt;
+        K.y += (my - K.y) * folge * dt;
+        K.r += (Math.min(0.34 * Math.min(W, H), Math.max(90, d * 1.25)) - K.r)
+             * 0.25 * dt * (1 - 0.9 * K.fest);
+      } else {
+        K.s -= STIMMUNG.zerfall * K.s * dt;
+      }
+      if (K.s > 1) K.s = 1;
+    }
+
+    var maxS = 0;
+    for (var i = 0; i < kerne.length; i++) {
+      var Q = kerne[i];
+      if (Q !== aktiverKern || !unten) {
+        /* Nachhall: der Wirbel läuft weiter und klingt ab. Er beginnt nie
+           von selbst etwas Neues — ohne Anregung geht alles zur Ruhe. */
+        Q.s -= (STIMMUNG.zerfall * 1.25) * Q.s * dt;
+        Q.om *= (1 - 0.16 * dt);
+        if (Q.s < 0.0008) { Q.s = 0; Q.fest = 0; }
+      }
+      if (Q.s > maxS) maxS = Q.s;
+    }
+    schreibt = maxS > STIMMUNG.schwelle ? 1 : 0;
+  }
+
+  function mediumRechnen(dt) {
+    var reib = Math.exp(-0.85 * dt);
+    var schub = 0.26;
+    var zug = 2.2;   /* wie stark das Wirbelfeld die Fäden mitnimmt */
+
+    for (var i = 0; i < N; i++) {
+      lf[i] -= dt;
+      if (lf[i] <= 0) {
+        if (rnd() < 0.34) {
+          var j = (rnd() * N) | 0;
+          px[i] = px[j] + (rnd() - 0.5) * 26; py[i] = py[j] + (rnd() - 0.5) * 26;
+          vx[i] = vx[j] * 0.8; vy[i] = vy[j] * 0.8; hz[i] = hz[j];
+        } else {
+          px[i] = rnd() * W; py[i] = rnd() * H;
+          vx[i] = 0; vy[i] = 0; hz[i] = 0;
+        }
+        lm[i] = 2.6 + rnd() * 3.6; lf[i] = lm[i];
+      }
+      var x = px[i], y = py[i];
+      var ax = 0, ay = 0, nah = -1;
+
+      for (var c = 0; c < kerne.length; c++) {
+        var K = kerne[c];
+        if (K.s < 0.01) continue;
+        var rx = x - K.x, ry = y - K.y;
+        var d2 = rx*rx + ry*ry;
+        if (d2 > 640000) continue;             /* 800 px Reichweite */
+        var d = Math.sqrt(d2) + 0.001;
+        /* Differentielle Rotation: die Winkelgeschwindigkeit fällt nach
+           außen ab. Genau daraus wickeln sich die Arme auf — ein starrer
+           Wirbel dreht nur, er zeichnet nichts. */
+        var om = K.om * K.r * K.r / (d2 + K.r * K.r);
+        var vt = om * d * K.s * zug;
+        ax += (-ry / d) * vt - (rx / d) * vt * 0.09;   /* Tangential + wenig Sog */
+        ay += ( rx / d) * vt - (ry / d) * vt * 0.09;
+        if (d < 7 && K.s > 0.05) { nah = c; }
+      }
+
+      /* Die Hand schiebt immer, unabhängig von jeder Resonanz. Das ist die
+         Rückmeldung, die dem ersten Prüfstück gefehlt hat. */
+      if (unten) {
+        var dx = x - hx, dy = y - hy;
+        var dd = dx*dx + dy*dy;
+        if (dd < 22500) {
+          var f = (1 - dd / 22500) * schub;
+          ax += hvx * f; ay += hvy * f;
+        }
+      }
+
+      if (nah >= 0) {
+        /* Im Kern verschluckt: aussen wieder aussetzen. So entsteht ein
+           dauernder Strom hinein statt eines leergefegten Lochs. */
+        var K2 = kerne[nah];
+        var w = rnd() * 6.2832, rr = K2.r * (1.4 + 1.6 * rnd());
+        px[i] = K2.x + Math.cos(w) * rr; py[i] = K2.y + Math.sin(w) * rr;
+        var vt0 = K2.om * K2.r * 0.55 * K2.s;
+        vx[i] = -Math.sin(w) * vt0; vy[i] = Math.cos(w) * vt0; hz[i] = 0;
+        lf[i] = lm[i];
+        continue;
+      }
+
+      var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib;
+      var nvy = (vy[i] + (ay - vy[i]) * 4.2 * dt) * reib;
+      vx[i] = nvx; vy[i] = nvy;
+
+      qx[i] = x; qy[i] = y;
+      x += nvx * dt; y += nvy * dt;
+
+      if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
+      if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
+      px[i] = x; py[i] = y;
+    }
+  }
+
+  /* ---------------------------------------------------------- Darstellung */
+  function puffern() {
+    var j = 0;
+    for (var i = 0; i < N; i++) {
+      /* Hitze: nah an einem starken Kern wird aus Kalt Gold. */
+      var h = 0;
+      for (var c = 0; c < kerne.length; c++) {
+        var K = kerne[c];
+        if (K.s < 0.05) continue;
+        var ex = px[i] - K.x, ey = py[i] - K.y;
+        var d = Math.sqrt(ex*ex + ey*ey);
+        var nah = 1 - Math.min(1, d / (K.r * 2.2));
+        var w = K.s * nah * nah;
+        if (w > h) h = w;
+      }
+      hz[i] += (h - hz[i]) * 0.16;
+
+      var sx = vx[i], sy = vy[i];
+      var tempo = Math.sqrt(sx*sx + sy*sy);
+      var a = tempo / 380; if (a > 1) a = 1;
+      a = a * a * (3 - 2 * a);
+      a += hz[i] * 0.85; if (a > 1) a = 1;
+      var rest = lf[i], alt2 = lm[i] - lf[i];
+      if (rest < 0.6) a *= rest / 0.6;
+      if (alt2 < 0.6) a *= alt2 / 0.6;
+      var tx = px[i] - sx * SCHWEIF, ty = py[i] - sy * SCHWEIF;
+
+      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i];
+      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;        daten[j++] = hz[i];
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
+    gl.bufferData(gl.ARRAY_BUFFER, daten, gl.DYNAMIC_DRAW);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 16, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 2, gl.FLOAT, false, 16, 8);
+  }
+
+  function faedenZeichnen(staerke, punkt, tor) {
+    gl.useProgram(pFaden);
+    gl.uniform2f(uRes, BW, BH);
+    gl.uniform1f(uStaerke, staerke);
+    gl.uniform1f(uPunkt, punkt);
+    gl.uniform1f(uPunktModus, punkt > 1.5 ? 1 : 0);
+    gl.uniform1f(uHitzeTor, tor || 0);
+    gl.drawArrays(punkt > 1.5 ? gl.POINTS : gl.LINES, 0, N * 2);
+  }
+
+  function zeichnen() {
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE);            /* additiv, Farbe ist vormultipliziert */
+    puffern();
+
+    /* 1) Niederschlag: nur solange der Wirbel in Resonanz ist. */
+    if (schreibt) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+      gl.viewport(0, 0, BW, BH);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   /* deckend, nicht addierend */
+      faedenZeichnen(0.0260, 1.0, 1);
+      faedenZeichnen(0.0260 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
+      gl.blendFunc(gl.ONE, gl.ONE);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
+
+    /* 2) Bildschirm: erst das Liegengebliebene, dann das Lebendige. */
+    gl.viewport(0, 0, BW, BH);
+    gl.disable(gl.BLEND);
+    gl.clearColor(0.020, 0.027, 0.047, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(pQuad);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
+    gl.enableVertexAttribArray(lXY); gl.vertexAttribPointer(lXY, 2, gl.FLOAT, false, 0, 0);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.uniform1i(uTex, 0);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 16, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 2, gl.FLOAT, false, 16, 8);
+    faedenZeichnen(0.55, 1.0, 0);  /* Fäden  */
+    faedenZeichnen(0.22, 7.0, 0);  /* Glühen */
+  }
+
+  /* -------------------------------------------------------------- Schleife */
+  var letzterRahmen = performance.now(), rest = 0;
+  function rahmen(t) {
+    var dt = Math.min(0.05, (t - letzterRahmen) / 1000);
+    letzterRahmen = t;
+    rest += dt;
+    var n = 0;
+    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); mediumRechnen(DT); rest -= DT; n++; }
+    if (n === MAX_SUB) rest = 0;
+    zeichnen();
+    requestAnimationFrame(rahmen);
+  }
+
+  function messen() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = cv.clientWidth, h = cv.clientHeight;
+    if (w === W && h === H) return false;
+    W = w; H = h;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    return true;
+  }
+
+  /* Gerechnet wird durchgehend in CSS-Punkten; erst beim Puffern wird auf
+     Gerätepunkte skaliert. Sonst müsste jede Konstante zweimal stimmen. */
+  function aufbauen(erhalten) {
+    messen();
+    fboBauen(cv.width, cv.height, erhalten);
+    saeen();
+  }
+  aufbauen(false);
+
+  window.addEventListener('resize', function () {
+    if (cv.clientWidth === W && cv.clientHeight === H) return;
+    aufbauen(true);
+  });
+
+  requestAnimationFrame(rahmen);
+})();
+</script>
+</body>
+</html>

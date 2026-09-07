@@ -361,6 +361,38 @@ Drehrichtung. Bei vier Zügen nebeneinander scheiterten dadurch zwei. In E ist
 die Übernahme auf 120 px eingeengt; A bis D behalten die alte Fassung, damit
 der Vergleich sauber bleibt.
 
+### 15. Der Befund, der eine frühere Entscheidung umstößt
+
+Nach E, unaufgefordert: „Ich kann es noch nicht fassen, momentan überwiegt das
+Erlebnis in der Bewegung. Was bleibt gefällt mir gar nicht, was aber aktuell
+noch nicht so wichtig ist."
+
+Das steht quer zu der Festlegung aus Abschnitt 8, die den ganzen Niederschlag
+begründet hat: „Es bleibt liegen. Es ist ein Bild, welches entsteht und bleiben
+soll." Beides sind ehrliche Befunde desselben Testers, nur zu verschiedenen
+Zeitpunkten — der zweite nach dem ersten Mal, dass die Bewegung wirklich
+funktioniert hat.
+
+Die wahrscheinliche Ursache ist ein Konstruktionsfehler, den bisher niemand
+benannt hat: **Der Niederschlag ist kein eigenes Ding, sondern ein Abbild des
+Mediums.** Es sind dieselben Fäden, nur mit geringer Deckkraft aufgetragen.
+Alles, was die lebende Schicht trägt — Bewegung, Vergänglichkeit, der Schweif,
+den es nur für 0,12 Sekunden gibt — ist genau das, was ein Standbild nicht
+tragen kann. Der Niederschlag erbt die Erscheinung, aber nicht die Eigenschaft,
+die sie wirken ließ. Eine Langzeitbelichtung von Feuerwerk ist kein Feuerwerk.
+
+Drei Wege stehen offen, keiner ist entschieden:
+
+1. **Es bleibt nichts.** Resonanz ist ein Erlebnis in der Zeit; was aufbewahrt
+   wird, ist eine Wiedergabe, kein Bild.
+2. **Der Niederschlag bekommt eine eigene Sprache** — nicht Fäden bei niedriger
+   Deckkraft, sondern etwas, das nur beim Verweilen entsteht und im Stehen
+   funktioniert: Flächen, Grate, Kanten statt Streifen.
+3. **Nichts ändern**, solange die Bewegung selbst trägt.
+
+Der Tester hat den Punkt ausdrücklich zurückgestellt. Er ist hier
+festgehalten, damit er nicht verlorengeht.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -473,6 +505,9 @@ Diese Punkte sind geklärt und stehen nicht mehr zur Debatte:
    unterschiedliche Fassungen, keine Regler.
 
 ## Teil IV — Offene Fragen
+
+**Trägt das Bleibende überhaupt?** Siehe Abschnitt 15 — der bisher wichtigste
+unentschiedene Punkt.
 
 **Was passiert, wenn die Fläche voll ist?** Bei deckender Farbe malt man
 weiter und übermalt. Dann ist das Bild nach zwanzig Minuten das, was zuletzt

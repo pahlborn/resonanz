@@ -223,12 +223,16 @@
   /* -------------------------------------------------------------- Eingabe */
   var unten = false, hx = 0, hy = 0, hvx = 0, hvy = 0, letzteZeit = 0, druck = 1;
   var mx = 0, my = 0, m1x = 0, m1y = 0;   /* Mitte der Bewegung, geglättet */
-  var aktiverKern = null, aktive = 0;
+  var aktiverKern = null;
+  var zeigerId = null;              /* der führende Finger */
+  var offen = 0;                    /* wie viele Finger liegen */
 
   function anfassen(e) {
-    aktive++;
-    if (aktive === 2) zweiZeit2 = performance.now();
-    if (aktive > 1) { e.preventDefault(); return; }
+    offen++;
+    if (offen === 2) zweiZeit2 = performance.now();
+    if (zeigerId !== null) { e.preventDefault(); return; }   /* stört nicht */
+    zeigerId = e.pointerId;
+    try { cv.setPointerCapture(e.pointerId); } catch (x) {}
     unten = true; hx = e.clientX; hy = e.clientY; hvx = hvy = 0;
     mx = m1x = hx; my = m1y = hy;
     letzteZeit = performance.now();
@@ -237,7 +241,7 @@
     e.preventDefault();
   }
   function bewegen(e) {
-    if (!unten || aktive > 1) { e.preventDefault(); return; }
+    if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
     var pkte = (e.getCoalescedEvents && e.getCoalescedEvents()) || [e];
     for (var i = 0; i < pkte.length; i++) {
       var t = performance.now();
@@ -268,9 +272,12 @@
 
   var zweiZeit2 = 0;
   function loslassen(e) {
-    if (aktive === 2 && performance.now() - zweiZeit2 < 600) vollbild();
-    aktive = Math.max(0, aktive - 1);
-    if (aktive === 0) { unten = false; hvx = hvy = 0; aktiverKern = null; }
+    var vorher = offen;
+    offen = Math.max(0, offen - 1);
+    if (vorher === 2 && performance.now() - zweiZeit2 < 600) vollbild();
+    if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
+    try { cv.releasePointerCapture(e.pointerId); } catch (x) {}
+    zeigerId = null; unten = false; hvx = hvy = 0; aktiverKern = null;
     e.preventDefault();
   }
   cv.addEventListener('pointerdown', anfassen, {passive:false});
@@ -290,6 +297,9 @@
   var schreibt = 0;
 
   function kerneRechnen(dt) {
+    if (unten && performance.now() - letzteZeit > 80) {
+      var ab = Math.exp(-6 * dt); hvx *= ab; hvy *= ab;
+    }
     if (unten) {
       var g = Math.min(1, dt / 0.6);
       m1x += (hx - m1x) * g; m1y += (hy - m1y) * g;
@@ -300,10 +310,11 @@
     }
     if (unten && aktiverKern) {
       var K = aktiverKern;
-      var rx = hx - K.x, ry = hy - K.y;
+      var bx = 1 ? mx : K.x, by = 1 ? my : K.y;
+      var rx = hx - bx, ry = hy - by;
       var d = Math.sqrt(rx*rx + ry*ry);
       if (d > 14 && d < 420) {
-        /* Winkelgeschwindigkeit der Hand um den Kern */
+        /* Winkelgeschwindigkeit der Hand um den Bezugspunkt */
         var omH = (hvx * (-ry / d) + hvy * (rx / d)) / d;
 
         /* Übereinstimmung mit dem Takt, den der Wirbel schon hat. Solange
@@ -325,7 +336,7 @@
            eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
            weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
         if (K.s > K.fest) K.fest = K.s;
-        var folge = 1.5;
+        var folge = 2.6;
         K.x += (mx - K.x) * folge * dt;
         K.y += (my - K.y) * folge * dt;
         K.r += (Math.min(0.20 * Math.min(W, H), Math.max(90, d * 1.25)) - K.r)

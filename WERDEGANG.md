@@ -223,6 +223,36 @@ engerer Wirbel (Radius 0,20 statt 0,34 der kurzen Bildkante) und engerer
 Hitzehof (1,15 statt 2,2 Kernradien). Und der Farbauftrag musste von 0,034 auf
 0,090 steigen, weil der Kern jede Stelle nur kurz überstreicht.
 
+### 11. Wandern ging nicht
+
+Befund am ersten C: „Wandern geht nicht, der Finger muss dazu jedes Mal neu
+aufgesetzt werden." Zwei unabhängige Fehler, beide grundsätzlich.
+
+**Der Takt wurde am Kern gemessen.** Beim Wandern hängt der Kern zurück, die
+Handbahn *um ihn herum* wird dadurch zur Schleifenkurve, die gemessene
+Winkelgeschwindigkeit springt, die Übereinstimmung fällt — und der Wirbel
+stirbt genau dann, wenn man ihn mitnehmen will. Der Bezugspunkt muss die
+**Mitte der Kreisbewegung** sein, nicht der nachlaufende Wirbel. A und B messen
+weiter am Kern; dort steht er ohnehin fest.
+
+**Finger wurden gezählt statt verfolgt.** Ein zweiter Kontakt — der Handballen
+beim Wandern über ein großes iPad — legte die Eingabe still, bis alle Finger
+weg waren. Und ein verlorengegangenes `pointerup` ließ den Zähler für immer
+stehen. Jetzt wird der führende Finger an seiner Kennung verfolgt und mit
+`setPointerCapture` festgehalten; weitere Finger stören nicht mehr.
+
+Dazu ein dritter, kleinerer: Ein stillstehender Finger trieb weiter an, weil
+die zuletzt gemessene Geschwindigkeit ihren Wert behielt, solange kein neues
+Ereignis kam. Sie klingt jetzt ab.
+
+Nachgemessen, kreisend über die Fläche gewandert, ohne abzusetzen:
+
+```
+Handmitte 250 -> 583      Kern 231 -> 566      Energie durchgehend 1.00
+```
+
+Vorher lag der Nachlauf bei rund 100 px, jetzt bei 20.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

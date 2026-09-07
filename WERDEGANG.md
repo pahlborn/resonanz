@@ -190,6 +190,39 @@ Dieselbe Messung zeigt nebenbei, dass A und B sich bei einer echten,
 schwankenden Hand deutlich unterscheiden — unter einem mathematisch perfekten
 Kreis waren sie noch fast gleich.
 
+### 10. Der Sinn fehlte
+
+Erster ehrlicher Eindruck nach dem Wirbel: „Das ist schon ganz nett. Aber der
+Sinn bleibt mir verborgen. Ich bewege den Finger in der Mitte im Kreis, ein
+Wirbel entsteht, und wenn ich aufhöre, bleibt ein dunkles Etwas stehen."
+
+Die Diagnose war nicht die Physik, sondern der Handlungsraum. Die App bot
+**ein Verb und ein Substantiv**: kreisen, Wirbel. Es gab keinen Grund für eine
+zweite Bewegung, weil die zweite Bewegung dasselbe an derselben Stelle tat.
+Daraus folgt der Satz, der das ganze Konzept betrifft:
+
+> **Selektivität ohne Auswahl ist keine Resonanz, sondern eine Hürde.**
+
+Bevorzugen setzt voraus, dass es etwas zu bevorzugen gibt. Die Selektivität war
+sauber gebaut und hatte nichts zur Auswahl.
+
+Gebaut wurde daraufhin **Versuch C**: Der glühende Kern darf der Hand folgen,
+statt sich festzunageln. Wer kreist *und* dabei wandert, zieht ihn mit und malt
+eine **Spur** statt eines Flecks. Damit bekommt Resonanz neben der Zeit endlich
+auch den Ort.
+
+Das Kreiseln auf der Stelle bleibt trotzdem ruhig, weil der Kern nicht der Hand
+folgt, sondern der geglätteten **Mitte** der Bewegung — und die steht still,
+solange man auf der Stelle kreist. Eine Glättungsstufe ließ dabei rund 30 px
+Zittern stehen; zwei Stufen drücken es bei gleicher Verzögerung auf ein
+Drittel. Gemessen beim Wandern über die Fläche: Der Kern folgt mit rund 100 px
+Nachlauf, die Energie bleibt bei 1.
+
+Zwei Zugaben waren nötig, damit aus dem Zug eine Spur wird und kein Wischer:
+engerer Wirbel (Radius 0,20 statt 0,34 der kurzen Bildkante) und engerer
+Hitzehof (1,15 statt 2,2 Kernradien). Und der Farbauftrag musste von 0,034 auf
+0,090 steigen, weil der Kern jede Stelle nur kurz überstreicht.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -249,15 +282,20 @@ Eine Fläche. Sonst nichts.
 Ein Motor, sechs Zahlen Unterschied. Zwei getrennte Dateien statt eines
 Schalters, damit in der App keine Bedienoberfläche entsteht.
 
-| | **A — Höhepunkt** | **B — Normalzustand** |
-|---|---|---|
-| Taktfenster (σ) | 1,8 | 3,2 |
-| Störung bei Danebengreifen | 1,4 | 0,7 |
-| Grundzerfall | 0,30 | 0,14 |
-| Aufbaugeschwindigkeit | 1,3 | 1,7 |
-| Schwelle zum Schreiben | 0,34 | 0,20 |
-| Farbauftrag | 0,040 | 0,026 |
-| Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant" |
+| | **A — Höhepunkt** | **B — Normalzustand** | **C — Wandernder Wirbel** |
+|---|---|---|---|
+| Taktfenster (σ) | 1,8 | 3,2 | 3,2 |
+| Störung bei Danebengreifen | 1,4 | 0,7 | 0,7 |
+| Grundzerfall | 0,30 | 0,14 | 0,14 |
+| Aufbaugeschwindigkeit | 1,3 | 1,7 | 1,7 |
+| Schwelle zum Schreiben | 0,34 | 0,20 | 0,20 |
+| Farbauftrag | 0,040 | 0,026 | 0,090 |
+| Kern verankert sich | ja | ja | **nein — er wird mitgezogen** |
+| Wirbelradius (kurze Kante) | 0,34 | 0,34 | 0,20 |
+| Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
+
+C ist B mit **einer** Änderung: Der Kern darf wandern. Alles andere an der
+Stimmung ist gleich, damit der Vergleich etwas aussagt.
 
 ### Technisches
 

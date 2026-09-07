@@ -222,7 +222,7 @@
 
   /* -------------------------------------------------------------- Eingabe */
   var unten = false, hx = 0, hy = 0, hvx = 0, hvy = 0, letzteZeit = 0, druck = 1;
-  var mx = 0, my = 0;   /* Mitte der Bewegung, geglättet */
+  var mx = 0, my = 0, m1x = 0, m1y = 0;   /* Mitte der Bewegung, geglättet */
   var aktiverKern = null, aktive = 0;
 
   function anfassen(e) {
@@ -230,7 +230,7 @@
     if (aktive === 2) zweiZeit2 = performance.now();
     if (aktive > 1) { e.preventDefault(); return; }
     unten = true; hx = e.clientX; hy = e.clientY; hvx = hvy = 0;
-    mx = hx; my = hy;
+    mx = m1x = hx; my = m1y = hy;
     letzteZeit = performance.now();
     aktiverKern = kernWaehlen(hx, hy);
     verstecken();
@@ -290,7 +290,14 @@
   var schreibt = 0;
 
   function kerneRechnen(dt) {
-    if (unten) { var g = Math.min(1, dt / 0.55); mx += (hx - mx) * g; my += (hy - my) * g; }
+    if (unten) {
+      var g = Math.min(1, dt / 0.55);
+      m1x += (hx - m1x) * g; m1y += (hy - m1y) * g;
+      if (0 > 0) {
+        var g2 = Math.min(1, dt / 0);
+        mx += (m1x - mx) * g2; my += (m1y - my) * g2;
+      } else { mx = m1x; my = m1y; }
+    }
     if (unten && aktiverKern) {
       var K = aktiverKern;
       var rx = hx - K.x, ry = hy - K.y;

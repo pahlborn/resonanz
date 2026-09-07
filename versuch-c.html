@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz B</title>
+<title>Resonanz C</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -25,13 +25,13 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-<p id="hinweis">Kreise mit dem Finger</p>
+<p id="hinweis">Kreise — und wandere dabei</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch B (Normalzustand — leicht und häufig)
+     Resonanz — Versuch C (Wandernder Wirbel — die Spur ist das Bild)
 
      Zwei Schichten:
 
@@ -291,10 +291,10 @@
 
   function kerneRechnen(dt) {
     if (unten) {
-      var g = Math.min(1, dt / 0.55);
+      var g = Math.min(1, dt / 0.6);
       m1x += (hx - m1x) * g; m1y += (hy - m1y) * g;
-      if (0 > 0) {
-        var g2 = Math.min(1, dt / 0);
+      if (0.6 > 0) {
+        var g2 = Math.min(1, dt / 0.6);
         mx += (m1x - mx) * g2; my += (m1y - my) * g2;
       } else { mx = m1x; my = m1y; }
     }
@@ -325,11 +325,11 @@
            eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
            weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
         if (K.s > K.fest) K.fest = K.s;
-        var folge = 1.4 * (1 - 0.94 * K.fest);
+        var folge = 1.5;
         K.x += (mx - K.x) * folge * dt;
         K.y += (my - K.y) * folge * dt;
-        K.r += (Math.min(0.34 * Math.min(W, H), Math.max(90, d * 1.25)) - K.r)
-             * 0.25 * dt * (1 - 0.9 * K.fest);
+        K.r += (Math.min(0.20 * Math.min(W, H), Math.max(90, d * 1.25)) - K.r)
+             * 0.25 * dt * 1.0;
       } else {
         K.s -= STIMMUNG.zerfall * K.s * dt;
       }
@@ -436,7 +436,7 @@
         if (K.s < 0.05) continue;
         var ex = px[i] - K.x, ey = py[i] - K.y;
         var d = Math.sqrt(ex*ex + ey*ey);
-        var nah = 1 - Math.min(1, d / (K.r * 2.2));
+        var nah = 1 - Math.min(1, d / (K.r * 1.15));
         var w = K.s * nah * nah;
         if (w > h) h = w;
       }
@@ -481,8 +481,8 @@
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
       gl.viewport(0, 0, BW, BH);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   /* deckend, nicht addierend */
-      faedenZeichnen(0.0260, 1.0, 1);
-      faedenZeichnen(0.0260 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
+      faedenZeichnen(0.0900, 1.0, 1);
+      faedenZeichnen(0.0900 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
       gl.blendFunc(gl.ONE, gl.ONE);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }

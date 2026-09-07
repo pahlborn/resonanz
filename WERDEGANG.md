@@ -313,6 +313,54 @@ bei C wird dieselbe Stelle zum Brei.
 Das Raster ist in Zellen gedacht, nicht in Bildpunkten; eine Größenänderung
 des Fensters lässt es deshalb unangetastet.
 
+### 14. Zwei Stimmen
+
+Frage nach D: „Muss es immer eine Kreisbewegung sein?" Gemessen mit sechs
+Gesten durch D, abgelesen wurde die erreichte Energie:
+
+```
+Kringel (Kreis)            1,00
+Achterschleife             1,00
+Gekritzel, unregelmässig   1,00
+welliger Strich            0,62
+Zickzack, hin und her      0,57
+gerade Linie               0,15
+```
+
+Ein Kreis ist also nicht nötig — das System hört **Krümmung über Zeit**, und
+alles, was seine Richtung fortlaufend dreht, treibt es an. Nebenbei ist das der
+erste saubere Beleg, dass die Resonanzkurve stetig ist und keine Hürde.
+
+Die eigentliche Grenze lag woanders: **Alle diese Bewegungen erzeugten dieselbe
+Art von Antwort, nur mehr oder weniger davon.** Ein Instrument mit einer Taste.
+In der Vorgabe steht die Antwort als EPIC 04, *Motion as Instrument*.
+
+**Versuch E** gibt dem System zwei Ohren statt einem:
+
+| Bewegungseigenschaft | Antwort |
+|---|---|
+| **Drehrichtung** | links herum kühl (Blau → Violett → Blauweiß), rechts herum warm (Zinnober → Bernstein → Gold) |
+| **Schleifengröße** | kleine Kringel malen fein, große Schleifen breit — Pinselbreite aus der Geste, ohne Regler |
+
+Die Schleifengröße ist der Krümmungsradius der Handbahn: Tempo geteilt durch
+Drehrate. Gemessen, vier Gesten einzeln:
+
+```
+klein, rechts herum   Ton 1   Drehzahl  +3,1   Schleife  26 px   Kernradius  44 px
+klein, links  herum   Ton 0   Drehzahl  -3,1   Schleife  26 px   Kernradius  44 px
+gross, rechts herum   Ton 1   Drehzahl  +3,1   Schleife 115 px   Kernradius 135 px
+gross, links  herum   Ton 0   Drehzahl  -3,1   Schleife 115 px   Kernradius 135 px
+```
+
+Beide Stimmen sind unabhängig ablesbar: Farbe folgt der Richtung, Breite der
+Größe, Faktor 3 zwischen fein und breit.
+
+Ein Nebenbefund musste dabei weg: Ein neuer Zug übernahm einen bis zu 260 px
+entfernten, noch drehenden Wirbel — und kämpfte dann gegen dessen
+Drehrichtung. Bei vier Zügen nebeneinander scheiterten dadurch zwei. In E ist
+die Übernahme auf 120 px eingeengt; A bis D behalten die alte Fassung, damit
+der Vergleich sauber bleibt.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -385,6 +433,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+E ist D plus zwei Stimmen (Drehrichtung färbt, Schleifengröße malt).
 C hat dieselbe Stimmung wie B. Anders ist nur, wo der Wirbel sitzt und woran
 der Takt gemessen wird. **D ist C mit genau einer Änderung: Das schon Gemalte
 wirkt zurück** — es lenkt die Fäden und begrenzt die Aufnahme. Eine Änderung je

@@ -25,13 +25,13 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-<p id="hinweis">Kreise — und wandere dabei</p>
+<p id="hinweis">Kringle mit dem Finger</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch C (Wandernder Wirbel — die Spur ist das Bild)
+     Resonanz — Versuch C (Der Wirbel unter dem Finger — die Spur ist das Bild)
 
      Zwei Schichten:
 
@@ -223,6 +223,7 @@
   /* -------------------------------------------------------------- Eingabe */
   var unten = false, hx = 0, hy = 0, hvx = 0, hvy = 0, letzteZeit = 0, druck = 1;
   var mx = 0, my = 0, m1x = 0, m1y = 0;   /* Mitte der Bewegung, geglättet */
+  var drehrate = 0, letzterWinkel = NaN;  /* wie schnell die Richtung kringelt */
   var aktiverKern = null;
   var zeigerId = null;              /* der führende Finger */
   var offen = 0;                    /* wie viele Finger liegen */
@@ -235,6 +236,7 @@
     try { cv.setPointerCapture(e.pointerId); } catch (x) {}
     unten = true; hx = e.clientX; hy = e.clientY; hvx = hvy = 0;
     mx = m1x = hx; my = m1y = hy;
+    drehrate = 0; letzterWinkel = NaN;
     letzteZeit = performance.now();
     aktiverKern = kernWaehlen(hx, hy);
     verstecken();
@@ -253,6 +255,23 @@
       var ivx = (nx - hx) / dt, ivy = (ny - hy) / dt;
       hvx += (ivx - hvx) * 0.4; hvy += (ivy - hvy) * 0.4;
       hx = nx; hy = ny;
+
+      /* Wie schnell dreht sich die Bewegungsrichtung? Für eine Kreisbahn ist
+         das genau die Kreisfrequenz — nur braucht es dafür keinen Mittelpunkt.
+         Damit kann der Wirbel unter dem Finger sitzen statt daneben. */
+      var tempo = Math.sqrt(ivx*ivx + ivy*ivy);
+      if (tempo > 60) {
+        var w = Math.atan2(ivy, ivx);
+        if (!isNaN(letzterWinkel)) {
+          var dth = w - letzterWinkel;
+          while (dth >  Math.PI) dth -= 2*Math.PI;
+          while (dth < -Math.PI) dth += 2*Math.PI;
+          var roh = dth / dt;
+          if (roh >  25) roh =  25; if (roh < -25) roh = -25;
+          drehrate += (roh - drehrate) * Math.min(1, dt / 0.12);
+        }
+        letzterWinkel = w;
+      }
     }
     /* Druck ist Zugabe, nie Voraussetzung — ein Finger liefert auf dem iPad
        keine Kraft, nur der Pencil. */
@@ -298,7 +317,7 @@
 
   function kerneRechnen(dt) {
     if (unten && performance.now() - letzteZeit > 80) {
-      var ab = Math.exp(-6 * dt); hvx *= ab; hvy *= ab;
+      var ab = Math.exp(-6 * dt); hvx *= ab; hvy *= ab; drehrate *= ab;
     }
     if (unten) {
       var g = Math.min(1, dt / 0.6);
@@ -310,12 +329,22 @@
     }
     if (unten && aktiverKern) {
       var K = aktiverKern;
-      var bx = 1 ? mx : K.x, by = 1 ? my : K.y;
-      var rx = hx - bx, ry = hy - by;
-      var d = Math.sqrt(rx*rx + ry*ry);
-      if (d > 14 && d < 420) {
-        /* Winkelgeschwindigkeit der Hand um den Bezugspunkt */
-        var omH = (hvx * (-ry / d) + hvy * (rx / d)) / d;
+      var omH, treiben, d;
+      if (1) {
+        /* Der Wirbel sitzt unter dem Finger. Getaktet wird mit dem Kringeln —
+           der Drehrate der eigenen Bewegungsrichtung. Damit braucht es keinen
+           Mittelpunkt, den man umkreisen muss, und die Farbe ist dort, wo die
+           Hand ist. Wer die Kringelbewegung aufgibt, dem versiegt sie. */
+        omH = drehrate;
+        treiben = Math.sqrt(hvx*hvx + hvy*hvy) > 60;
+        d = K.r;
+      } else {
+        var rx = hx - K.x, ry = hy - K.y;
+        d = Math.sqrt(rx*rx + ry*ry);
+        treiben = d > 14 && d < 420;
+        omH = treiben ? (hvx * (-ry / d) + hvy * (rx / d)) / d : 0;
+      }
+      if (treiben) {
 
         /* Übereinstimmung mit dem Takt, den der Wirbel schon hat. Solange
            wenig Energie da ist, nimmt er fast jeden Takt an — der erste
@@ -336,11 +365,13 @@
            eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
            weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
         if (K.s > K.fest) K.fest = K.s;
-        var folge = 2.6;
-        K.x += (mx - K.x) * folge * dt;
-        K.y += (my - K.y) * folge * dt;
-        K.r += (Math.min(0.20 * Math.min(W, H), Math.max(90, d * 1.25)) - K.r)
-             * 0.25 * dt * 1.0;
+        var folge = 9.0;
+        var zx = 1 ? hx : mx, zy = 1 ? hy : my;
+        K.x += (zx - K.x) * folge * dt;
+        K.y += (zy - K.y) * folge * dt;
+        var rZiel = 1 ? 0.13 * Math.min(W, H)
+                  : Math.min(0.13 * Math.min(W, H), Math.max(90, d * 1.25));
+        K.r += (rZiel - K.r) * 0.25 * dt * 1.0;
       } else {
         K.s -= STIMMUNG.zerfall * K.s * dt;
       }
@@ -447,7 +478,7 @@
         if (K.s < 0.05) continue;
         var ex = px[i] - K.x, ey = py[i] - K.y;
         var d = Math.sqrt(ex*ex + ey*ey);
-        var nah = 1 - Math.min(1, d / (K.r * 1.15));
+        var nah = 1 - Math.min(1, d / (K.r * 1.35));
         var w = K.s * nah * nah;
         if (w > h) h = w;
       }
@@ -492,8 +523,8 @@
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
       gl.viewport(0, 0, BW, BH);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   /* deckend, nicht addierend */
-      faedenZeichnen(0.0900, 1.0, 1);
-      faedenZeichnen(0.0900 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
+      faedenZeichnen(0.1400, 1.0, 1);
+      faedenZeichnen(0.1400 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
       gl.blendFunc(gl.ONE, gl.ONE);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }

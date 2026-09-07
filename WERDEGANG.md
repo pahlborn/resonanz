@@ -253,6 +253,37 @@ Handmitte 250 -> 583      Kern 231 -> 566      Energie durchgehend 1.00
 
 Vorher lag der Nachlauf bei rund 100 px, jetzt bei 20.
 
+### 12. Der Rührstab wird zum Pinsel
+
+Befund: „In dem Moment, in dem mein Finger das Radial verlässt, verlässt auch
+die Farbe und folgt nicht meinem Finger."
+
+Das war kein Fehler mehr, sondern ein Konstruktionsproblem. In C saß der
+Wirbel im **Mittelpunkt der Kreisbewegung** — also immer einen Handbreit neben
+dem Finger. Wer die Kreisbahn verlässt, für den gibt es keinen Mittelpunkt
+mehr, dem das System folgen könnte; es hat nur noch den alten. Gebaut war ein
+Rührstab, erwartet wird ein Pinsel.
+
+Die Umkehr behält die Resonanz und dreht nur den Bezug:
+
+> **Der Wirbel sitzt unter dem Finger. Getaktet wird mit dem Kringeln** — der
+> Drehrate der eigenen Bewegungsrichtung.
+
+Für eine Kreisbahn ist die Drehrate der Richtung genau die Kreisfrequenz, nur
+braucht sie keinen Mittelpunkt. Damit ist die Farbe dort, wo die Hand ist, und
+die Selektivität bleibt: Wer die Kringelbewegung aufgibt, dem versiegt sie.
+
+Nachgemessen, kringelnd über die Fläche, mit einer geraden Strecke dazwischen:
+
+```
+Abstand Wirbel zu Finger    6 bis 20 px  (vorher ein Handbreit)
+Energie beim Kringeln       1.00
+nach der geraden Strecke    0.73  — die Farbe versiegt, ohne zu sterben
+```
+
+Auf dem Bild stehen danach zwei gemalte Züge dort, wo gekringelt wurde, und
+die gerade Strecke dazwischen ist fast leer. Genau so soll es sein.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -319,13 +350,14 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Grundzerfall | 0,30 | 0,14 | 0,14 |
 | Aufbaugeschwindigkeit | 1,3 | 1,7 | 1,7 |
 | Schwelle zum Schreiben | 0,34 | 0,20 | 0,20 |
-| Farbauftrag | 0,040 | 0,026 | 0,090 |
-| Kern verankert sich | ja | ja | **nein — er wird mitgezogen** |
-| Wirbelradius (kurze Kante) | 0,34 | 0,34 | 0,20 |
+| Farbauftrag | 0,040 | 0,026 | 0,140 |
+| Kern verankert sich | ja | ja | **nein — er sitzt unter dem Finger** |
+| Wirbelradius (kurze Kante) | 0,34 | 0,34 | 0,13 |
+| Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
-C ist B mit **einer** Änderung: Der Kern darf wandern. Alles andere an der
-Stimmung ist gleich, damit der Vergleich etwas aussagt.
+C hat dieselbe Stimmung wie B. Anders ist nur, wo der Wirbel sitzt und woran
+der Takt gemessen wird — damit der Vergleich etwas aussagt.
 
 ### Technisches
 

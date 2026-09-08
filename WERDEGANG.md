@@ -511,6 +511,39 @@ nicht mehr ganz leer, sondern zeigt ein schwaches Sternfeld. Das entspricht der
 Vorgabe, widerspricht aber der Regel, dass das Medium in Ruhe unsichtbar ist.
 Eine Zahl in `versuch-h.html` entscheidet darüber.
 
+### 19. Sterne und das Tempo als Farbe
+
+Zwei Befunde nach H: „Die ganz hellen Lichtpunkte sind leider noch nicht da"
+und der Vorschlag, die Farbe vom Fingertempo abhängig zu machen — „langsame
+Bewegungen dunkler, je schneller umso heller".
+
+**Die hellen Punkte fehlten, weil alle Körner gleich behandelt wurden.** Ein
+Sternfeld hat wenige sehr helle und viele schwache. Jetzt bekommen 1,6 Prozent
+der Fäden die zwei- bis dreifache Größe und eine Helligkeit nahe eins; sie
+werden mit einer schärferen Kante gezeichnet als das übrige Glühen. Das gehört
+noch zu H — es macht ein Versprechen ein, das H gegeben und nicht gehalten hat.
+
+**Beim Tempo wurde dem Ziel zugestimmt, dem Weg widersprochen.** Helligkeit ist
+bereits vergeben: Sie zeigt die Resonanz. Hängt das Tempo auch daran, kämpfen
+zwei Bedeutungen um eine Anzeige und man liest keine mehr. Das Tempo gehört an
+die **Farbe**: langsam die tiefen, satten Töne, schnell die hellen — dunkelblau
+bis blauweiß, tiefrot bis gold. Das ist dasselbe Erlebnis ohne den Konflikt.
+Damit trägt jede Achse genau eine Bedeutung:
+
+| Achse | Bedeutung |
+|---|---|
+| Farbfamilie | Drehrichtung |
+| Lage auf der Skala | **Handtempo** (neu) |
+| Helligkeit | Resonanz |
+| Breite | Schleifengröße |
+| Form | Kringeln, Ziehen, Anhalten, Werfen |
+
+Zwei Fehler unterwegs, beide meine: Der Tempo-Block landete zunächst in der
+**falschen Schleife** — in der Abklingschleife, wo es den angeregten Kern gar
+nicht gibt (`Cannot read properties of undefined`). Und die Tempofarbe kam
+zuerst nur im glühenden Kern an, weil sie sich nach dem *heißesten* Wirbel
+richtete; jetzt nach dem *nächsten*, damit sie im ganzen Zug ankommt.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -583,6 +616,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+I ist H plus die Tempofarbe (langsam tief, schnell hell).
 H ist G plus das Korn (träge Fäden bleiben als Lichtpunkte stehen).
 G ist F plus der begonnene Kreis (ein offener Bogen fliegt weiter).
 F ist E plus die zweite Handschrift (Ziehen macht Linien, Anhalten Knoten).

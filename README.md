@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch I — Tempo färbt**](https://pahlborn.github.io/resonanz/versuch-i.html) · langsam tief, schnell hell
 * [**Versuch H — Lichtpunkte**](https://pahlborn.github.io/resonanz/versuch-h.html) · was langsam ist, bleibt ein Punkt
 * [**Versuch G — Der begonnene Kreis**](https://pahlborn.github.io/resonanz/versuch-g.html) · ein Bogen zieht weiter
 * [**Versuch F — Filament und Knoten**](https://pahlborn.github.io/resonanz/versuch-f.html) · die zweite Handschrift
@@ -25,7 +26,8 @@ Schleifengröße über die Breite — zwei Stimmen ohne einen einzigen Regler. I
 kommt eine zweite Handschrift dazu: Kringeln macht Wirbel, Ziehen macht Linien,
 Anhalten setzt Lichtpunkte darauf. In G fliegt ein begonnener Kreis weiter —
 laden, öffnen, loslassen. In H hat das Medium Korn: Ein Teil der Fäden ist träge
-und bleibt als Lichtpunkt stehen, statt zu einem Streifen zu schmieren.
+und bleibt als Lichtpunkt stehen, statt zu einem Streifen zu schmieren — wenige
+davon sehr hell. In I bestimmt das Handtempo, wo auf der Farbskala gemalt wird.
 Zwei Finger kurz auftippen versucht Vollbild.
 
 Auf dem iPad: Adresse in Safari öffnen, dann **Teilen → Zum Home-Bildschirm**.

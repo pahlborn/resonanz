@@ -83,22 +83,23 @@
   var vsFaden =
     'attribute vec2 aPos;' +
     'attribute vec4 aPar;' +
-    'attribute float aGr;' +            /* x = Helligkeit, y = Hitze */
+    'attribute float aGr;' +
+    'attribute float aHl;' +            /* x = Helligkeit, y = Hitze */
     'uniform vec2 uRes;' +
     'uniform float uPunkt;' +
     'varying float vA; varying float vH; varying float vAuf; varying float vTon;' +
-    'varying float vGr;' +
+    'varying float vGr; varying float vHl;' +
     'void main(){' +
     '  vec2 n = (aPos / uRes) * 2.0 - 1.0;' +
     '  gl_Position = vec4(n.x, -n.y, 0.0, 1.0);' +
     '  gl_PointSize = uPunkt * (1.0 + aGr * 0.9);' +
-    '  vA = aPar.x; vH = aPar.y; vAuf = aPar.z; vTon = aPar.w; vGr = aGr;' +
+    '  vA = aPar.x; vH = aPar.y; vAuf = aPar.z; vTon = aPar.w; vGr = aGr; vHl = aHl;' +
     '}';
 
   var fsFaden =
     'precision mediump float;' +
     'varying float vA; varying float vH; varying float vAuf; varying float vTon;' +
-    'varying float vGr;' +
+    'varying float vGr; varying float vHl;' +
     'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
     'void main(){' +
     '  vec3 kA = vec3(0.11, 0.40, 0.98); vec3 kB = vec3(0.55, 0.24, 0.98);' +
@@ -140,7 +141,8 @@
 
   var pFaden = programm(vsFaden, fsFaden), pQuad = programm(vsQuad, fsQuad);
   var lPos = gl.getAttribLocation(pFaden, 'aPos'), lPar = gl.getAttribLocation(pFaden, 'aPar'),
-    lGr = gl.getAttribLocation(pFaden, 'aGr');
+    lGr = gl.getAttribLocation(pFaden, 'aGr'),
+    lHl = gl.getAttribLocation(pFaden, 'aHl');
   var uRes = gl.getUniformLocation(pFaden, 'uRes'),
       uPunkt = gl.getUniformLocation(pFaden, 'uPunkt'),
       uStaerke = gl.getUniformLocation(pFaden, 'uStaerke'),
@@ -191,8 +193,9 @@
       qx = new Float32Array(N), qy = new Float32Array(N),
       vx = new Float32Array(N), vy = new Float32Array(N),
       hz = new Float32Array(N), lf = new Float32Array(N), lm = new Float32Array(N),
-      tn = new Float32Array(N), fest = new Uint8Array(N), korn = new Float32Array(N);
-  var daten = new Float32Array(N * 14);  /* 2 Ecken, je (x,y,a,h,auf,ton,größe) */
+      tn = new Float32Array(N), fest = new Uint8Array(N), korn = new Float32Array(N),
+      hl = new Float32Array(N);
+  var daten = new Float32Array(N * 16);  /* je (x,y,a,h,auf,ton,größe,tempo) */
 
   var W = 0, H = 0, dpr = 1;
 
@@ -200,9 +203,10 @@
     for (var i = 0; i < N; i++) {
       px[i] = qx[i] = rnd() * W;
       py[i] = qy[i] = rnd() * H;
-      vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0;
+      vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0; hl[i] = 0.45;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
-      korn[i] = 1 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
+      korn[i] = 1 ? (rnd() < 0.016 ? 1.7 + 1.1 * rnd()
+                          : (rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0)) : 0;
     }
   }
 
@@ -242,7 +246,7 @@
   }
 
   /* -------------------------------------------------------------- Die Kerne */
-  function Kern() { this.x=0; this.y=0; this.om=0; this.s=0; this.r=170; this.fest=0; this.ton=0; this.dvx=0; this.dvy=0; }
+  function Kern() { this.x=0; this.y=0; this.om=0; this.s=0; this.r=170; this.fest=0; this.ton=0; this.dvx=0; this.dvy=0; this.hell=0.45; }
   var kerne = []; for (var k = 0; k < KERNE_MAX; k++) kerne.push(new Kern());
 
   function kernWaehlen(x, y) {
@@ -256,12 +260,12 @@
     if (beste && dist < 120) return beste;
     for (var j = 0; j < kerne.length; j++) if (kerne[j].s < 0.02) {
       var N2 = kerne[j];
-      N2.x = x; N2.y = y; N2.om = 0; N2.s = 0.001; N2.fest = 0; N2.ton = 0.5; N2.dvx = 0; N2.dvy = 0;
+      N2.x = x; N2.y = y; N2.om = 0; N2.s = 0.001; N2.fest = 0; N2.ton = 0.5; N2.dvx = 0; N2.dvy = 0; N2.hell = 0.45;
       return N2;
     }
     var schwach = kerne[0];
     for (var m = 1; m < kerne.length; m++) if (kerne[m].s < schwach.s) schwach = kerne[m];
-    schwach.x = x; schwach.y = y; schwach.om = 0; schwach.s = 0.001; schwach.fest = 0; schwach.ton = 0.5; schwach.dvx = 0; schwach.dvy = 0;
+    schwach.x = x; schwach.y = y; schwach.om = 0; schwach.s = 0.001; schwach.fest = 0; schwach.ton = 0.5; schwach.dvx = 0; schwach.dvy = 0; schwach.hell = 0.45;
     return schwach;
   }
 
@@ -418,6 +422,7 @@
     var i = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
     px[i] = x; py[i] = y; vx[i] = gx; vy[i] = gy;
     hz[i] = hitze; tn[i] = aktiverKern ? aktiverKern.ton : 0.5;
+    hl[i] = Math.min(1, Math.sqrt(hvx*hvx + hvy*hvy) / 900);
     fest[i] = 1; korn[i] = 0; lm[i] = dauer; lf[i] = dauer;
   }
 
@@ -516,6 +521,14 @@
         var zx = 1 ? hx : mx, zy = 1 ? hy : my;
         K.x += (zx - K.x) * folge * dt;
         K.y += (zy - K.y) * folge * dt;
+        if (0) {
+          /* Das Tempo der Hand bestimmt, wo auf der Farbskala der Wirbel
+             liegt: langsam die tiefen, satten Töne, schnell die hellen.
+             Die Helligkeit selbst bleibt der Resonanz vorbehalten — sonst
+             kämpfen zwei Bedeutungen um dieselbe Anzeige. */
+          var tp = Math.min(1, Math.sqrt(hvx*hvx + hvy*hvy) / 900);
+          K.hell += (tp - K.hell) * 1.6 * dt;
+        }
         if (1 && Math.abs(omH) > 0.8) {
           /* Die Drehrichtung ist die zweite Stimme: links und rechts herum
              werden zwei Farbfamilien. Der Wechsel läuft weich, damit ein
@@ -572,7 +585,8 @@
           vx[i] = 0; vy[i] = 0; hz[i] = 0;
         }
         lm[i] = 2.6 + rnd() * 3.6; lf[i] = lm[i];
-        korn[i] = 1 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
+        korn[i] = 1 ? (rnd() < 0.016 ? 1.7 + 1.1 * rnd()
+                          : (rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0)) : 0;
       }
       var x = px[i], y = py[i];
       var ax = 0, ay = 0, nah = -1;
@@ -657,7 +671,7 @@
     var j = 0;
     for (var i = 0; i < N; i++) {
       /* Hitze: nah an einem starken Kern wird es hell. */
-      var h = 0, tonZiel = -1;
+      var h = 0, tonZiel = -1, hellZiel = -1, nahBest = 0;
       if (fest[i]) { h = hz[i]; }
       else
       for (var c = 0; c < kerne.length; c++) {
@@ -668,16 +682,21 @@
         var nah = 1 - Math.min(1, d / (K.r * 1.35));
         var w = K.s * nah * nah;
         if (w > h) { h = w; tonZiel = K.ton; }
+        if (nah > nahBest) { nahBest = nah; hellZiel = K.hell; }
       }
       if (!fest[i]) hz[i] += (h - hz[i]) * 0.16;
       if (tonZiel >= 0) tn[i] += (tonZiel - tn[i]) * 0.10;
+      if (hellZiel >= 0) hl[i] += (hellZiel - hl[i]) * 0.10;
 
       var sx = vx[i], sy = vy[i];
       var tempo = Math.sqrt(sx*sx + sy*sy);
       var a = tempo / 380; if (a > 1) a = 1;
       a = a * a * (3 - 2 * a);
       a += hz[i] * 0.85; if (a > 1) a = 1;
-      if (korn[i] > 0) { var ak = 0.24 + 0.72 * hz[i]; if (ak > a) a = ak; }
+      if (korn[i] > 0) {
+        var ak = korn[i] > 1.2 ? 0.86 + 0.14 * hz[i] : 0.24 + 0.72 * hz[i];
+        if (ak > a) a = ak;
+      }
       var rest = lf[i], alt2 = lm[i] - lf[i];
       if (rest < 0.6) a *= rest / 0.6;
       if (alt2 < 0.6) a *= alt2 / 0.6;
@@ -700,14 +719,15 @@
         }
       }
 
-      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i]; daten[j++] = korn[i];
-      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;   daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i]; daten[j++] = korn[i];
+      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i]; daten[j++] = korn[i]; daten[j++] = hl[i];
+      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;   daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i]; daten[j++] = korn[i]; daten[j++] = hl[i];
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
     gl.bufferData(gl.ARRAY_BUFFER, daten, gl.DYNAMIC_DRAW);
-    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 28, 0);
-    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 28, 8);
-    gl.enableVertexAttribArray(lGr); gl.vertexAttribPointer(lGr, 1, gl.FLOAT, false, 28, 24);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 32, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 32, 8);
+    if (lGr >= 0) { gl.enableVertexAttribArray(lGr); gl.vertexAttribPointer(lGr, 1, gl.FLOAT, false, 32, 24); }
+    if (lHl >= 0) { gl.enableVertexAttribArray(lHl); gl.vertexAttribPointer(lHl, 1, gl.FLOAT, false, 32, 28); }
   }
 
   function faedenZeichnen(staerke, punkt, tor) {
@@ -750,9 +770,10 @@
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
     gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
-    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 28, 0);
-    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 28, 8);
-    gl.enableVertexAttribArray(lGr); gl.vertexAttribPointer(lGr, 1, gl.FLOAT, false, 28, 24);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 32, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 32, 8);
+    if (lGr >= 0) { gl.enableVertexAttribArray(lGr); gl.vertexAttribPointer(lGr, 1, gl.FLOAT, false, 32, 24); }
+    if (lHl >= 0) { gl.enableVertexAttribArray(lHl); gl.vertexAttribPointer(lHl, 1, gl.FLOAT, false, 32, 28); }
     faedenZeichnen(0.55, 1.0, 0);  /* Fäden  */
     faedenZeichnen(0.22, 7.0, 0);  /* Glühen */
   }

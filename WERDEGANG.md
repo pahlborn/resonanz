@@ -589,6 +589,41 @@ unsichtbar. Was bleibt, ist allein das Gemalte.** Und der Nachhall ist auch
 hier keine Eigeninitiative — die Punkte klingen mit dem Wirbel ab, den der
 Benutzer selbst erzeugt hat.
 
+### 21. Zwei Korrekturen an I
+
+„Bei I haben wir Farbe verloren. Zudem sollten sich Lichtpunkte nicht am
+Bildschirmrand ansammeln."
+
+**Die Farbe war nicht verschoben, sie war ersetzt.** In H bestimmte die
+Resonanz, wo auf der Skala gemalt wird; in I saß das Tempo an derselben Stelle.
+Eine echte Hand bewegt sich meist mittelschnell — also landete alles in der
+Mitte der Skala, und der helle Bereich, den ein glühender Wirbel vorher
+erreichte, kam nie mehr vor. Richtig ist:
+
+> **Die Hitze bestimmt die Lage auf der Skala, das Tempo verschiebt sie.**
+
+Formal `r = Hitze · 0,88 + (Tempo − 0,45) · 0,62`. Dazu wurden die tiefen Enden
+wieder farbiger gesetzt: Sie waren dunkel *und* entsättigt, und nur das erste
+war gewollt.
+
+**Das Korn wanderte.** Gemessen bewegte es sich mit rund 60 px/s, zwei Drittel
+davon nach außen — über eine Lebensdauer gut 240 px. Wer den Rand erreichte,
+wurde umgeschlagen und tauchte gegenüber wieder auf; das ist die Ansammlung am
+Bildschirmrand. Ein Lichtpunkt hat aber nichts zu wandern.
+
+Der erste Reparaturversuch griff nicht, und die Messung zeigte es: Das Tempo
+des Korns **stieg** nach dem Loslassen sogar. Ursache war die Reihenfolge — ich
+hatte das Korn stillgestellt, *bevor* die Bildlenkung aus Abschnitt 13 es
+wieder anschob. Jetzt steht es zuletzt, unmittelbar vor der Integration.
+
+```
+vorher    Tempo 58 px/s   zwei Drittel nach außen
+falsch    Tempo 57 px/s   die Bildlenkung schob weiter
+jetzt     Tempo  0,1 px/s  nichts nach außen, nichts am Rand
+```
+
+Wer trotzdem hinausgerät, verschwindet, statt gegenüber wieder aufzutauchen.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

@@ -424,7 +424,7 @@
     if (i === quelle) return;
     px[i] = px[quelle] + (rnd() - 0.5) * 5;
     py[i] = py[quelle] + (rnd() - 0.5) * 5;
-    vx[i] = vx[quelle] * 0.08; vy[i] = vy[quelle] * 0.08;
+    vx[i] = vx[quelle] * 0.05; vy[i] = vy[quelle] * 0.05;
     hz[i] = hz[quelle] * (0.75 + 0.4 * rnd());
     tn[i] = tn[quelle]; hl[i] = hl[quelle];
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
@@ -660,8 +660,6 @@
       }
 
       if (fest[i]) { ax *= 0.14; ay *= 0.14; }
-      if (korn[i] > 0) { ax *= 0.20; ay *= 0.20; }
-
       var zaeh = 1;
       if (0) {
         var F = dichteAbtasten(x, y);
@@ -681,15 +679,21 @@
         }
       }
 
+      if (korn[i] > 0) { ax = 0; ay = 0; }   /* zuletzt, sonst schiebt das Bild */
       var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib * zaeh;
       var nvy = (vy[i] + (ay - vy[i]) * 4.2 * dt) * reib * zaeh;
+      if (korn[i] > 0) { var kb = Math.exp(-7 * dt); nvx *= kb; nvy *= kb; }
       vx[i] = nvx; vy[i] = nvy;
 
       qx[i] = x; qy[i] = y;
       x += nvx * dt; y += nvy * dt;
 
-      if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
-      if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
+      if (korn[i] > 0) {
+        if (x < 0 || x > W || y < 0 || y > H) { lf[i] = 0; }
+      } else {
+        if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
+        if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
+      }
       px[i] = x; py[i] = y;
     }
   }

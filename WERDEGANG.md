@@ -684,6 +684,41 @@ geworfener Wirbel, 6 s Flug       6 Zerfälle, bis zu 29 Funken gleichzeitig
 Funken sind selbst kein Korn und können deshalb nicht weiterzünden — eine
 Kettenreaktion wäre Eigenleben.
 
+### 24. Weiß, sparsamer, und ein dritter Auslöser
+
+Drei Rückmeldungen zu K auf einmal: „Es bleiben zu viele Lichtpunkte", „sie
+sollten nur weiß sein" und — als Antwort auf die Frage aus Abschnitt 23 — „Ja,
+zerspringen ohne Zutun bei Kollision."
+
+Die dritte war die interessante. Sie ergibt einen Auslöser, den es noch nicht
+gab: **ein Faden trifft einen Lichtpunkt.** Die Fäden fliegen durch den Wirbel,
+den der Benutzer gemacht hat; der Treffer geschieht ohne sein Zutun, aber nicht
+ohne seine Ursache. Damit das bezahlbar bleibt, merkt sich ein grobes Raster
+(45 × 35 Zellen), wo die treffbaren Punkte liegen — sonst wäre es ein Vergleich
+jedes Fadens mit jedem Punkt.
+
+K hat damit drei Auslöser, alle drei kausal:
+
+| Auslöser | Wer bewegt sich |
+|---|---|
+| Hand fährt über einen Punkt | die Hand |
+| geworfener Wirbel überstreicht ihn | der Wirbel, den man geworfen hat |
+| ein Faden trifft ihn | das Medium, das man angeregt hat |
+
+Dazu: Lichtpunkte sind in K **weiß**, und es sind weniger. Beim Einstellen habe
+ich zuerst weit überzogen — Rate, Quellschwelle und Lebensdauer gleichzeitig
+gesenkt, dazu die neuen Fadentreffer, und es blieben zwei bis vier Punkte übrig.
+Drei Stellschrauben auf einmal zu drehen ist genau der Fehler, den die
+Fassungsleiter eigentlich verhindern soll.
+
+```
+vorher (J)   bis zu 800 Körner
+zu weit      2 bis 4 Körner
+K jetzt      26 bis 35 Körner, 16 Zerfälle im Testlauf
+```
+
+A bis J behalten ihre farbigen, zahlreicheren Punkte zum Vergleich.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

@@ -109,6 +109,7 @@
     '  vec3 ck = vH < 0.5 ? mix(kA, kB, vH * 2.0) : mix(kB, kC, (vH - 0.5) * 2.0);' +
     '  vec3 cw = vH < 0.5 ? mix(wA, wB, vH * 2.0) : mix(wB, wC, (vH - 0.5) * 2.0);' +
     '  vec3 c = mix(ck, cw, vTon);' +
+    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 0.0);' +
     '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
@@ -415,6 +416,16 @@
      Beides ist verdient, nicht geschenkt: gerade heißt gerade, und Verweilen
      heißt wirklich anhalten. */
   var wach = 0;   /* wieviel Leben gerade im Feld ist, 0 bis 1 */
+  var KX = 45, KY = 35, kzelle = new Int32Array(KX * KY);
+
+  function kornRasterFuellen() {
+    kzelle.fill(-1);
+    for (var i = 0; i < N; i++) {
+      if (korn[i] <= 0.9 || lf[i] <= 0 || lm[i] - lf[i] < 0.45) continue;
+      var u = (px[i] / W * KX) | 0, v = (py[i] / H * KY) | 0;
+      if (u >= 0 && v >= 0 && u < KX && v < KY) kzelle[v * KX + u] = i;
+    }
+  }
   var spawnZeiger = 0, knotenLadung = 0, letzteHX = 0, letzteHY = 0;
   var linienWert = 0, knotenAktiv = 0, linieHer = 9;
 
@@ -460,7 +471,7 @@
     for (var k = 0; k < n; k++) {
       var q = (rnd() * N) | 0;
       if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
-      if (hz[q] < 0.10) continue;                /* nur dort, wo es leuchtet   */
+      if (hz[q] < 0.10) continue;      /* nur dort, wo es leuchtet   */
       kornSetzen(q);
     }
   }
@@ -703,6 +714,19 @@
         }
       }
 
+      if (0 && korn[i] <= 0 && !fest[i]) {
+        /* Ein Faden trifft einen Lichtpunkt. */
+        var vs2 = vx[i]*vx[i] + vy[i]*vy[i];
+        if (vs2 > 67600) {
+          var u3 = (x / W * KX) | 0, v3 = (y / H * KY) | 0;
+          if (u3 >= 0 && v3 >= 0 && u3 < KX && v3 < KY) {
+            var t3 = kzelle[v3 * KX + u3];
+            if (t3 >= 0 && lf[t3] > 0 && korn[t3] > 0.9) {
+              funken(t3); lf[t3] = 0; korn[t3] = 0; kzelle[v3 * KX + u3] = -1;
+            }
+          }
+        }
+      }
       if (korn[i] > 0) {
         ax = 0; ay = 0;                        /* zuletzt, sonst schiebt das Bild */
         if (0 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
@@ -860,7 +884,8 @@
     rest += dt;
     var n = 0;
     while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT);
-      if (0) korngeben(DT); mediumRechnen(DT); rest -= DT; n++; }
+      if (0) korngeben(DT);
+      if (0) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
     if (1 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();

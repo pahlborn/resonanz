@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch M — Ein Zug ist ein Beitrag**](https://pahlborn.github.io/resonanz/versuch-m.html) · schwacher Auftrag, mehrere Züge bis eine Figur steht
 * [**Versuch L — Enger Wirbel**](https://pahlborn.github.io/resonanz/versuch-l.html) · am Finger statt um ihn herum
 * [**Versuch K — Zusammenstoß**](https://pahlborn.github.io/resonanz/versuch-k.html) · triff einen Lichtpunkt, und er zerspringt
 * [**Versuch J — Zerspringende Punkte**](https://pahlborn.github.io/resonanz/versuch-j.html) · weniger, dafür mit Ende

@@ -760,6 +760,70 @@ lesen sich die einzelnen Schleifen als Schleifen.
 
 Die zu vielen Lichtpunkte waren bereits in K erledigt; L erbt das.
 
+### 26. Ein Zug ist ein Werk oder ein Beitrag
+
+Der Befund am Gerät stellte L und J/K gegeneinander: „L ist ein farbiges
+Abenteuer, die Figuren phänomenaler als bei J/K. Allerdings fließt es nicht,
+man wird schnell fertig, die Ergebnisse sind so einzigartig perfekt, dass man
+nach wenigen Handstrichen aufhören mag. J/K laden zu weitermachen ein, ein
+minutenlanges Schauspiel."
+
+Das ist kein Fehler, sondern eine Eigenschaft, die man einstellen kann. Ein
+Zug, der für sich vollständig ist, beendet das Bild. Ein Zug, der ein Beitrag
+ist, lädt zum nächsten ein.
+
+**Meine erste Erklärung war falsch, und die Messung hat sie widerlegt.** Ich
+hatte vermutet, L fülle die Fläche schneller. Gemessen wurde die mittlere
+Helligkeit des Bildes nach n Zügen, alles in Ruhe:
+
+```
+Züge         J        L
+   1       3,3      1,7
+   3      14,9     13,7
+   6      22,7     22,8
+```
+
+J und L füllen gleich schnell. Die Sättigung ist es also nicht. Was L beendet,
+ist die **Lesbarkeit je Zug**: Eine einzelne Schleife steht in L sofort als
+fertige Figur da, und wo etwas fertig ist, hört man auf.
+
+**Versuch M** ist L mit einem Viertel des Auftrags (0,15 statt 0,50) — sonst
+nichts. Dieselben Figuren, dieselben Radien, dieselbe Farbe; nur braucht es
+mehrere Züge, bis eine Figur steht. Gemessen füllt M rund dreimal langsamer als
+L (nach sechs Zügen 3,8 statt 22,6). Ob das aus dem fertigen Werk einen Beitrag
+macht, entscheidet die Hand, nicht die Zahl.
+
+### 27. Ein Befund, den ich noch nicht erklären kann
+
+Beim Messen der Sättigung fiel im Bild etwas auf, das bei einem einzelnen Zug
+nicht sichtbar ist: Nach sechs Zügen liegen **lange, blasse Schrägstriche** über
+die ganze Fläche — parallele Bündel, tangential zu den Wirbeln. Sie stecken in
+F bis M, nicht erst in M.
+
+Zwei Erklärungen habe ich gebaut und beide durch Messung verworfen:
+
+1. *Verankerte Fäden (Stränge, Knoten, Funken) tragen eingefrorene Hitze und
+   segeln quer über die Fläche.* Widerlegt: Unter den 200 schnellsten Fäden nach
+   dem Loslassen sind **null** verankerte und null Lichtpunkte — es sind
+   ausnahmslos freie Fäden des Mediums.
+2. *Nach dem Loslassen schreibt der Wirbel noch sekundenlang weiter, und kalte
+   Fäden malen dabei die Fläche voll.* Widerlegt: Ein einzelner Zug hinterlässt
+   auch nach 14 Sekunden ein sauberes Wirbelbild ohne einen einzigen Strich, und
+   die gemessene Helligkeit **fällt** nach dem Loslassen (0,69 → 0,52), statt zu
+   steigen. Auch ein Hitze-Tor auf dem Auftrag (nichts unter 0,05 legt ab) ließ
+   die Striche unverändert.
+
+Was bleibt: Die Striche entstehen **während** der Bewegung und erst, wenn
+mehrere Wirbel stehen. Fäden mit 260 px Abstand zum nächsten Kern haben Hitze
+0,000 und 40 px/s — die können es nicht sein. Die Vermutung ist jetzt: Fäden,
+die der Wirbel *während* des Kreisens auswirft, behalten für die knappe Sekunde
+ihrer Abkühlung genug Hitze, um im Geradeausflug eine halbe Fläche zu
+beschreiben — und weil das Medium am Rand umläuft statt zu enden, kreuzen sie
+mehrfach.
+
+Das ist eine Vermutung, keine Messung, und der nächste Versuch hat sie zu
+prüfen — nicht M, denn M soll genau eine Änderung tragen.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

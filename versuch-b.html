@@ -432,6 +432,25 @@
     lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
   }
 
+  function funken(i) {
+    /* Ein großer Lichtpunkt verlöscht nicht, er zerspringt. Das ist kein
+       Eigenleben: Der Punkt existiert nur, weil ihn jemand erzeugt hat, und
+       sein Ende gehört zu seinem Leben wie der Nachhall zum Wirbel. Funken
+       sind selbst kein Korn und können deshalb nicht weiterzünden. */
+    var n = 9 + ((rnd() * 7) | 0);
+    for (var k = 0; k < n; k++) {
+      var j = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
+      if (j === i) continue;
+      var w = rnd() * 6.2832, v = 150 + 300 * rnd();
+      px[j] = px[i] + Math.cos(w) * 3; py[j] = py[i] + Math.sin(w) * 3;
+      vx[j] = Math.cos(w) * v; vy[j] = Math.sin(w) * v;
+      hz[j] = Math.min(1, hz[i] * 1.25 + 0.2);
+      tn[j] = tn[i]; hl[j] = Math.min(1, hl[i] + 0.3);
+      korn[j] = 0; fest[j] = 1;
+      lm[j] = 0.30 + 0.35 * rnd(); lf[j] = lm[j];
+    }
+  }
+
   function korngeben(dt) {
     if (wach < 0.05) return;
     var n = Math.round(80 * wach);
@@ -604,6 +623,7 @@
     for (var i = 0; i < N; i++) {
       lf[i] -= dt;
       if (lf[i] <= 0) {
+        if (0 && korn[i] > 1.2 && hz[i] > 0.30 && rnd() < 0.34) funken(i);
         fest[i] = 0;
         if (rnd() < 0.34) {
           var j = (rnd() * N) | 0;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz I</title>
+<title>Resonanz J</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -31,7 +31,7 @@
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch I (Tempo färbt — langsam tief, schnell hell)
+     Resonanz — Versuch J (Weniger Punkte, und die großen zerspringen)
 
      Zwei Schichten:
 
@@ -457,7 +457,7 @@
 
   function korngeben(dt) {
     if (wach < 0.05) return;
-    var n = Math.round(80 * wach);
+    var n = Math.round(26 * wach);
     for (var k = 0; k < n; k++) {
       var q = (rnd() * N) | 0;
       if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
@@ -627,7 +627,7 @@
     for (var i = 0; i < N; i++) {
       lf[i] -= dt;
       if (lf[i] <= 0) {
-        if (0 && korn[i] > 1.2 && hz[i] > 0.30 && rnd() < 0.34) funken(i);
+        if (1 && korn[i] > 1.2 && hz[i] > 0.30 && rnd() < 0.34) funken(i);
         fest[i] = 0;
         if (rnd() < 0.34) {
           var j = (rnd() * N) | 0;

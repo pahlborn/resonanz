@@ -624,6 +624,35 @@ jetzt     Tempo  0,1 px/s  nichts nach außen, nichts am Rand
 
 Wer trotzdem hinausgerät, verschwindet, statt gegenüber wieder aufzutauchen.
 
+### 22. Weniger Punkte, und ein Ende für die großen
+
+„Die Lichtpunkte könnten wir versuchsweise etwas reduzieren, es liegt nun zu
+viel Fokus darauf. Kann der eine oder andere Lichtpunkt explodieren?"
+
+Beim zweiten Teil war eine Grenze zu ziehen, die gerade erst wiederhergestellt
+worden war: **Ein Lichtpunkt darf nicht von sich aus explodieren.** Das wäre
+Eigeninitiative — ausgeschlossen seit dem ersten Konzept und in Abschnitt 20
+mit dem leeren Anfang zurückerobert.
+
+Legitim ist eine andere Lesart, und sie ist die bessere: **Die Explosion ist
+nicht spontan, sie ist das Ende seines Lebens.** Ein Punkt existiert nur, weil
+ihn jemand erzeugt hat; dass er nicht verlöscht, sondern zerspringt, gehört zu
+seinem Leben wie der Nachhall zum Wirbel. Getroffen werden nur die wenigen
+großen, und auch die nur in einem Drittel der Fälle. Funken sind selbst kein
+Korn und können deshalb nicht weiterzünden.
+
+**Versuch J** senkt die Kornrate von 80 auf 26 je Weckeinheit. Gemessen:
+
+```
+vorher   bis zu 800 Körner gleichzeitig
+J        bis zu 251 Körner, davon rund 20 große
+Funken   höchstens 15 gleichzeitig, ein Zerfall alle paar Sekunden
+```
+
+Ein Zerfall war im Standbild nur zu erwischen, indem 159 Einzelbilder danach
+abgesucht wurden — das ist die richtige Häufigkeit für „der eine oder andere",
+nicht für ein Feuerwerk.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -696,6 +725,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+J ist I mit weniger Korn — und die großen Punkte zerspringen, statt zu verlöschen.
 I ist H plus die Tempofarbe (langsam tief, schnell hell).
 H ist G plus das Korn (träge Fäden bleiben als Lichtpunkte stehen).
 G ist F plus der begonnene Kreis (ein offener Bogen fliegt weiter).

@@ -653,6 +653,37 @@ Ein Zerfall war im Standbild nur zu erwischen, indem 159 Einzelbilder danach
 abgesucht wurden — das ist die richtige Häufigkeit für „der eine oder andere",
 nicht für ein Feuerwerk.
 
+### 23. Zusammenstoß
+
+„Lichtpunkte explodieren bei Kollision!?" — und das ist besser als der Auslöser
+aus Abschnitt 22, mit einem Haken, der zuerst zu nennen war: **Zwei Lichtpunkte
+können nicht kollidieren, sie stehen beide still.** Genau das wurde in
+Abschnitt 21 repariert. Bewegt ist etwas anderes — die Hand, und ein geworfener
+Wirbel aus Abschnitt 17.
+
+Damit ist die Explosion nicht nur verursacht, sondern **beabsichtigt**: Zum
+ersten Mal kann man auf etwas einwirken, das schon im Bild liegt. Das ersetzt
+den Zufall am Lebensende; J behält ihn zum Vergleich.
+
+Zwei Befunde bei der Prüfung:
+
+1. **Nichts löste aus.** Die Schwelle lag bei 280 px/s Handtempo, der
+   Testroboter zog mit 227 — und 280 war ohnehin zu hoch gegriffen. Ohne die
+   Einzelmessung der Bedingungen (Tempo, Umkreis, Anzahl treffbarer Punkte)
+   hätte ich am falschen Ende gesucht. Jetzt 130 px/s.
+2. **Die Hand zerschlug, was sie gerade gesetzt hatte.** Vierzehn Zerfälle
+   allein beim Malen, weil der kreisende Finger über die eben erzeugten Punkte
+   fährt. Ein Punkt muss erst existieren, bevor er getroffen werden kann —
+   Mindestalter 0,45 s.
+
+```
+Hand quer durch ein Sternfeld     2 Zerfälle bei 5 treffbaren Punkten
+geworfener Wirbel, 6 s Flug       6 Zerfälle, bis zu 29 Funken gleichzeitig
+```
+
+Funken sind selbst kein Korn und können deshalb nicht weiterzünden — eine
+Kettenreaktion wäre Eigenleben.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -725,6 +756,8 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+K ist J mit einem anderen Auslöser: Lichtpunkte zerspringen bei Berührung
+statt am Lebensende.
 J ist I mit weniger Korn — und die großen Punkte zerspringen, statt zu verlöschen.
 I ist H plus die Tempofarbe (langsam tief, schnell hell).
 H ist G plus das Korn (träge Fäden bleiben als Lichtpunkte stehen).

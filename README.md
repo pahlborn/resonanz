@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch K — Zusammenstoß**](https://pahlborn.github.io/resonanz/versuch-k.html) · triff einen Lichtpunkt, und er zerspringt
 * [**Versuch J — Zerspringende Punkte**](https://pahlborn.github.io/resonanz/versuch-j.html) · weniger, dafür mit Ende
 * [**Versuch I — Tempo färbt**](https://pahlborn.github.io/resonanz/versuch-i.html) · langsam tief, schnell hell
 * [**Versuch H — Lichtpunkte**](https://pahlborn.github.io/resonanz/versuch-h.html) · was langsam ist, bleibt ein Punkt
@@ -30,7 +31,9 @@ laden, öffnen, loslassen. In H hat das Medium Korn: Ein Teil der Fäden ist tr�
 und bleibt als Lichtpunkt stehen, statt zu einem Streifen zu schmieren — wenige
 davon sehr hell. Die Fläche beginnt leer; die Lichtpunkte entstehen dort, wo ein
 Strahl war, und klingen mit ihm ab. In I bestimmt das Handtempo, wo auf der Farbskala gemalt wird. In J
-sind es weniger Punkte, und die großen zerspringen am Ende ihres Lebens.
+sind es weniger Punkte, und die großen zerspringen am Ende ihres Lebens. In K
+zerspringen sie stattdessen bei Berührung — mit der Hand oder mit einem
+geworfenen Wirbel.
 Zwei Finger kurz auftippen versucht Vollbild.
 
 Auf dem iPad: Adresse in Safari öffnen, dann **Teilen → Zum Home-Bildschirm**.

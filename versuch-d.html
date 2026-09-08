@@ -616,6 +616,7 @@
   }
 
   function mediumRechnen(dt) {
+    var handTempo = unten ? Math.sqrt(hvx*hvx + hvy*hvy) : 0;
     var reib = Math.exp(-0.85 * dt);
     var schub = 0.26;
     var zug = 2.2;   /* wie stark das Wirbelfeld die Fäden mitnimmt */
@@ -699,7 +700,25 @@
         }
       }
 
-      if (korn[i] > 0) { ax = 0; ay = 0; }   /* zuletzt, sonst schiebt das Bild */
+      if (korn[i] > 0) {
+        ax = 0; ay = 0;                        /* zuletzt, sonst schiebt das Bild */
+        if (0 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
+          var zer = 0;
+          if (unten && handTempo > 130) {
+            var hx2 = x - hx, hy2 = y - hy;
+            if (hx2*hx2 + hy2*hy2 < 900) zer = 1;
+          }
+          if (!zer) for (var c2 = 0; c2 < kerne.length; c2++) {
+            var W2 = kerne[c2];
+            if (W2.s < 0.12) continue;
+            var dv2 = W2.dvx*W2.dvx + W2.dvy*W2.dvy;
+            if (dv2 < 4900) continue;            /* nur ein geworfener Wirbel */
+            var kx2 = x - W2.x, ky2 = y - W2.y, rr2 = W2.r * 0.5;
+            if (kx2*kx2 + ky2*ky2 < rr2*rr2) { zer = 1; break; }
+          }
+          if (zer) { funken(i); lf[i] = 0; korn[i] = 0; continue; }
+        }
+      }
       var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib * zaeh;
       var nvy = (vy[i] + (ay - vy[i]) * 4.2 * dt) * reib * zaeh;
       if (korn[i] > 0) { var kb = Math.exp(-7 * dt); nvx *= kb; nvy *= kb; }

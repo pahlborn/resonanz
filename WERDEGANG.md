@@ -506,10 +506,8 @@ selbst: Das Bild wurde sechs Sekunden nach dem Loslassen aufgenommen, als die
 lebende Schicht längst tot war. Lichtpunkte sind ein Phänomen der lebenden
 Schicht; gemessen und beurteilt wird ab jetzt **während** der Bewegung.
 
-Nebenwirkung, die eine Entscheidung verlangt: Die Fläche ist jetzt auch in Ruhe
-nicht mehr ganz leer, sondern zeigt ein schwaches Sternfeld. Das entspricht der
-Vorgabe, widerspricht aber der Regel, dass das Medium in Ruhe unsichtbar ist.
-Eine Zahl in `versuch-h.html` entscheidet darüber.
+Nebenwirkung, die eine Entscheidung verlangte: Die Fläche war damit auch in
+Ruhe nicht mehr leer. Entschieden in Abschnitt 20 — sie ist es wieder.
 
 ### 19. Sterne und das Tempo als Farbe
 
@@ -543,6 +541,30 @@ Zwei Fehler unterwegs, beide meine: Der Tempo-Block landete zunächst in der
 nicht gibt (`Cannot read properties of undefined`). Und die Tempofarbe kam
 zuerst nur im glühenden Kern an, weil sie sich nach dem *heißesten* Wirbel
 richtete; jetzt nach dem *nächsten*, damit sie im ganzen Zug ankommt.
+
+### 20. Der leere Anfang
+
+Die in Abschnitt 18 offengelassene Entscheidung ist gefallen: „Zu Beginn bitte
+ein leerer Bildschirm. Die Lichtpunkte entstehen mit der Bewegung."
+
+Das Korn ist damit keine Grundausstattung der Fläche, sondern eine Folge des
+Handelns. Eine **Weckhüllkurve** steuert es: Sie steigt schnell (2,4 pro
+Sekunde), sobald ein Finger liegt oder ein Wirbel Energie hat, und fällt
+langsam (0,45), solange noch etwas glüht. Bei null wird sie hart auf null
+gesetzt, damit wirklich nichts stehen bleibt.
+
+Gemessen:
+
+```
+am Anfang, unberührt     wach = 0,000   Fläche vollständig leer
+während der Bewegung     wach = 1,000   Sternfeld
+16 s nach dem Loslassen  wach = 0,371   klingt mit dem Wirbel ab
+```
+
+Damit gilt die alte Regel wieder ohne Ausnahme: **Das Medium ist in Ruhe
+unsichtbar. Was bleibt, ist allein das Gemalte.** Und der Nachhall ist auch
+hier keine Eigeninitiative — die Punkte klingen mit dem Wirbel ab, den der
+Benutzer selbst erzeugt hat.
 
 ---
 

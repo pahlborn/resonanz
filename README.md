@@ -27,8 +27,8 @@ kommt eine zweite Handschrift dazu: Kringeln macht Wirbel, Ziehen macht Linien,
 Anhalten setzt Lichtpunkte darauf. In G fliegt ein begonnener Kreis weiter —
 laden, öffnen, loslassen. In H hat das Medium Korn: Ein Teil der Fäden ist träge
 und bleibt als Lichtpunkt stehen, statt zu einem Streifen zu schmieren — wenige
-davon sehr hell. Die Fläche beginnt leer; die Lichtpunkte entstehen mit der
-Bewegung und klingen mit ihr ab. In I bestimmt das Handtempo, wo auf der Farbskala gemalt wird.
+davon sehr hell. Die Fläche beginnt leer; die Lichtpunkte entstehen dort, wo ein
+Strahl war, und klingen mit ihm ab. In I bestimmt das Handtempo, wo auf der Farbskala gemalt wird.
 Zwei Finger kurz auftippen versucht Vollbild.
 
 Auf dem iPad: Adresse in Safari öffnen, dann **Teilen → Zum Home-Bildschirm**.

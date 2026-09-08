@@ -202,8 +202,7 @@
       py[i] = qy[i] = rnd() * H;
       vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0; hl[i] = 0.45;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
-      korn[i] = 0 ? (rnd() < 0.016 ? 1.7 + 1.1 * rnd()
-                          : (rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0)) : 0;
+      korn[i] = 0;
     }
   }
 
@@ -416,6 +415,34 @@
   var spawnZeiger = 0, knotenLadung = 0, letzteHX = 0, letzteHY = 0;
   var linienWert = 0, knotenAktiv = 0, linieHer = 9;
 
+  /* Ein Lichtpunkt entsteht dort, wo ein Strahl war: Er übernimmt Ort, Hitze
+     und Farbe eines hellen Fadens und bleibt liegen. Vorher war das Korn ein
+     über die ganze Fläche verstreutes Raster, das bei jeder Regung überall
+     zugleich anging — das sah nach Eigenleben aus, weil es genau das war. */
+  function kornSetzen(quelle) {
+    var i = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
+    if (i === quelle) return;
+    px[i] = px[quelle] + (rnd() - 0.5) * 5;
+    py[i] = py[quelle] + (rnd() - 0.5) * 5;
+    vx[i] = vx[quelle] * 0.08; vy[i] = vy[quelle] * 0.08;
+    hz[i] = hz[quelle] * (0.75 + 0.4 * rnd());
+    tn[i] = tn[quelle]; hl[i] = hl[quelle];
+    korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
+    fest[i] = 1;
+    lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
+  }
+
+  function korngeben(dt) {
+    if (wach < 0.05) return;
+    var n = Math.round(80 * wach);
+    for (var k = 0; k < n; k++) {
+      var q = (rnd() * N) | 0;
+      if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
+      if (hz[q] < 0.10) continue;                /* nur dort, wo es leuchtet   */
+      kornSetzen(q);
+    }
+  }
+
   function setzen(x, y, gx, gy, hitze, dauer) {
     var i = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
     px[i] = x; py[i] = y; vx[i] = gx; vy[i] = gy;
@@ -587,8 +614,7 @@
           vx[i] = 0; vy[i] = 0; hz[i] = 0;
         }
         lm[i] = 2.6 + rnd() * 3.6; lf[i] = lm[i];
-        korn[i] = 0 ? (rnd() < 0.016 ? 1.7 + 1.1 * rnd()
-                          : (rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0)) : 0;
+        korn[i] = 0;
       }
       var x = px[i], y = py[i];
       var ax = 0, ay = 0, nah = -1;
@@ -787,7 +813,8 @@
     letzterRahmen = t;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT); mediumRechnen(DT); rest -= DT; n++; }
+    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT);
+      if (0) korngeben(DT); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
     if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();

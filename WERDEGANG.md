@@ -542,7 +542,7 @@ nicht gibt (`Cannot read properties of undefined`). Und die Tempofarbe kam
 zuerst nur im glühenden Kern an, weil sie sich nach dem *heißesten* Wirbel
 richtete; jetzt nach dem *nächsten*, damit sie im ganzen Zug ankommt.
 
-### 20. Der leere Anfang
+### 20. Der leere Anfang, und wo Lichtpunkte herkommen
 
 Die in Abschnitt 18 offengelassene Entscheidung ist gefallen: „Zu Beginn bitte
 ein leerer Bildschirm. Die Lichtpunkte entstehen mit der Bewegung."
@@ -559,6 +559,29 @@ Gemessen:
 am Anfang, unberührt     wach = 0,000   Fläche vollständig leer
 während der Bewegung     wach = 1,000   Sternfeld
 16 s nach dem Loslassen  wach = 0,371   klingt mit dem Wirbel ab
+```
+
+Das genügte nicht. Der nächste Befund: „Die Lichtpunkte sind nach wie vor
+bereits zu Beginn sichtbar. Zudem haben sie ein Eigenleben und entstehen nicht
+entlang oder mit den Strahlen."
+
+Beides war dieselbe Ursache, und sie lag tiefer als die Hüllkurve: **Das Korn
+war ein vorhandenes Raster, das angeht.** Vierzehn Prozent aller Fäden waren
+von Anfang an Korn, gleichmäßig über die Fläche verstreut; sobald Leben aufkam,
+leuchteten sie alle zugleich auf — überall, auch dort, wo nie ein Finger war.
+Das sah nach Eigenleben aus, weil es genau das war.
+
+Richtig ist: **Ein Lichtpunkt entsteht dort, wo ein Strahl war.** Körner werden
+nicht mehr beim Säen verteilt, sondern im Lauf der Bewegung gesetzt — sie
+übernehmen Ort, Hitze und Farbe eines hellen Fadens und bleiben liegen. Wo
+nichts leuchtet, entsteht nichts.
+
+Gemessen, nur auf der linken Bildhälfte gemalt:
+
+```
+unberührt          0 Körner links     0 rechts
+nur links gemalt   193 Körner links   4 rechts
+14 s danach         83 Körner links   1 rechts
 ```
 
 Damit gilt die alte Regel wieder ohne Ausnahme: **Das Medium ist in Ruhe

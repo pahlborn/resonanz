@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch G — Der begonnene Kreis**](https://pahlborn.github.io/resonanz/versuch-g.html) · ein Bogen zieht weiter
 * [**Versuch F — Filament und Knoten**](https://pahlborn.github.io/resonanz/versuch-f.html) · die zweite Handschrift
 * [**Versuch E — Zwei Stimmen**](https://pahlborn.github.io/resonanz/versuch-e.html) · Drehrichtung färbt, Schleifengröße malt
 * [**Versuch D — Das Bild lenkt**](https://pahlborn.github.io/resonanz/versuch-d.html) · die Fläche antwortet mit
@@ -21,7 +22,8 @@ eine Spur, wohin man auch geht. Hört man auf zu kringeln, versiegt die Farbe. I
 Gemalte zurück. In E entscheidet die Drehrichtung über die Farbe und die
 Schleifengröße über die Breite — zwei Stimmen ohne einen einzigen Regler. In F
 kommt eine zweite Handschrift dazu: Kringeln macht Wirbel, Ziehen macht Linien,
-Anhalten setzt Lichtpunkte darauf.
+Anhalten setzt Lichtpunkte darauf. In G fliegt ein begonnener Kreis weiter —
+laden, öffnen, loslassen.
 Zwei Finger kurz auftippen versucht Vollbild.
 
 Auf dem iPad: Adresse in Safari öffnen, dann **Teilen → Zum Home-Bildschirm**.

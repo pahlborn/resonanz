@@ -434,6 +434,51 @@ gesenkt und die seitliche Streuung halbiert, damit der Strang Farbe hat und
 der Knoten allein weißglüht. Erst dadurch entsteht eine Rangfolge statt einer
 Fläche.
 
+### 17. Der begonnene Kreis
+
+Aus der Vorgabe fehlte noch der Bogen, „der sich in eine andere Richtung
+fortbewegen lässt". Die Messgröße dafür ist der **aufsummierte Drehwinkel seit
+dem letzten Richtungswechsel**: unter einer vollen Umdrehung ein begonnener
+Kreis, darüber ein geschlossener. Ein offener Bogen erbt beim Loslassen die
+Wanderung der Hand und trägt den Wirbel weiter; ein geschlossener bleibt
+stehen. Das setzt fort, was der Benutzer begonnen hat — von selbst beginnt
+nach wie vor nichts.
+
+Vier Anläufe waren nötig, jeder mit einem eigenen Befund:
+
+1. **Der Prüfgriff war zu langsam.** Unter 60 px/s greift die Taktmessung gar
+   nicht; die ersten Zahlen waren Artefakte des Testroboters, nicht des Codes.
+2. **Der Zug kam aus der falschen Größe.** Aus der Momentangeschwindigkeit
+   gemessen kamen 27 px/s heraus, wo 300 richtig waren — die Schleife
+   beherrscht sie und mittelt sich nur zufällig weg.
+3. **Ein Rückblick von 0,45 s fällt mitten in die Kreisbahn** und misst eine
+   Sehne statt der Wanderung. Das Fenster muss vom Beginn des Zuges reichen.
+4. **Ohne Verfall sammelt durchgehendes Kreiseln Winkel ohne Ende** — und man
+   könnte nie mehr etwas loswerfen. Mit Verfall bleibt anhaltendes Kreiseln
+   geschlossen (Gleichgewicht bei rund 590 Grad), während ein einzelner Bogen
+   offen bleibt.
+
+Dabei kam ein Fehler aus F zum Vorschein, den erst G sichtbar gemacht hat:
+**Jeder Zuganfang setzte einen Knoten.** Dort ist die Hand noch langsam und die
+Drehung noch nicht erkannt, und beides zusammen sieht aus wie Verweilen. Jetzt
+gilt: Ein Knoten sitzt auf einer Linie — er entsteht nur, wenn kurz zuvor ein
+Filament gelegt wurde.
+
+Die eigentliche Geste ist damit dreiteilig: **laden, öffnen, loslassen.**
+Gemessen:
+
+```
+nach dem Laden (2,5 enge Umdrehungen)   Energie 1,00   Bogen 324°
+nach dem Öffnen (weiter, langsamer Bogen) Energie 0,75   Bogen  48°
+beim Loslassen                          offen 1,00     Drift 206 px/s
+danach                                  266 px geflogen, Energie nach 4,6 s noch 0,62
+```
+
+Weil die Energie den Flug überdauert, schreibt der Wirbel unterwegs weiter —
+im Bild bleibt ein Komet: ein dichter Kern und ein heller Bogen, der davonzieht.
+Von kalt gestartet fliegt ein Bogen zwar auch, ist aber zu schwach, um Farbe zu
+lassen. Das ist ehrlich: Was nichts geladen hat, hinterlässt nichts.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -506,6 +551,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+G ist F plus der begonnene Kreis (ein offener Bogen fliegt weiter).
 F ist E plus die zweite Handschrift (Ziehen macht Linien, Anhalten Knoten).
 E ist D plus zwei Stimmen (Drehrichtung färbt, Schleifengröße malt).
 C hat dieselbe Stimmung wie B. Anders ist nur, wo der Wirbel sitzt und woran

@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch L — Enger Wirbel**](https://pahlborn.github.io/resonanz/versuch-l.html) · am Finger statt um ihn herum
 * [**Versuch K — Zusammenstoß**](https://pahlborn.github.io/resonanz/versuch-k.html) · triff einen Lichtpunkt, und er zerspringt
 * [**Versuch J — Zerspringende Punkte**](https://pahlborn.github.io/resonanz/versuch-j.html) · weniger, dafür mit Ende
 * [**Versuch I — Tempo färbt**](https://pahlborn.github.io/resonanz/versuch-i.html) · langsam tief, schnell hell

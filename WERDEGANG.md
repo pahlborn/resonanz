@@ -719,6 +719,47 @@ K jetzt      26 bis 35 Körner, 16 Zerfälle im Testlauf
 
 A bis J behalten ihre farbigen, zahlreicheren Punkte zum Vergleich.
 
+### 25. Drei Beschwerden, eine Ursache
+
+Zu J: „Das Endprodukt, also was bleibt, ist ein ziemlich diffuses Geschmiere.
+Es gibt zu viele Lichtpunkte, die liegen bleiben. Die Wirbel gehen etwas unter
+und bewegen sich nicht mehr zentral am Finger, der Radius steuert nach außen."
+
+Die Messung zeigte, dass zwei davon **dieselbe** Ursache haben, und es ist
+meine Zuordnung Schleifengröße → Wirbelradius aus Abschnitt 19:
+
+```
+Kringel    Wirbelradius   Hitzehof   Abstand Kern ↔ Finger
+ 30 px         51 px        69 px          10 px
+ 90 px        111 px       150 px          31 px
+170 px        192 px       259 px          58 px
+```
+
+Bei großen Schleifen glühte ein Hof von 259 px — ein Viertel der kurzen
+iPad-Kante, weich über die Fläche verteilt: das Geschmiere. Der schnellste Ring
+lag bei 192 px, also *außerhalb* der Fingerbahn: „der Radius steuert nach
+außen". Und der Kern hinkte 58 px hinterher, weil er bei großen, schnellen
+Schleifen der Hand nicht folgen kann: „nicht mehr zentral am Finger". Ein
+Zusammenhang, den man ohne die drei Zahlen nebeneinander nicht sieht.
+
+**Versuch L** fasst den Wirbel enger (Faktor 0,62 statt 1,15, Deckel 0,125
+statt 0,26 der kurzen Kante), verkleinert den Hitzehof (0,95 statt 1,35
+Kernradien) und lässt den Kern schneller folgen (20 statt 9):
+
+```
+ 30 px   Wirbelradius  48 px   Hof  46 px   Abstand   4 px
+ 90 px                 69 px        66 px            11 px
+170 px                104 px        99 px            21 px
+```
+
+Dazu ein Auftrag, der sich sammelt statt zu verwaschen: Er folgt jetzt der
+Hitze **hoch 1,45** statt linear, sodass die Farbe in der Mitte liegen bleibt
+und der Rand ausdünnt. Beim ersten Versuch war die Kurve mit 1,7 zu steil und
+fraß die Stärke gleich mit; erst mit stärkerem Grundauftrag (0,50 statt 0,14)
+lesen sich die einzelnen Schleifen als Schleifen.
+
+Die zu vielen Lichtpunkte waren bereits in K erledigt; L erbt das.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -791,6 +832,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+L ist K mit engerem Wirbel und einem Auftrag, der sich sammelt.
 K ist J mit einem anderen Auslöser: Lichtpunkte zerspringen bei Berührung
 statt am Lebensende.
 J ist I mit weniger Korn — und die großen Punkte zerspringen, statt zu verlöschen.

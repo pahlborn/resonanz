@@ -82,20 +82,23 @@
   /* ---------------------------------------------------------------- Shader */
   var vsFaden =
     'attribute vec2 aPos;' +
-    'attribute vec4 aPar;' +            /* x = Helligkeit, y = Hitze */
+    'attribute vec4 aPar;' +
+    'attribute float aGr;' +            /* x = Helligkeit, y = Hitze */
     'uniform vec2 uRes;' +
     'uniform float uPunkt;' +
     'varying float vA; varying float vH; varying float vAuf; varying float vTon;' +
+    'varying float vGr;' +
     'void main(){' +
     '  vec2 n = (aPos / uRes) * 2.0 - 1.0;' +
     '  gl_Position = vec4(n.x, -n.y, 0.0, 1.0);' +
-    '  gl_PointSize = uPunkt;' +
-    '  vA = aPar.x; vH = aPar.y; vAuf = aPar.z; vTon = aPar.w;' +
+    '  gl_PointSize = uPunkt * (1.0 + aGr * 0.9);' +
+    '  vA = aPar.x; vH = aPar.y; vAuf = aPar.z; vTon = aPar.w; vGr = aGr;' +
     '}';
 
   var fsFaden =
     'precision mediump float;' +
     'varying float vA; varying float vH; varying float vAuf; varying float vTon;' +
+    'varying float vGr;' +
     'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
     'void main(){' +
     '  vec3 kalt = vec3(0.13, 0.42, 0.98);' +
@@ -105,7 +108,8 @@
     '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
-    '    a *= smoothstep(0.5, 0.0, d) * 0.55;' +
+    '    if (vGr > 0.001) { a *= smoothstep(0.34, 0.0, d) * (0.9 + vGr * 1.6); }' +
+    '    else { a *= smoothstep(0.5, 0.0, d) * 0.55; }' +
     '  }' +
     '  gl_FragColor = vec4(c * a, a);' +
     '}';
@@ -132,7 +136,8 @@
   }
 
   var pFaden = programm(vsFaden, fsFaden), pQuad = programm(vsQuad, fsQuad);
-  var lPos = gl.getAttribLocation(pFaden, 'aPos'), lPar = gl.getAttribLocation(pFaden, 'aPar');
+  var lPos = gl.getAttribLocation(pFaden, 'aPos'), lPar = gl.getAttribLocation(pFaden, 'aPar'),
+    lGr = gl.getAttribLocation(pFaden, 'aGr');
   var uRes = gl.getUniformLocation(pFaden, 'uRes'),
       uPunkt = gl.getUniformLocation(pFaden, 'uPunkt'),
       uStaerke = gl.getUniformLocation(pFaden, 'uStaerke'),
@@ -183,8 +188,8 @@
       qx = new Float32Array(N), qy = new Float32Array(N),
       vx = new Float32Array(N), vy = new Float32Array(N),
       hz = new Float32Array(N), lf = new Float32Array(N), lm = new Float32Array(N),
-      tn = new Float32Array(N), fest = new Uint8Array(N);
-  var daten = new Float32Array(N * 12);  /* 2 Ecken je Faden, je (x,y,a,h,auf,ton) */
+      tn = new Float32Array(N), fest = new Uint8Array(N), korn = new Float32Array(N);
+  var daten = new Float32Array(N * 14);  /* 2 Ecken, je (x,y,a,h,auf,ton,größe) */
 
   var W = 0, H = 0, dpr = 1;
 
@@ -194,6 +199,7 @@
       py[i] = qy[i] = rnd() * H;
       vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
+      korn[i] = 0 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
     }
   }
 
@@ -409,7 +415,7 @@
     var i = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
     px[i] = x; py[i] = y; vx[i] = gx; vy[i] = gy;
     hz[i] = hitze; tn[i] = aktiverKern ? aktiverKern.ton : 0.5;
-    fest[i] = 1; lm[i] = dauer; lf[i] = dauer;
+    fest[i] = 1; korn[i] = 0; lm[i] = dauer; lf[i] = dauer;
   }
 
   function filamente(dt) {
@@ -563,6 +569,7 @@
           vx[i] = 0; vy[i] = 0; hz[i] = 0;
         }
         lm[i] = 2.6 + rnd() * 3.6; lf[i] = lm[i];
+        korn[i] = 0 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
       }
       var x = px[i], y = py[i];
       var ax = 0, ay = 0, nah = -1;
@@ -608,6 +615,7 @@
       }
 
       if (fest[i]) { ax *= 0.14; ay *= 0.14; }
+      if (korn[i] > 0) { ax *= 0.20; ay *= 0.20; }
 
       var zaeh = 1;
       if (1) {
@@ -666,10 +674,12 @@
       var a = tempo / 380; if (a > 1) a = 1;
       a = a * a * (3 - 2 * a);
       a += hz[i] * 0.85; if (a > 1) a = 1;
+      if (korn[i] > 0) { var ak = 0.24 + 0.72 * hz[i]; if (ak > a) a = ak; }
       var rest = lf[i], alt2 = lm[i] - lf[i];
       if (rest < 0.6) a *= rest / 0.6;
       if (alt2 < 0.6) a *= alt2 / 0.6;
-      var tx = px[i] - sx * SCHWEIF, ty = py[i] - sy * SCHWEIF;
+      var sf = korn[i] > 0 ? 0 : SCHWEIF;
+      var tx = px[i] - sx * sf, ty = py[i] - sy * sf;
 
       /* Wie viel Farbe nimmt die Fläche hier noch an? Wo schon viel liegt,
          wenig — sonst läuft alles zu. Und was aufgetragen wird, wandert ins
@@ -687,13 +697,14 @@
         }
       }
 
-      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i];
-      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;   daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i];
+      daten[j++] = tx * dpr; daten[j++] = ty * dpr; daten[j++] = a * 0.20; daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i]; daten[j++] = korn[i];
+      daten[j++] = px[i] * dpr; daten[j++] = py[i] * dpr; daten[j++] = a;   daten[j++] = hz[i]; daten[j++] = auf; daten[j++] = tn[i]; daten[j++] = korn[i];
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
     gl.bufferData(gl.ARRAY_BUFFER, daten, gl.DYNAMIC_DRAW);
-    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 24, 0);
-    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 24, 8);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 28, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 28, 8);
+    gl.enableVertexAttribArray(lGr); gl.vertexAttribPointer(lGr, 1, gl.FLOAT, false, 28, 24);
   }
 
   function faedenZeichnen(staerke, punkt, tor) {
@@ -736,8 +747,9 @@
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
     gl.bindBuffer(gl.ARRAY_BUFFER, vboFaden);
-    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 24, 0);
-    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 24, 8);
+    gl.enableVertexAttribArray(lPos); gl.vertexAttribPointer(lPos, 2, gl.FLOAT, false, 28, 0);
+    gl.enableVertexAttribArray(lPar); gl.vertexAttribPointer(lPar, 4, gl.FLOAT, false, 28, 8);
+    gl.enableVertexAttribArray(lGr); gl.vertexAttribPointer(lGr, 1, gl.FLOAT, false, 28, 24);
     faedenZeichnen(0.55, 1.0, 0);  /* Fäden  */
     faedenZeichnen(0.22, 7.0, 0);  /* Glühen */
   }

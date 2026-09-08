@@ -479,6 +479,38 @@ im Bild bleibt ein Komet: ein dichter Kern und ein heller Bogen, der davonzieht.
 Von kalt gestartet fliegt ein Bogen zwar auch, ist aber zu schwach, um Farbe zu
 lassen. Das ist ehrlich: Was nichts geladen hat, hinterlässt nichts.
 
+### 18. Lichtpunkte
+
+Frage nach G: „Können wir Lichtpunkte erzeugen?" — mit einem
+herangezoomten Ausschnitt der Vorgabe, auf dem zwischen den Streifen überall
+einzelne, scharfe Punkte sitzen.
+
+Dafür braucht es keinen neuen Mechanismus. **Ein Lichtpunkt ist derselbe Faden,
+nur langsam:** Ein schneller Faden schmiert zu einem Streifen, ein langsamer
+bleibt ein Punkt. Genau das war bisher unmöglich, weil die Helligkeit an der
+Geschwindigkeit hing — ein stehender Faden war unsichtbar.
+
+**Versuch H** gibt vierzehn Prozent der Fäden **Trägheit**: Sie folgen dem
+Wirbelfeld nur zu einem Fünftel und bleiben fast stehen. Drei Folgen:
+
+* Sie ziehen keinen Schweif, sondern werden als **scharfer Punkt** gezeichnet,
+  mit eigener Größe je Faden — es gibt große und kleine.
+* Ihre Helligkeit kommt aus der **Hitze**, nicht aus dem Tempo: fern von allem
+  ein schwaches Korn, nahe an einem glühenden Wirbel helle Funken.
+* Sie schreiben mit — und ein Punkt ist im Standbild lesbar, wo ein
+  verwischter Streifen es nicht ist. Das ist der erste Beitrag zu dem in
+  Abschnitt 15 festgehaltenen Problem, ohne dass er dafür gebaut wurde.
+
+Der erste Anlauf war zu blass, und der Grund war ein Fehler in der Prüfung
+selbst: Das Bild wurde sechs Sekunden nach dem Loslassen aufgenommen, als die
+lebende Schicht längst tot war. Lichtpunkte sind ein Phänomen der lebenden
+Schicht; gemessen und beurteilt wird ab jetzt **während** der Bewegung.
+
+Nebenwirkung, die eine Entscheidung verlangt: Die Fläche ist jetzt auch in Ruhe
+nicht mehr ganz leer, sondern zeigt ein schwaches Sternfeld. Das entspricht der
+Vorgabe, widerspricht aber der Regel, dass das Medium in Ruhe unsichtbar ist.
+Eine Zahl in `versuch-h.html` entscheidet darüber.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung
@@ -551,6 +583,7 @@ Schalters, damit in der App keine Bedienoberfläche entsteht.
 | Takt gemessen an | Umkreisen des Wirbels | Umkreisen des Wirbels | **Kringeln der Richtung** |
 | Bisheriger Eindruck | war zuerst unerreichbar, jetzt prüfbar | „imposant", aber ohne Sinn | offen |
 
+H ist G plus das Korn (träge Fäden bleiben als Lichtpunkte stehen).
 G ist F plus der begonnene Kreis (ein offener Bogen fliegt weiter).
 F ist E plus die zweite Handschrift (Ziehen macht Linien, Anhalten Knoten).
 E ist D plus zwei Stimmen (Drehrichtung färbt, Schleifengröße malt).

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz E</title>
+<title>Resonanz H</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -25,13 +25,13 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-<p id="hinweis">Links herum, rechts herum · klein, groß</p>
+<p id="hinweis">Kringeln · Ziehen · Anhalten · Werfen</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch E (Zwei Stimmen — Drehrichtung färbt, Schleifengröße malt)
+     Resonanz — Versuch H (Lichtpunkte — was langsam ist, bleibt ein Punkt)
 
      Zwei Schichten:
 
@@ -202,7 +202,7 @@
       py[i] = qy[i] = rnd() * H;
       vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
-      korn[i] = 0 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
+      korn[i] = 1 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
     }
   }
 
@@ -363,7 +363,7 @@
     offen = Math.max(0, offen - 1);
     if (vorher === 2 && performance.now() - zweiZeit2 < 600) vollbild();
     if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
-    if (0 && aktiverKern) {
+    if (1 && aktiverKern) {
       /* Ein begonnener Kreis nimmt Fahrt mit: Je weniger vollendet die Drehung
          ist, desto mehr Zug erbt der Wirbel — und trägt ihn weiter, wenn die
          Hand ihn loslässt. Ein geschlossener Kreis bleibt stehen. Das setzt
@@ -540,10 +540,10 @@
       if (Q !== aktiverKern || !unten) {
         /* Nachhall: der Wirbel läuft weiter und klingt ab. Er beginnt nie
            von selbst etwas Neues — ohne Anregung geht alles zur Ruhe. */
-        var vd2 = 0 ? Math.sqrt(Q.dvx*Q.dvx + Q.dvy*Q.dvy) : 0;
+        var vd2 = 1 ? Math.sqrt(Q.dvx*Q.dvx + Q.dvy*Q.dvy) : 0;
         Q.s -= (STIMMUNG.zerfall * (vd2 > 40 ? 0.85 : 1.25)) * Q.s * dt;
         Q.om *= (1 - 0.16 * dt);
-        if (0) {
+        if (1) {
           Q.x += Q.dvx * dt; Q.y += Q.dvy * dt;
           var br = Math.exp(-0.28 * dt); Q.dvx *= br; Q.dvy *= br;
         }
@@ -551,7 +551,7 @@
       }
       if (Q.s > maxS) maxS = Q.s;
     }
-    schreibt = (maxS > STIMMUNG.schwelle || (0 && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
+    schreibt = (maxS > STIMMUNG.schwelle || (1 && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
   }
 
   function mediumRechnen(dt) {
@@ -572,7 +572,7 @@
           vx[i] = 0; vy[i] = 0; hz[i] = 0;
         }
         lm[i] = 2.6 + rnd() * 3.6; lf[i] = lm[i];
-        korn[i] = 0 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
+        korn[i] = 1 && rnd() < 0.14 ? 0.15 + 0.7 * rnd() : 0;
       }
       var x = px[i], y = py[i];
       var ax = 0, ay = 0, nah = -1;
@@ -764,7 +764,7 @@
     letzterRahmen = t;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT); mediumRechnen(DT); rest -= DT; n++; }
+    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (1) filamente(DT); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
     if (1 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();

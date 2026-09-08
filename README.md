@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch H — Lichtpunkte**](https://pahlborn.github.io/resonanz/versuch-h.html) · was langsam ist, bleibt ein Punkt
 * [**Versuch G — Der begonnene Kreis**](https://pahlborn.github.io/resonanz/versuch-g.html) · ein Bogen zieht weiter
 * [**Versuch F — Filament und Knoten**](https://pahlborn.github.io/resonanz/versuch-f.html) · die zweite Handschrift
 * [**Versuch E — Zwei Stimmen**](https://pahlborn.github.io/resonanz/versuch-e.html) · Drehrichtung färbt, Schleifengröße malt
@@ -23,7 +24,8 @@ Gemalte zurück. In E entscheidet die Drehrichtung über die Farbe und die
 Schleifengröße über die Breite — zwei Stimmen ohne einen einzigen Regler. In F
 kommt eine zweite Handschrift dazu: Kringeln macht Wirbel, Ziehen macht Linien,
 Anhalten setzt Lichtpunkte darauf. In G fliegt ein begonnener Kreis weiter —
-laden, öffnen, loslassen.
+laden, öffnen, loslassen. In H hat das Medium Korn: Ein Teil der Fäden ist träge
+und bleibt als Lichtpunkt stehen, statt zu einem Streifen zu schmieren.
 Zwei Finger kurz auftippen versucht Vollbild.
 
 Auf dem iPad: Adresse in Safari öffnen, dann **Teilen → Zum Home-Bildschirm**.

@@ -756,9 +756,19 @@
 
       if (korn[i] > 0) {
         if (x < 0 || x > W || y < 0 || y > H) { lf[i] = 0; }
-      } else {
+      } else if (1) {
         if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
         if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
+      } else {
+        /* Was hinausfliegt, ist fort. Nicht hart an der Kante — ein Rand von
+           18 % lässt den Faden sichtbar davonfliegen statt an einer Wand zu
+           verschwinden. Danach kommt er still und kalt irgendwo wieder herein,
+           damit das Feld nicht ausdünnt und die Ruhebewegung bleibt. */
+        if (x < -W * 0.18 || x > W * 1.18 || y < -H * 0.18 || y > H * 1.18) {
+          x = rnd() * W; y = rnd() * H;
+          vx[i] = 0; vy[i] = 0; hz[i] = 0;
+          qx[i] = x; qy[i] = y;
+        }
       }
       px[i] = x; py[i] = y;
     }

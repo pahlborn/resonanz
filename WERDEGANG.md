@@ -824,6 +824,96 @@ mehrfach.
 Das ist eine Vermutung, keine Messung, und der nächste Versuch hat sie zu
 prüfen — nicht M, denn M soll genau eine Änderung tragen.
 
+### 28. Was hinausfliegt, ist fort
+
+Der Befund am Gerät kam als Wunsch, nicht als Fehlermeldung: „Wir sollten mal
+versuchen, dass alles, was über die Bildschirmränder herausfliegt, nicht
+unbedingt wieder auf einer anderen Seite hereinkommen muss." Dazu, im selben
+Atemzug, eine Schutzbedingung: „Was mir unheimlich gut gefällt: wenn das Bild
+in Bewegung bleibt, auch wenn nichts passiert."
+
+Beides zusammen ist die eigentliche Aufgabe. Das Medium hat feste 14 000 Fäden.
+Wer sie am Rand sterben lässt, dünnt das Feld aus — und mit dem Feld verschwindet
+genau die Ruhebewegung, die bleiben soll.
+
+Die Lösung ist ein Rand von 18 % der Kante: Der Faden fliegt sichtbar hinaus,
+statt an einer Wand zu verschwinden, und kommt danach **still und kalt** an
+einer zufälligen Stelle wieder herein. Still, weil er ohne Geschwindigkeit
+startet; kalt, weil seine Hitze auf null geht — ein Faden ohne Hitze und ohne
+Tempo ist unsichtbar und legt nichts ab. Das Feld bleibt voll, ohne dass etwas
+aufblitzt.
+
+**Versuch N** ist M ohne Umlauf, **Versuch O** ist K ohne Umlauf. Zwei
+Grundlagen, weil beide gelobt wurden und die Änderung auf jeder für sich zu
+beurteilen ist.
+
+```
+nach sechs Zügen, alles in Ruhe        M       N   |     K       O
+Fäden im Bild (von 14 000)         13 998  13 032  | 13 993  12 071
+mittleres Tempo im Feld (px/s)       23,2    22,9  |   65,2    66,3
+Helligkeit der Fläche                 3,1    3,18  |  18,07   18,99
+```
+
+Das Feld dünnt nicht aus: 12 000 bis 13 000 der 14 000 Fäden sind jederzeit im
+Bild, der Rest gerade draußen und binnen Sekunden zurück. Die Ruhebewegung
+bleibt unverändert (22,9 gegen 23,2 px/s; 66,3 gegen 65,2). Die Helligkeit auch.
+Die Änderung nimmt also nichts weg — sie nimmt nur den Umlauf.
+
+**Was die Messung nicht zeigt:** ob damit die Schrägstriche aus Abschnitt 27
+verschwinden. Mein Maß dafür — Helligkeit im Randband — trennt die Striche
+nicht von einem Wirbel, der nah am Rand liegt, und die Streuung zwischen zwei
+Läufen ist größer als der Unterschied. Der Umlauf war meine dritte und letzte
+Vermutung zur Ursache; sie ist damit weder bestätigt noch widerlegt. Das
+entscheidet die Hand.
+
+### 29. „J hängt am Finger" — und ich hatte das Falsche gemessen
+
+Der Befund am Gerät: „J hängt am Finger, die nachfolgenden Versionen nicht so."
+
+Dem widersprach meine eigene Messung aus Abschnitt 25 direkt. Dort war der
+Abstand zwischen Fingerspitze und Wirbelkern gemessen worden — J/K: 58 px,
+L: 21 px. Nach dieser Zahl hängt L *besser* am Finger. Also war entweder die
+Beobachtung falsch oder die Zahl misst die falsche Sache.
+
+Sie misst die falsche Sache. „Hängen" ist keine Aussage über den **Ort** des
+Kerns, sondern über die **Masse, die mitkommt**. Gemessen wurde deshalb neu:
+ein Kringel, dessen Mittelpunkt langsam nach rechts wandert; dabei für alle
+Fäden binnen 200 px um die Fingerspitze der Anteil ihrer Geschwindigkeit in
+Handrichtung, geteilt durch das Handtempo.
+
+```
+                       J       K       L       M       N
+Handtempo (px/s)     186     186     186     186     186
+Fäden in Reichweite  1402    1450    1862    1864    1820
+davon mit der Hand   94,5    93,1    38,9    39,2    38,3   px/s
+Anteil               0,53    0,52    0,22    0,22    0,21
+Hitze am Finger     0,053   0,061   0,014   0,014   0,015
+```
+
+**J und K nehmen 53 % des Handtempos mit, L bis N nur 22 %** — der Faktor 2,4,
+den die Hand als „hängt nicht mehr" spürt. Die Hitze am Finger fällt um das
+Vierfache mit. Die Beobachtung war präzise; nur meine Zahl war die falsche.
+
+**Die Ursache ist genau der Umbau, der L besser gemacht hat.** Die
+Tangentialgeschwindigkeit des Wirbelfelds geht mit dem Quadrat des
+Kernradius: `om = K.om · K.r² / (d² + K.r²)`. L hat den Radius halbiert
+(0,125 statt 0,26 der kurzen Kante, Faktor 0,62 statt 1,15) — also viertelt
+sich, was in der Ferne noch mitgenommen wird.
+
+Damit steht eine echte Zielkollision im Raum, und keine Seite ist nur ein
+Fehler:
+
+```
+weiter Wirbel (J/K)         enger Wirbel (L/M/N)
+hängt am Finger, es fließt  lesbare, scharfe Figur
+Hof 259 px: „Geschmiere"    nur 22 % kommen mit
+```
+
+Der Ausweg wäre, beides zu entkoppeln: den Radius klein lassen (scharfe Figur)
+und stattdessen die **Reichweite** des Feldes strecken, also den Abfall nach
+außen flacher machen statt den Kern zu vergrößern. Das ist ein Vorschlag, keine
+Messung, und gehört in einen eigenen Versuch.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

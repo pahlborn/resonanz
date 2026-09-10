@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz Stoß</title>
+<title>Resonanz Strömung</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -40,15 +40,15 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-<div id="kopf">Kabinett<b>Stoß</b><i>Ein Lichtpunkt zerspringt, wenn ihn etwas trifft — die Hand oder ein Wirbel.  ·  baut auf Korn</i></div>
+<div id="kopf">Kabinett<b>Strömung</b><i>Die Hand streicht ihre Bewegung in die Fläche. Sie wirkt nach, auch ohne Kreis.</i></div>
 <a id="zurueck" href="kabinett.html">&#8592;</a>
-<p id="hinweis">Zieh schnell über einen Lichtpunkt</p>
+<p id="hinweis">Zieh gerade — und sieh, was nachläuft</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch Stoß (Ein Lichtpunkt zerspringt, wenn ihn etwas trifft — die Hand oder ein Wirbel.)
+     Resonanz — Versuch Strömung (Die Hand streicht ihre Bewegung in die Fläche. Sie wirkt nach, auch ohne Kreis.)
 
      Zwei Schichten:
 
@@ -123,7 +123,7 @@
     '  vec3 violett = vec3(0.58, 0.26, 0.98);' +
     '  vec3 gold = vec3(1.00, 0.74, 0.28);' +
     '  vec3 c = vH < 0.5 ? mix(kalt, violett, vH * 2.0) : mix(violett, gold, (vH - 0.5) * 2.0);' +
-    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 1.0);' +
+    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 0.0);' +
     '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
@@ -361,7 +361,7 @@
       var ivx = (nx - hx) / dt, ivy = (ny - hy) / dt;
       hvx += (ivx - hvx) * 0.4; hvy += (ivy - hvy) * 0.4;
       hx = nx; hy = ny;
-      if (0) feldStreichen(nx, ny, hvx, hvy, dt);
+      if (1) feldStreichen(nx, ny, hvx, hvy, dt);
       bahnX[bahnI] = nx; bahnY[bahnI] = ny; bahnT[bahnI] = t;
       bahnI = (bahnI + 1) % BAHN; if (bahnN < BAHN) bahnN++;
 
@@ -493,7 +493,7 @@
     tn[i] = tn[quelle]; hl[i] = hl[quelle];
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
     fest[i] = 1;
-    lm[i] = 1.9 + 2.6 * rnd(); lf[i] = lm[i];
+    lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
   }
 
   function funken(i) {
@@ -517,11 +517,11 @@
 
   function korngeben(dt) {
     if (wach < 0.05) return;
-    var n = Math.round(26 * wach);
+    var n = Math.round(80 * wach);
     for (var k = 0; k < n; k++) {
       var q = (rnd() * N) | 0;
       if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
-      if (hz[q] < 0.20) continue;      /* nur dort, wo es leuchtet   */
+      if (hz[q] < 0.10) continue;      /* nur dort, wo es leuchtet   */
       kornSetzen(q);
     }
   }
@@ -723,7 +723,7 @@
 
       /* Die Hand schiebt immer, unabhängig von jeder Resonanz. Das ist die
          Rückmeldung, die dem ersten Prüfstück gefehlt hat. */
-      if (0) {
+      if (1) {
         if (!fest[i]) {
           var fu = (x / W * GX) | 0, fv = (y / H * GY) | 0;
           if (fu >= 0 && fv >= 0 && fu < GX && fv < GY) {
@@ -772,7 +772,7 @@
         }
       }
 
-      if (1 && korn[i] <= 0 && !fest[i]) {
+      if (0 && korn[i] <= 0 && !fest[i]) {
         /* Ein Faden trifft einen Lichtpunkt. */
         var vs2 = vx[i]*vx[i] + vy[i]*vy[i];
         if (vs2 > 67600) {
@@ -787,7 +787,7 @@
       }
       if (korn[i] > 0) {
         ax = 0; ay = 0;                        /* zuletzt, sonst schiebt das Bild */
-        if (1 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
+        if (0 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
           var zer = 0;
           if (unten && handTempo > 130) {
             var hx2 = x - hx, hy2 = y - hy;
@@ -951,9 +951,9 @@
     letzterRahmen = t;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { if (0) feldAbklingen(DT); kerneRechnen(DT); if (0) filamente(DT);
-      if (1) korngeben(DT);
-      if (1) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
+    while (rest >= DT && n < MAX_SUB) { if (1) feldAbklingen(DT); kerneRechnen(DT); if (0) filamente(DT);
+      if (0) korngeben(DT);
+      if (0) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
     if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();

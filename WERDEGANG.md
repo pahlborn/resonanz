@@ -983,6 +983,49 @@ unverändert; geprüft durch Vergleich der erzeugten Dateien.
 Was das Kabinett nebenbei sichtbar macht, ist der Befund aus Abschnitt 30:
 Auf der Seite **Strang** sieht man ohne Umweg, wie wenig ein gerader Zug bewegt.
 
+### 32. Zwei Nachträge: die Funken und das Feld
+
+**Versuch P** macht eine Entscheidung rückgängig, die nie eine war. `FUNKEN`
+wurde in K abgeschaltet, weil der Zusammenstoß den Zerfall am Lebensende
+ersetzen sollte. Das war ein Irrtum: Die beiden sind keine Alternativen,
+sondern zwei Auslöser für dieselbe schöne Sache. P ist O mit beiden.
+
+**Versuch Q** schließt die Lücke aus Abschnitt 30. Bisher hatte der gerade Zug
+nur den Schub im Umkreis von 150 px. Jetzt streicht die Hand ihre Bewegung in
+ein Raster (80 × 60 Zellen, Pinselbreite 180 px), das Raster wirkt auf das
+Medium, und es klingt über anderthalb Sekunden ab. Gemessen an einem geraden
+Zug quer über die Fläche — mittleres Tempo der Fäden in Zugrichtung, binnen
+200 px, geteilt durch das Handtempo:
+
+```
+                       P (Schub)      Q (Feld)
+während des Zuges           0,27          0,65
+0,8 s nach dem Loslassen      46            89   px/s
+```
+
+Zum Vergleich: Kreisen brachte in J 0,53 (Abschnitt 29). Der gerade Zug ist
+damit nicht mehr die arme Verwandte des Kreises. Und weil das Feld nachwirkt,
+ist das Medium **nach** dem Loslassen schneller als währenddessen — der Zug
+läuft aus, statt abzureißen.
+
+Die Zahl ist eine Wahl, keine Ableitung. Gemessen wurden vier Einstellungen:
+
+```
+Kraft / Pinsel      Anteil während des Zuges
+1,1 / 180 px                    0,65     ← gewählt
+1,1 / 260 px                    0,90
+1,8 / 180 px                    0,97
+1,8 / 260 px                    1,21     Medium schneller als die Hand
+```
+
+Über 1,0 zieht das Feld schneller als die Hand — das kippt von „ich bewege
+etwas" nach „etwas reißt mich mit". 0,65 liegt knapp über dem Kreisen und
+darunter.
+
+Die Fassungen A bis O bleiben unberührt: Feld und Funkenschalter stehen dort
+auf 0, geprüft durch Vergleich der erzeugten Dateien — die einzigen
+Unterschiede sind `if (0)`-Zweige.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

@@ -239,6 +239,41 @@
   var GX = 80, GY = 60;
   var dich = new Float32Array(GX * GY);
   var dichG = new Float32Array(GX * GY);   /* geglättet, dafür stabile Gefälle */
+
+  /* --------------------------------------------------------- Strömungsfeld
+     Der gerade Zug hatte bisher nur einen Schub im Umkreis von 150 px um den
+     Finger: höchstens ein Viertel des Handtempos, und nur solange der Finger
+     dort ist. Wer nicht kreist, bewegte damit fast nichts.
+     Das Feld ist die Verallgemeinerung: Die Hand streicht ihre Bewegung in ein
+     Raster, das Raster wirkt auf das Medium, und es klingt über etwa anderthalb
+     Sekunden ab. Damit wirkt ein Zug nach — und weil das Feld in der Mitte
+     schnell und daneben still ist, rollt sich der Rand von selbst ein. */
+  var sfx = new Float32Array(GX * GY), sfy = new Float32Array(GX * GY);
+  var FELD_R = 180;          /* Pinselbreite der Hand im Feld, in px */
+  var FELD_TAU = 1.5;        /* Abklingzeit in Sekunden */
+
+  function feldStreichen(x, y, vx0, vy0, dt) {
+    var ru = FELD_R / W * GX, rv = FELD_R / H * GY;
+    var u0 = Math.max(0, Math.floor(x / W * GX - ru)), u1 = Math.min(GX - 1, Math.ceil(x / W * GX + ru));
+    var v0 = Math.max(0, Math.floor(y / H * GY - rv)), v1 = Math.min(GY - 1, Math.ceil(y / H * GY + rv));
+    var rate = 1 - Math.exp(-9 * dt);
+    for (var j = v0; j <= v1; j++) {
+      for (var i = u0; i <= u1; i++) {
+        var cx = (i + 0.5) / GX * W, cy = (j + 0.5) / GY * H;
+        var ex = cx - x, ey = cy - y, d2 = ex*ex + ey*ey;
+        if (d2 > FELD_R * FELD_R) continue;
+        var g = 1 - Math.sqrt(d2) / FELD_R; g = g * g;
+        var k = j * GX + i, w = rate * g;
+        sfx[k] += (vx0 - sfx[k]) * w;
+        sfy[k] += (vy0 - sfy[k]) * w;
+      }
+    }
+  }
+
+  function feldAbklingen(dt) {
+    var f = Math.exp(-dt / FELD_TAU);
+    for (var k = 0; k < GX * GY; k++) { sfx[k] *= f; sfy[k] *= f; }
+  }
   var glaettZaehler = 0;
 
   function dichteAbtasten(x, y) {
@@ -330,6 +365,7 @@
       var ivx = (nx - hx) / dt, ivy = (ny - hy) / dt;
       hvx += (ivx - hvx) * 0.4; hvy += (ivy - hvy) * 0.4;
       hx = nx; hy = ny;
+      if (0) feldStreichen(nx, ny, hvx, hvy, dt);
       bahnX[bahnI] = nx; bahnY[bahnI] = ny; bahnT[bahnI] = t;
       bahnI = (bahnI + 1) % BAHN; if (bahnN < BAHN) bahnN++;
 
@@ -691,7 +727,15 @@
 
       /* Die Hand schiebt immer, unabhängig von jeder Resonanz. Das ist die
          Rückmeldung, die dem ersten Prüfstück gefehlt hat. */
-      if (unten && !fest[i]) {
+      if (0) {
+        if (!fest[i]) {
+          var fu = (x / W * GX) | 0, fv = (y / H * GY) | 0;
+          if (fu >= 0 && fv >= 0 && fu < GX && fv < GY) {
+            var fk = fv * GX + fu;
+            ax += sfx[fk] * 1.1; ay += sfy[fk] * 1.1;
+          }
+        }
+      } else if (unten && !fest[i]) {
         var dx = x - hx, dy = y - hy;
         var dd = dx*dx + dy*dy;
         if (dd < 22500) {
@@ -911,7 +955,7 @@
     letzterRahmen = t;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT);
+    while (rest >= DT && n < MAX_SUB) { if (0) feldAbklingen(DT); kerneRechnen(DT); if (0) filamente(DT);
       if (0) korngeben(DT);
       if (0) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;

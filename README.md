@@ -8,6 +8,8 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch Q — Der gerade Zug bekommt ein Feld**](https://pahlborn.github.io/resonanz/versuch-q.html) · die Hand streicht ihre Bewegung in die Fläche
+* [**Versuch P — Die Funken sind zurück**](https://pahlborn.github.io/resonanz/versuch-p.html) · seit K waren sie versehentlich aus
 * [**Kabinett**](https://pahlborn.github.io/resonanz/kabinett.html) · eine Seite je Wirkung, mit dem Namen darauf
 * [**Versuch N — Was hinausfliegt, ist fort**](https://pahlborn.github.io/resonanz/versuch-n.html) · kein Umlauf am Rand, auf M
 * [**Versuch O — Was hinausfliegt, ist fort**](https://pahlborn.github.io/resonanz/versuch-o.html) · kein Umlauf am Rand, auf K

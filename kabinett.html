@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resonanz — Kabinett</title>
+<style>
+  :root{ --grund:#05070C; --text:#D8DCDF; --leise:#7E8B99; --linie:#1B242E; --akzent:#3F7BE8; }
+  html,body{margin:0;padding:0;min-height:100%;background:var(--grund);}
+  body{
+    color:var(--text); display:flex; justify-content:center;
+    padding:max(48px, env(safe-area-inset-top)) 22px 60px;
+    font:400 16px/1.6 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  }
+  .blatt{width:100%; max-width:34rem; display:flex; flex-direction:column; gap:34px;}
+  h1{
+    margin:0; font:500 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing:.42em; text-transform:uppercase;
+  }
+  p{margin:0; color:var(--leise); max-width:62ch;}
+  .waehlen{display:flex; flex-direction:column; gap:1px; background:var(--linie); border:1px solid var(--linie);}
+  a.versuch{
+    display:flex; flex-direction:column; gap:5px; padding:20px 22px;
+    background:#0C1218; text-decoration:none; color:var(--text);
+  }
+  a.versuch:hover, a.versuch:focus-visible{background:#111A23; outline:none;}
+  a.versuch:focus-visible{box-shadow:inset 0 0 0 2px var(--akzent);}
+  .name{font:500 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.2em; text-transform:uppercase;}
+  .was{color:var(--leise); font-size:14px;}
+  .fuss{color:var(--leise); font-size:13px; border-top:1px solid var(--linie); padding-top:20px;}
+  .fuss a{color:var(--akzent);}
+
+  .baut{color:#5B6A86; font-size:12px; font-style:italic;}
+</style>
+</head>
+<body>
+  <div class="blatt">
+    <h1>Kabinett</h1>
+    <p>Eine Seite je Wirkung, mit dem Namen darauf. Die Grundlage ist überall
+       dieselbe — der Wirbel unter dem Finger, weit genug, dass das Medium
+       mitkommt, und kein Umlauf am Rand. Jede Seite schaltet genau eine Sache
+       hinzu. Damit heißt jede Sache, wie sie heißt, und man kann über sie
+       reden, ohne sie beschreiben zu müssen.</p>
+    <div class="waehlen">
+      <a class="versuch" href="kab-wirbel.html">
+        <span class="name">Wirbel</span>
+        <span class="was">Kreisen erzeugt einen Wirbel. Alles Weitere sitzt darauf.</span>
+      </a>
+      <a class="versuch" href="kab-strang.html">
+        <span class="name">Strang</span>
+        <span class="was">Der gerade Zug legt ein Filament. Wer darauf verweilt, setzt einen Knoten.</span>
+      </a>
+      <a class="versuch" href="kab-wurf.html">
+        <span class="name">Wurf</span>
+        <span class="was">Ein unvollendeter Kreis schickt den Wirbel weiter, wenn die Hand loslässt.</span>
+      </a>
+      <a class="versuch" href="kab-korn.html">
+        <span class="name">Korn</span>
+        <span class="was">Wo es hell ist, gerinnt ein Faden zu einem Lichtpunkt.</span>
+      </a>
+      <a class="versuch" href="kab-funken.html">
+        <span class="name">Funken</span>
+        <span class="was">Ein großer Lichtpunkt verlöscht nicht — er zerspringt in Funken.</span>
+        <span class="baut">baut auf Korn auf</span>
+      </a>
+      <a class="versuch" href="kab-stoss.html">
+        <span class="name">Stoß</span>
+        <span class="was">Ein Lichtpunkt zerspringt, wenn ihn etwas trifft — die Hand oder ein Wirbel.</span>
+        <span class="baut">baut auf Korn auf</span>
+      </a>
+      <a class="versuch" href="kab-sog.html">
+        <span class="name">Sog</span>
+        <span class="was">Was schon liegt, lenkt das Medium — und nimmt weniger Farbe an.</span>
+      </a>
+      <a class="versuch" href="kab-stimmen.html">
+        <span class="name">Zwei Stimmen</span>
+        <span class="was">Links herum und rechts herum werden zwei Farbfamilien.</span>
+      </a>
+      <a class="versuch" href="kab-schleife.html">
+        <span class="name">Schleife</span>
+        <span class="was">Die Größe deiner Schleife bestimmt die Größe des Wirbels.</span>
+      </a>
+      <a class="versuch" href="kab-tempo.html">
+        <span class="name">Tempo</span>
+        <span class="was">Wie schnell die Hand geht, entscheidet über die Farbe: langsam tief, schnell hell.</span>
+      </a>
+    </div>
+    <p class="fuss">Die zusammengesetzten Fassungen stehen unter
+       <a href="./">Resonanz</a>. Der Werdegang steht im
+       <a href="https://github.com/pahlborn/resonanz/blob/main/WERDEGANG.md">WERDEGANG</a>.</p>
+  </div>
+</body>
+</html>

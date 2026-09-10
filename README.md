@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Kabinett**](https://pahlborn.github.io/resonanz/kabinett.html) · eine Seite je Wirkung, mit dem Namen darauf
 * [**Versuch N — Was hinausfliegt, ist fort**](https://pahlborn.github.io/resonanz/versuch-n.html) · kein Umlauf am Rand, auf M
 * [**Versuch O — Was hinausfliegt, ist fort**](https://pahlborn.github.io/resonanz/versuch-o.html) · kein Umlauf am Rand, auf K
 * [**Versuch M — Ein Zug ist ein Beitrag**](https://pahlborn.github.io/resonanz/versuch-m.html) · schwacher Auftrag, mehrere Züge bis eine Figur steht

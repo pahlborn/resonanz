@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz N</title>
+<title>Resonanz Zwei Stimmen</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -40,14 +40,15 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-
-<p id="hinweis">Kringeln · Ziehen · Anhalten · Werfen</p>
+<div id="kopf">Kabinett<b>Zwei Stimmen</b><i>Links herum und rechts herum werden zwei Farbfamilien.</i></div>
+<a id="zurueck" href="kabinett.html">&#8592;</a>
+<p id="hinweis">Links herum · rechts herum</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch N (Was hinausfliegt, ist fort — auf M)
+     Resonanz — Versuch Zwei Stimmen (Links herum und rechts herum werden zwei Farbfamilien.)
 
      Zwei Schichten:
 
@@ -118,16 +119,15 @@
     'varying float vGr; varying float vHl;' +
     'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
     'void main(){' +
-    '  vec3 kA = vec3(0.05, 0.16, 0.62); vec3 kB = vec3(0.42, 0.20, 0.98);' +
-    '  vec3 kC = vec3(0.78, 0.92, 1.00);' +
-    '  vec3 wA = vec3(0.62, 0.08, 0.04); vec3 wB = vec3(1.00, 0.50, 0.10);' +
-    '  vec3 wC = vec3(1.00, 0.96, 0.80);' +
-    '  float r = clamp(vH * 0.88 + (vHl - 0.45) * 0.62, 0.0, 1.0);' +
-    '  vec3 ck = r < 0.5 ? mix(kA, kB, r * 2.0) : mix(kB, kC, (r - 0.5) * 2.0);' +
-    '  vec3 cw = r < 0.5 ? mix(wA, wB, r * 2.0) : mix(wB, wC, (r - 0.5) * 2.0);' +
+    '  vec3 kA = vec3(0.11, 0.40, 0.98); vec3 kB = vec3(0.55, 0.24, 0.98);' +
+    '  vec3 kC = vec3(0.74, 0.90, 1.00);' +
+    '  vec3 wA = vec3(0.95, 0.22, 0.10); vec3 wB = vec3(1.00, 0.60, 0.13);' +
+    '  vec3 wC = vec3(1.00, 0.95, 0.78);' +
+    '  vec3 ck = vH < 0.5 ? mix(kA, kB, vH * 2.0) : mix(kB, kC, (vH - 0.5) * 2.0);' +
+    '  vec3 cw = vH < 0.5 ? mix(wA, wB, vH * 2.0) : mix(wB, wC, (vH - 0.5) * 2.0);' +
     '  vec3 c = mix(ck, cw, vTon);' +
-    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 1.0);' +
-    '  float a = vA * uStaerke * mix(1.0, pow(vH, 1.45) * vAuf, uHitzeTor);' +
+    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 0.0);' +
+    '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
     '    if (vGr > 0.001) { a *= smoothstep(0.34, 0.0, d) * (0.9 + vGr * 1.6); }' +
@@ -384,7 +384,7 @@
     offen = Math.max(0, offen - 1);
     if (vorher === 2 && performance.now() - zweiZeit2 < 600) vollbild();
     if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
-    if (1 && aktiverKern) {
+    if (0 && aktiverKern) {
       /* Ein begonnener Kreis nimmt Fahrt mit: Je weniger vollendet die Drehung
          ist, desto mehr Zug erbt der Wirbel — und trägt ihn weiter, wenn die
          Hand ihn loslässt. Ein geschlossener Kreis bleibt stehen. Das setzt
@@ -460,7 +460,7 @@
     tn[i] = tn[quelle]; hl[i] = hl[quelle];
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
     fest[i] = 1;
-    lm[i] = 1.9 + 2.6 * rnd(); lf[i] = lm[i];
+    lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
   }
 
   function funken(i) {
@@ -484,11 +484,11 @@
 
   function korngeben(dt) {
     if (wach < 0.05) return;
-    var n = Math.round(24 * wach);
+    var n = Math.round(80 * wach);
     for (var k = 0; k < n; k++) {
       var q = (rnd() * N) | 0;
       if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
-      if (hz[q] < 0.20) continue;      /* nur dort, wo es leuchtet   */
+      if (hz[q] < 0.10) continue;      /* nur dort, wo es leuchtet   */
       kornSetzen(q);
     }
   }
@@ -592,11 +592,11 @@
            eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
            weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
         if (K.s > K.fest) K.fest = K.s;
-        var folge = 20.0;
+        var folge = 9.0;
         var zx = 1 ? hx : mx, zy = 1 ? hy : my;
         K.x += (zx - K.x) * folge * dt;
         K.y += (zy - K.y) * folge * dt;
-        if (1) {
+        if (0) {
           /* Das Tempo der Hand bestimmt, wo auf der Farbskala der Wirbel
              liegt: langsam die tiefen, satten Töne, schnell die hellen.
              Die Helligkeit selbst bleibt der Resonanz vorbehalten — sonst
@@ -611,9 +611,9 @@
           K.ton += ((omH > 0 ? 1 : 0) - K.ton) * 1.6 * dt;
         }
         var rZiel = !1 ? Math.min(0.13 * Math.min(W, H), Math.max(90, d * 1.25))
-                  : (1
-                      ? Math.max(0.042 * Math.min(W, H),
-                          Math.min(0.125 * Math.min(W, H), schleife * 0.62))
+                  : (0
+                      ? Math.max(0.045 * Math.min(W, H),
+                          Math.min(0.26 * Math.min(W, H), schleife * 1.15))
                       : 0.13 * Math.min(W, H));
         K.r += (rZiel - K.r) * 0.25 * dt * 1.0;
       } else {
@@ -628,10 +628,10 @@
       if (Q !== aktiverKern || !unten) {
         /* Nachhall: der Wirbel läuft weiter und klingt ab. Er beginnt nie
            von selbst etwas Neues — ohne Anregung geht alles zur Ruhe. */
-        var vd2 = 1 ? Math.sqrt(Q.dvx*Q.dvx + Q.dvy*Q.dvy) : 0;
+        var vd2 = 0 ? Math.sqrt(Q.dvx*Q.dvx + Q.dvy*Q.dvy) : 0;
         Q.s -= (STIMMUNG.zerfall * (vd2 > 40 ? 0.85 : 1.25)) * Q.s * dt;
         Q.om *= (1 - 0.16 * dt);
-        if (1) {
+        if (0) {
           Q.x += Q.dvx * dt; Q.y += Q.dvy * dt;
           var br = Math.exp(-0.28 * dt); Q.dvx *= br; Q.dvy *= br;
         }
@@ -643,7 +643,7 @@
     wach += (zielWach - wach) * (zielWach > wach ? 2.4 : 0.45) * dt;
     if (wach < 0.0015) wach = 0;
 
-    schreibt = (maxS > STIMMUNG.schwelle || (1 && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
+    schreibt = (maxS > STIMMUNG.schwelle || (0 && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
   }
 
   function mediumRechnen(dt) {
@@ -713,7 +713,7 @@
 
       if (fest[i]) { ax *= 0.14; ay *= 0.14; }
       var zaeh = 1;
-      if (1) {
+      if (0) {
         var F = dichteAbtasten(x, y);
         if (F) {
           var gl2 = Math.sqrt(F.gx*F.gx + F.gy*F.gy);
@@ -731,7 +731,7 @@
         }
       }
 
-      if (1 && korn[i] <= 0 && !fest[i]) {
+      if (0 && korn[i] <= 0 && !fest[i]) {
         /* Ein Faden trifft einen Lichtpunkt. */
         var vs2 = vx[i]*vx[i] + vy[i]*vy[i];
         if (vs2 > 67600) {
@@ -746,7 +746,7 @@
       }
       if (korn[i] > 0) {
         ax = 0; ay = 0;                        /* zuletzt, sonst schiebt das Bild */
-        if (1 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
+        if (0 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
           var zer = 0;
           if (unten && handTempo > 130) {
             var hx2 = x - hx, hy2 = y - hy;
@@ -804,7 +804,7 @@
         if (K.s < 0.05) continue;
         var ex = px[i] - K.x, ey = py[i] - K.y;
         var d = Math.sqrt(ex*ex + ey*ey);
-        var nah = 1 - Math.min(1, d / (K.r * 0.95));
+        var nah = 1 - Math.min(1, d / (K.r * 1.35));
         var w = K.s * nah * nah;
         if (w > h) { h = w; tonZiel = K.ton; }
         if (nah > nahBest) { nahBest = nah; hellZiel = K.hell; }
@@ -832,7 +832,7 @@
          wenig — sonst läuft alles zu. Und was aufgetragen wird, wandert ins
          Raster, damit es beim nächsten Zug lenkt. */
       var auf = 1;
-      if (1 && schreibt) {
+      if (0 && schreibt) {
         var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
         if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
           var gk = gv * GX + gu;
@@ -875,8 +875,8 @@
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
       gl.viewport(0, 0, BW, BH);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   /* deckend, nicht addierend */
-      faedenZeichnen(0.1500, 1.0, 1);
-      faedenZeichnen(0.1500 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
+      faedenZeichnen(0.1400, 1.0, 1);
+      faedenZeichnen(0.1400 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
       gl.blendFunc(gl.ONE, gl.ONE);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
@@ -910,11 +910,11 @@
     letzterRahmen = t;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (1) filamente(DT);
-      if (1) korngeben(DT);
-      if (1) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
+    while (rest >= DT && n < MAX_SUB) { kerneRechnen(DT); if (0) filamente(DT);
+      if (0) korngeben(DT);
+      if (0) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
-    if (1 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
+    if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();
     requestAnimationFrame(rahmen);
   }

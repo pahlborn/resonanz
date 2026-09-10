@@ -21,10 +21,26 @@
     letter-spacing:.22em; text-transform:uppercase; color:#4B5A72;
     transition:opacity 1.2s ease;
   }
+  #kopf{
+    position:fixed; left:0; right:0; top:max(14px, env(safe-area-inset-top));
+    text-align:center; pointer-events:none; z-index:3;
+    font:400 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing:.26em; text-transform:uppercase; color:#7B8AA6;
+  }
+  #kopf b{display:block; font-weight:400; font-size:17px; color:#C9D4E6; letter-spacing:.20em;}
+  #kopf i{display:block; font-style:normal; font-size:11px; color:#4B5A72; letter-spacing:.16em;
+          text-transform:none; margin-top:5px;}
+  #zurueck{
+    position:fixed; left:max(14px, env(safe-area-inset-left)); top:max(12px, env(safe-area-inset-top));
+    z-index:4; pointer-events:auto; -webkit-tap-highlight-color:transparent;
+    font:400 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.2em;
+    color:#5B6A86; text-decoration:none; padding:10px 14px;
+  }
 </style>
 </head>
 <body>
 <canvas id="feld"></canvas>
+
 <p id="hinweis">Kringle — und sieh, was das Bild damit macht</p>
 <script>
 (function () {

@@ -914,6 +914,75 @@ und stattdessen die **Reichweite** des Feldes strecken, also den Abfall nach
 außen flacher machen statt den Kern zu vergrößern. Das ist ein Vorschlag, keine
 Messung, und gehört in einen eigenen Versuch.
 
+### 30. Die Feuerbälle sind Funken — und es gibt sie nur in J
+
+Zwei Fragen waren offen, und ein rot umkringelter Screenshot hat beide auf
+einmal beantwortet — genauer als jede Beschreibung es gekonnt hätte.
+
+**„Wenn der Finger sich nicht im Kreis bewegt, bewegt sich am Schirm nur
+wenig."** Das ist die Antwort auf „M ist nicht flüssig": keine Bildrate,
+sondern eine Lücke im Entwurf. Der gerade Zug hat nur den direkten Handschub —
+`schub = 0.26` im Umkreis von 150 px, also höchstens 26 % des Handtempos, und
+das nur ganz nah am Finger. Ein Wirbelfeld entsteht dabei nicht, weil ohne
+Drehung kein Takt zu treffen ist. Das Filament aus Abschnitt F liegt zwar, aber
+das Medium kommt nicht mit. Der Befund steht; die Abhilfe ist noch keine.
+
+**„Der hier ist ein Feuerball oder Tierchen"**, mit rotem Kringel um ein
+kleines, helles Ding mit Kopf und kurzem Schweif, mitten in der Struktur —
+in *Versuch J*. Das ist kein geworfener Wirbel, wie wir beide vermutet hatten.
+Das ist ein **Funke**:
+
+```
+funken(i):  9–16 Teilchen · 150–450 px/s · Lebensdauer 0,30–0,65 s
+            fest = 1 (trägt eigene Hitze, legt also überall ab)
+            hell = hl + 0,3  →  am oberen Ende der Farbskala, weiß-heiß
+```
+
+Größe, Kopf, Schweif, Lebensdauer, das Eintauchen in die bestehende Struktur:
+alles passt. Und daran hängt ein Fehler von mir. **`FUNKEN` steht nur in J auf
+1.** Als in K der Zusammenstoß dazukam, habe ich den Zerfall am Lebensende
+abgeschaltet — es sollte ja eine Änderung je Fassung sein, und ich hielt den
+Zusammenstoß für den besseren Auslöser. Damit ist das, was am meisten gefällt,
+seit K aus jeder Fassung verschwunden, und niemandem ist aufgefallen, warum
+J/K „unglaublich" waren und die späteren ärmer wirkten.
+
+Ein Screenshot mit einem Kringel hat zwei Vermutungen geschlagen, meine und
+seine. Das ist der Kanal, der trägt.
+
+### 31. Das Kabinett
+
+Der Vorschlag kam von der Hand, nicht von mir: „Vielleicht machen wir
+verschiedene Seiten mit jeweils nur einem Effekt und dem Namen dran?"
+
+Das löst genau das Verständigungsproblem aus Abschnitt 29: Über eine Sache, die
+einen Namen hat, lässt sich reden; über einen Eindruck in einer zusammengesetzten
+Fassung nicht. **Zehn Seiten, eine Wirkung je Seite, der Name steht oben drauf.**
+Die Grundlage ist überall dieselbe — Wirbel unter dem Finger, weit genug, dass
+das Medium mitkommt (Abschnitt 29), kein Umlauf am Rand (Abschnitt 28), alte
+Farbskala, gleicher Auftrag. Jede Seite schaltet genau eine Sache hinzu:
+
+```
+Wirbel        die Grundlage, alles Weitere sitzt darauf
+Strang        gerader Zug legt ein Filament, Verweilen setzt einen Knoten
+Wurf          ein unvollendeter Kreis schickt den Wirbel weiter
+Korn          wo es hell ist, gerinnt ein Faden zu einem Lichtpunkt
+Funken        ein großer Lichtpunkt zerspringt am Ende seines Lebens
+Stoß          ein Lichtpunkt zerspringt, wenn ihn etwas trifft
+Sog           was schon liegt, lenkt das Medium
+Zwei Stimmen  Drehrichtung wird Farbfamilie
+Schleife      Schleifengröße wird Wirbelgröße
+Tempo         Handtempo wird Farbe
+```
+
+Dafür musste eine Bündelung aufgelöst werden: `ZWEI_STIMMEN` steuerte bisher
+zwei Dinge zugleich — die Farbfamilie **und** die Kopplung von Schleifengröße
+an Wirbelradius. Das sind zwei Wirkungen, also sind es jetzt zwei Schalter
+(`ZWEI_STIMMEN`, `SCHLEIFE_R`). Die Fassungen A bis O verhalten sich dadurch
+unverändert; geprüft durch Vergleich der erzeugten Dateien.
+
+Was das Kabinett nebenbei sichtbar macht, ist der Befund aus Abschnitt 30:
+Auf der Seite **Strang** sieht man ohne Umweg, wie wenig ein gerader Zug bewegt.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

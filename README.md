@@ -8,6 +8,7 @@ und Blatt. Eigenes Repository, eigene Engine, kein gemeinsamer Code.
 
 ## Ausprobieren
 
+* [**Versuch R — Schwaches verblasst, Starkes bleibt**](https://pahlborn.github.io/resonanz/versuch-r.html) · das Bild räumt sich selbst auf
 * [**Versuch Q — Der gerade Zug bekommt ein Feld**](https://pahlborn.github.io/resonanz/versuch-q.html) · die Hand streicht ihre Bewegung in die Fläche
 * [**Versuch P — Die Funken sind zurück**](https://pahlborn.github.io/resonanz/versuch-p.html) · seit K waren sie versehentlich aus
 * [**Kabinett**](https://pahlborn.github.io/resonanz/kabinett.html) · eine Seite je Wirkung, mit dem Namen darauf

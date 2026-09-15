@@ -1026,6 +1026,66 @@ Die Fassungen A bis O bleiben unberührt: Feld und Funkenschalter stehen dort
 auf 0, geprüft durch Vergleich der erzeugten Dateien — die einzigen
 Unterschiede sind `if (0)`-Zweige.
 
+### 33. Die Strömung war nicht das Problem — das Liegengebliebene war es
+
+Die Bitte lautete: „Strömung ist genial. Kannst du R bauen, Q als Basis und
+Strömung einbauen?" Nur: **Q trägt die Strömung schon**, mit denselben Werten
+wie die Kabinettseite. Gemessen am geraden Zug, Anteil des Handtempos:
+
+```
+Q                    0,72
+Kabinett Strömung    0,44
+```
+
+In Q ist sie sogar stärker. Was die Kabinettseite besser machte, war nicht die
+Strömung, sondern die **Leere um sie herum**: kein Korn, keine Funken, kein
+Stoß. Damit beantwortet die zweite Bitte desselben Tages die erste —
+„bei vielen Bewegungen bleibt zu viel übrig".
+
+**Versuch R** ist Q mit Verblassen. Der Niederschlag wird viermal je Sekunde
+durch einen zweiten Puffer geschickt und dabei nach Helligkeit verschieden
+behandelt: Was unter 0,04 liegt, verblasst mit einer Halbwertszeit von 25
+Sekunden; was über 0,30 liegt, bleibt für immer. Dazwischen wird weich
+übergeblendet. Damit räumt das Bild den Schmier weg und behält die Figuren.
+
+Zwei Dinge daran waren nicht offensichtlich:
+
+**Multiplizieren kommt bei 8 Bit nie an.** Der Wert 1/255 mal 0,97 rundet
+wieder auf 1/255. Der erste Versuch ließ deshalb einen Grauschleier stehen, der
+sich nicht mehr rührte. Nötig ist zusätzlich ein kleiner Abzug — aber nur am
+schwachen Ende, sonst frisst er auch die Figuren.
+
+**Der Abzug war zuerst viermal zu stark.** Mit 6/255 je Sekunde war nach 15
+Sekunden alles fort, unabhängig von der eingestellten Halbwertszeit: Der Abzug
+hatte den Parameter bedeutungslos gemacht. Mit 1,5/255 greift die Halbwertszeit
+wieder.
+
+Gemessen wurde diesmal der **Niederschlag allein**, direkt aus dem Puffer
+gelesen statt vom Bildschirm — die erste Messung hatte die lebende Schicht
+mitgezählt und dadurch fast nichts gezeigt.
+
+```
+sechs Kringel, dann Ruhe    Q        R
+Flächenhelligkeit +2 s     33,3     26,7
+                 +45 s     34,0     23,7   und weiter fallend
+Pixel über 0,30          35 325   32 391   die Figuren bleiben
+```
+
+Q steht nach 45 Sekunden exakt so da wie nach zweien — für immer. R räumt
+weiter, ohne die Figuren anzutasten.
+
+**Wieviel verblassen soll, kann niemand vorhersagen.** Deshalb drei
+Kabinettseiten statt einer Zahl: *sacht* (Halbwertszeit 45 s, Starkes für
+immer), *mittel* (20 s, Starkes für immer), *stark* (7 s, und auch Starkes
+gibt mit 120 s nach). R liegt mit 25 s zwischen sacht und mittel.
+
+```
+nach sechs Kringeln, +45 s   Flächenhelligkeit
+sacht                              63,2
+mittel                             53,3
+stark                              31,4
+```
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

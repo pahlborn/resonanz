@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz Wirbel</title>
+<title>Resonanz Verblassen sacht</title>
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -40,15 +40,15 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
-<div id="kopf">Kabinett<b>Wirbel</b><i>Kreisen erzeugt einen Wirbel. Alles Weitere sitzt darauf.</i></div>
+<div id="kopf">Kabinett<b>Verblassen sacht</b><i>Ganz langsam: Schwaches braucht etwa eine Dreiviertelminute. Starkes bleibt für immer.  ·  baut auf Korn und Strömung</i></div>
 <a id="zurueck" href="kabinett.html">&#8592;</a>
-<p id="hinweis">Kreise mit dem Finger</p>
+<p id="hinweis">Mal viel — und sieh zu, was bleibt</p>
 <script>
 (function () {
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch Wirbel (Kreisen erzeugt einen Wirbel. Alles Weitere sitzt darauf.)
+     Resonanz — Versuch Verblassen sacht (Ganz langsam: Schwaches braucht etwa eine Dreiviertelminute. Starkes bleibt für immer.)
 
      Zwei Schichten:
 
@@ -123,7 +123,7 @@
     '  vec3 violett = vec3(0.58, 0.26, 0.98);' +
     '  vec3 gold = vec3(1.00, 0.74, 0.28);' +
     '  vec3 c = vH < 0.5 ? mix(kalt, violett, vH * 2.0) : mix(violett, gold, (vH - 0.5) * 2.0);' +
-    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 0.0);' +
+    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 1.0);' +
     '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
@@ -212,7 +212,7 @@
   function fboBauen(w, h, erhalten) {
     var altTex = tex, altFbo = fbo, altTex2 = tex2, altFbo2 = fbo2;
     var a = zielBauen(w, h); fbo = a.f; tex = a.t;
-    if (0) { var b2 = zielBauen(w, h); fbo2 = b2.f; tex2 = b2.t; }
+    if (1) { var b2 = zielBauen(w, h); fbo2 = b2.f; tex2 = b2.t; }
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
     /* Beim Drehen des iPads wird der Puffer neu angelegt. Das Bild soll das
@@ -235,7 +235,7 @@
 
   /* Halbwertszeiten in Sekunden: was schwach ist, was stark ist.
      1e9 heißt: bleibt für immer. */
-  var BLASS_SCHWACH = 8, BLASS_STARK = 1e9;
+  var BLASS_SCHWACH = 45, BLASS_STARK = 1e9;
   var blassAkku = 0;
   function verblassen(dt) {
     blassAkku += dt;
@@ -416,7 +416,7 @@
       var ivx = (nx - hx) / dt, ivy = (ny - hy) / dt;
       hvx += (ivx - hvx) * 0.4; hvy += (ivy - hvy) * 0.4;
       hx = nx; hy = ny;
-      if (0) feldStreichen(nx, ny, hvx, hvy, dt);
+      if (1) feldStreichen(nx, ny, hvx, hvy, dt);
       bahnX[bahnI] = nx; bahnY[bahnI] = ny; bahnT[bahnI] = t;
       bahnI = (bahnI + 1) % BAHN; if (bahnN < BAHN) bahnN++;
 
@@ -548,7 +548,7 @@
     tn[i] = tn[quelle]; hl[i] = hl[quelle];
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
     fest[i] = 1;
-    lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
+    lm[i] = 1.9 + 2.6 * rnd(); lf[i] = lm[i];
   }
 
   function funken(i) {
@@ -572,11 +572,11 @@
 
   function korngeben(dt) {
     if (wach < 0.05) return;
-    var n = Math.round(80 * wach);
+    var n = Math.round(26 * wach);
     for (var k = 0; k < n; k++) {
       var q = (rnd() * N) | 0;
       if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
-      if (hz[q] < 0.10) continue;      /* nur dort, wo es leuchtet   */
+      if (hz[q] < 0.20) continue;      /* nur dort, wo es leuchtet   */
       kornSetzen(q);
     }
   }
@@ -778,7 +778,7 @@
 
       /* Die Hand schiebt immer, unabhängig von jeder Resonanz. Das ist die
          Rückmeldung, die dem ersten Prüfstück gefehlt hat. */
-      if (0) {
+      if (1) {
         if (!fest[i]) {
           var fu = (x / W * GX) | 0, fv = (y / H * GY) | 0;
           if (fu >= 0 && fv >= 0 && fu < GX && fv < GY) {
@@ -977,7 +977,7 @@
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
-    if (0) verblassen(rahmenDt);
+    if (1) verblassen(rahmenDt);
 
     /* 2) Bildschirm: erst das Liegengebliebene, dann das Lebendige. */
     gl.viewport(0, 0, BW, BH);
@@ -1008,8 +1008,8 @@
     letzterRahmen = t; rahmenDt = dt;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { if (0) feldAbklingen(DT); kerneRechnen(DT); if (0) filamente(DT);
-      if (0) korngeben(DT);
+    while (rest >= DT && n < MAX_SUB) { if (1) feldAbklingen(DT); kerneRechnen(DT); if (0) filamente(DT);
+      if (1) korngeben(DT);
       if (0) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
     if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();

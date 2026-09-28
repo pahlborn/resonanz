@@ -1086,6 +1086,67 @@ mittel                             53,3
 stark                              31,4
 ```
 
+### 34. Aus zweiunddreißig Prüfstücken wird eine App
+
+Die Frage kam von der Hand: „Würde es auch gehen, dass wir eine App bauen, in
+der ich auf alle Versionen Zugriff habe? Vielleicht nur kleine nahezu
+transparente Boxen von 01-xx?"
+
+Dagegen sprach das, was seit dem Kabinett endlich funktioniert: **Namen.**
+„01 bis 32" sagt nichts, und die Verständigung über Formen war ohnehin das
+schwierigste an diesem Projekt (Abschnitt 29 und 31). Ein Raster aus
+zweiunddreißig Kästchen hätte außerdem vor jedes Malen eine Entscheidung
+gestellt — und die zweiunddreißig sind nicht gleichwertig: vierzehn sind
+Einzelwirkungen, achtzehn Zusammensetzungen, und A bis I sind längst tot.
+
+Gebaut wurde daher **zwei Türen statt einer Wand:**
+
+```
+erste Tür    index.html ist die lebende Fassung. Start = Fläche.
+             Kein Menü, keine Auswahl, nur die Hand.
+zweite Tür   Ein Punkt unten rechts. Sichern · Galerie · Regal.
+```
+
+Der Punkt greift die Idee der „nahezu transparenten Boxen" auf — aber als
+**eine** Tür statt als zweiunddreißig.
+
+**Das Regal** (`regal.html`) führt alles mit Namen und einem Satz: oben die
+vierzehn Wirkungen, darunter die achtzehn Fassungen, die lebende mit einem
+blauen Strich markiert. Es wird aus derselben Liste erzeugt wie die Seiten
+selbst, kann also nicht veralten.
+
+**Die Galerie** (`galerie.html`) ist das, was aus Prüfstücken erst eine App
+macht: Bisher war jedes Bild verloren, sobald man die Seite schloss. Jedes
+gesicherte Bild merkt sich, in welcher Fassung es entstand; ein Tipp öffnet
+diese Fassung wieder. Gespeichert wird in IndexedDB — ein Bild ist für
+`localStorage` zu groß, dreißig Bilder sprengen die fünf Megabyte.
+
+**Zwei Fallen unterwegs:**
+
+*Ein WebGL-Bild ist nach dem Rahmen fort.* `toDataURL` auf dem Canvas lieferte
+reines Schwarz, weil der Zeichenpuffer nach jedem Bild geleert wird. Statt
+`preserveDrawingBuffer` einzuschalten (das kostet dauerhaft Leistung) stellt
+der Knopf jetzt einen Wunsch, den die Schleife unmittelbar nach `zeichnen()`
+erfüllt. Gemessen: Helligkeit der Vorschauen vorher 0, nachher 22 und 12,9.
+
+*Der Service Worker erneuert sich nicht von selbst.* Die Lehre aus dem
+Nachbarprojekt gilt hier genauso: Ein Gerät, auf dem schon ein Worker läuft,
+fragt `sw.js` kaum je neu ab. Deshalb `updateViaCache: 'none'`, beim Einrichten
+`fetch(…, { cache: 'reload' })`, und beim Holen zuerst aus dem Vorrat antworten
+und im Hintergrund erneuern. Es gibt **genau einen** Worker für alle
+zweiunddreißig Seiten — kein zweiter, der beim Aktivieren den Vorrat des
+ersten löscht.
+
+Geprüft im echten Browser, der ganze Weg: malen, sichern, zweites Bild in einer
+anderen Fassung, Galerie, Großansicht, Fassung öffnen, löschen, Regal — und
+danach mit abgeschaltetem Netz Regal und Fassung J. Ohne Fehler.
+
+**Was ich nicht gebaut habe, obwohl ich es angekündigt hatte:** dass die App
+sich merkt, womit zuletzt gemalt wurde, und dort wieder öffnet. Das bräuchte
+eine Umleitung bei jedem Start — fragil ohne Netz, und im schlechten Fall
+sperrt sie einen in einer alten Fassung ein. Der Start geht deshalb immer in
+die lebende Fassung; das Regal ist einen Tipp entfernt.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

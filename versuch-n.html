@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Resonanz N</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="symbol-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Resonanz">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#05070C">
 <style>
   :root{ --grund:#05070C; }
   html,body{margin:0;padding:0;width:100%;height:100%;background:var(--grund);}
@@ -30,18 +36,54 @@
   #kopf b{display:block; font-weight:400; font-size:17px; color:#C9D4E6; letter-spacing:.20em;}
   #kopf i{display:block; font-style:normal; font-size:11px; color:#4B5A72; letter-spacing:.16em;
           text-transform:none; margin-top:5px;}
-  #zurueck{
-    position:fixed; left:max(14px, env(safe-area-inset-left)); top:max(12px, env(safe-area-inset-top));
-    z-index:4; pointer-events:auto; -webkit-tap-highlight-color:transparent;
-    font:400 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.2em;
-    color:#5B6A86; text-decoration:none; padding:10px 14px;
+  #tuer{
+    position:fixed; right:max(12px, env(safe-area-inset-right));
+    bottom:max(12px, env(safe-area-inset-bottom));
+    z-index:6; pointer-events:auto; -webkit-tap-highlight-color:transparent;
+    width:46px; height:46px; border-radius:23px; border:1px solid rgba(160,180,210,.16);
+    background:rgba(10,14,22,.30); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    color:rgba(180,198,224,.42); font:400 17px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    transition:opacity .6s ease, background .2s ease; opacity:.55;
   }
+  #tuer:active{background:rgba(20,28,42,.55);}
+  #leiste{
+    position:fixed; right:max(12px, env(safe-area-inset-right));
+    bottom:calc(max(12px, env(safe-area-inset-bottom)) + 56px);
+    z-index:6; display:none; flex-direction:column; gap:1px;
+    background:rgba(150,170,200,.12); border:1px solid rgba(150,170,200,.12);
+    border-radius:10px; overflow:hidden; min-width:172px;
+  }
+  #leiste.auf{display:flex;}
+  #leiste a, #leiste button{
+    appearance:none; border:0; text-align:left; cursor:pointer;
+    display:block; padding:13px 17px; background:rgba(9,13,20,.86);
+    color:#C2CEE2; text-decoration:none;
+    font:400 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.14em;
+    text-transform:uppercase; -webkit-tap-highlight-color:transparent;
+  }
+  #leiste a:active, #leiste button:active{background:rgba(22,30,45,.95);}
+  #ruf{
+    position:fixed; left:0; right:0; bottom:calc(max(12px, env(safe-area-inset-bottom)) + 72px);
+    z-index:7; text-align:center; pointer-events:none; opacity:0;
+    transition:opacity .5s ease; color:#9FB0CC;
+    font:400 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.2em;
+    text-transform:uppercase;
+  }
+  #ruf.da{opacity:1;}
 </style>
 </head>
 <body>
 <canvas id="feld"></canvas>
 
 <p id="hinweis">Kringeln · Ziehen · Anhalten · Werfen</p>
+<div id="leiste">
+  <button id="knSichern" type="button">Sichern</button>
+  <a href="galerie.html">Galerie</a>
+  <a href="regal.html">Regal</a>
+</div>
+<button id="tuer" type="button" aria-label="Menü">&#9679;</button>
+<p id="ruf"></p>
 <script>
 (function () {
   'use strict';
@@ -1017,6 +1059,7 @@
     if (n === MAX_SUB) rest = 0;
     if (1 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();
+    if (window.__bildWunsch) { window.__bildWunsch = false; window.__bildNehmen(); }
     requestAnimationFrame(rahmen);
   }
 
@@ -1045,6 +1088,107 @@
 
   requestAnimationFrame(rahmen);
 })();
+</script>
+
+
+<script>
+(function () {
+  var KENNUNG = 'n', SCHILD = 'Fassung N — Was hinausfliegt, ist fort — auf M';
+  try { localStorage.setItem('resonanz.zuletzt', KENNUNG); } catch (e) {}
+
+  var tuer = document.getElementById('tuer'), leiste = document.getElementById('leiste'),
+      ruf = document.getElementById('ruf'), knS = document.getElementById('knSichern');
+  function sagen(t) {
+    ruf.textContent = t; ruf.classList.add('da');
+    clearTimeout(sagen.z); sagen.z = setTimeout(function(){ ruf.classList.remove('da'); }, 2600);
+  }
+  tuer.addEventListener('click', function (e) {
+    e.stopPropagation(); leiste.classList.toggle('auf');
+  });
+  document.addEventListener('pointerdown', function (e) {
+    if (leiste.classList.contains('auf') && !leiste.contains(e.target) && e.target !== tuer)
+      leiste.classList.remove('auf');
+  }, true);
+
+  /* ---------------------------------------------------------- Bildspeicher */
+  function db() {
+    return new Promise(function (ok, fehl) {
+      var a = indexedDB.open('resonanz', 1);
+      a.onupgradeneeded = function () {
+        var d = a.result;
+        if (!d.objectStoreNames.contains('bilder'))
+          d.createObjectStore('bilder', { keyPath: 'id' });
+      };
+      a.onsuccess = function () { ok(a.result); };
+      a.onerror = function () { fehl(a.error); };
+    });
+  }
+  window.resonanzSpeicher = {
+    legen: function (satz) {
+      return db().then(function (d) {
+        return new Promise(function (ok, fehl) {
+          var t = d.transaction('bilder', 'readwrite');
+          t.objectStore('bilder').put(satz);
+          t.oncomplete = function () { ok(); }; t.onerror = function () { fehl(t.error); };
+        });
+      });
+    },
+    holen: function () {
+      return db().then(function (d) {
+        return new Promise(function (ok, fehl) {
+          var t = d.transaction('bilder', 'readonly'), a = t.objectStore('bilder').getAll();
+          a.onsuccess = function () { ok(a.result.sort(function (x, y) { return y.zeit - x.zeit; })); };
+          a.onerror = function () { fehl(a.error); };
+        });
+      });
+    },
+    loeschen: function (id) {
+      return db().then(function (d) {
+        return new Promise(function (ok, fehl) {
+          var t = d.transaction('bilder', 'readwrite');
+          t.objectStore('bilder').delete(id);
+          t.oncomplete = function () { ok(); }; t.onerror = function () { fehl(t.error); };
+        });
+      });
+    }
+  };
+
+  /* Ein WebGL-Bild lässt sich nur im selben Rahmen abholen, in dem es
+     gezeichnet wurde — danach ist der Puffer geleert. Also stellen wir einen
+     Wunsch, und die Schleife erfüllt ihn unmittelbar nach dem Zeichnen. */
+  window.__bildNehmen = function () {
+    var cv = document.getElementById('feld');
+    /* Auf die lange Kante 1600 px -- gross genug fuers iPad, klein genug,
+       dass hundert Bilder in den Speicher passen. */
+    var lang = Math.max(cv.width, cv.height), f = Math.min(1, 1600 / lang);
+    var k = document.createElement('canvas');
+    k.width = Math.round(cv.width * f); k.height = Math.round(cv.height * f);
+    var g = k.getContext('2d');
+    g.fillStyle = '#05070C'; g.fillRect(0, 0, k.width, k.height);
+    g.drawImage(cv, 0, 0, k.width, k.height);
+    var daten;
+    try { daten = k.toDataURL('image/jpeg', 0.86); }
+    catch (e) { sagen('Nicht gesichert'); return; }
+    window.resonanzSpeicher.legen({
+      id: 'b' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      zeit: Date.now(), fassung: KENNUNG, schild: SCHILD,
+      breite: k.width, hoehe: k.height, bild: daten
+    }).then(function () { sagen('Gesichert'); },
+            function () { sagen('Speicher voll?'); });
+  };
+  knS.addEventListener('click', function () {
+    leiste.classList.remove('auf');
+    window.__bildWunsch = true;
+  });
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
+  });
+}
 </script>
 </body>
 </html>

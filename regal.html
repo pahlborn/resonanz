@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="symbol-180.png">
+<title>Resonanz — Regal</title>
+<style>
+  :root{ --grund:#05070C; --text:#D8DCDF; --leise:#7E8B99; --linie:#1B242E; --akzent:#3F7BE8; }
+  html,body{margin:0;padding:0;min-height:100%;background:var(--grund);}
+  body{
+    color:var(--text); display:flex; justify-content:center;
+    padding:max(40px, env(safe-area-inset-top)) 20px 80px;
+    font:400 16px/1.6 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .blatt{width:100%; max-width:34rem; display:flex; flex-direction:column; gap:30px;}
+  h1{margin:0; font:500 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+     letter-spacing:.42em; text-transform:uppercase;}
+  h2{margin:0 0 -16px; font:500 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+     letter-spacing:.3em; text-transform:uppercase; color:var(--leise);}
+  p{margin:0; color:var(--leise); max-width:62ch;}
+  .liste{display:flex; flex-direction:column; gap:1px; background:var(--linie);
+         border:1px solid var(--linie); border-radius:8px; overflow:hidden;}
+  a.reihe{display:flex; flex-direction:column; gap:4px; padding:17px 19px;
+          background:#0C1218; text-decoration:none; color:var(--text);
+          -webkit-tap-highlight-color:transparent;}
+  a.reihe:active{background:#131D27;}
+  a.reihe.lebt{background:#101A22; box-shadow:inset 3px 0 0 var(--akzent);}
+  .name{font:500 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing:.18em; text-transform:uppercase;}
+  .was{color:var(--leise); font-size:14px;}
+  .baut{color:#5B6A86; font-size:12px; font-style:italic;}
+  .fuss{color:var(--leise); font-size:13px; border-top:1px solid var(--linie); padding-top:18px;}
+  .fuss a{color:var(--akzent);}
+  .zurueck{position:fixed; left:max(12px, env(safe-area-inset-left));
+           top:max(10px, env(safe-area-inset-top)); z-index:5;
+           padding:11px 15px; color:#5B6A86; text-decoration:none;
+           font:400 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+           -webkit-tap-highlight-color:transparent;}
+</style>
+</head>
+<body>
+<a class="zurueck" href="index.html">&#8592;</a>
+<div class="blatt">
+  <h1>Regal</h1>
+  <p>Alles, was gebaut wurde, bleibt hier erreichbar. Oben die einzelnen Wirkungen — jede für sich zu erleben, mit ihrem Namen. Darunter die Fassungen, in denen mehrere zusammenkommen. Ein Tipp, und du malst darin; über den Punkt unten rechts kommst du überall wieder heraus.</p>
+  <h2>Die Wirkungen</h2>
+  <div class="liste">
+  <a class="reihe" href="kab-wirbel.html">
+    <span class="name">Wirbel</span>
+    <span class="was">Kreisen erzeugt einen Wirbel. Alles Weitere sitzt darauf.</span>
+  </a>
+  <a class="reihe" href="kab-strang.html">
+    <span class="name">Strang</span>
+    <span class="was">Der gerade Zug legt ein Filament. Wer darauf verweilt, setzt einen Knoten.</span>
+  </a>
+  <a class="reihe" href="kab-wurf.html">
+    <span class="name">Wurf</span>
+    <span class="was">Ein unvollendeter Kreis schickt den Wirbel weiter, wenn die Hand loslässt.</span>
+  </a>
+  <a class="reihe" href="kab-korn.html">
+    <span class="name">Korn</span>
+    <span class="was">Wo es hell ist, gerinnt ein Faden zu einem Lichtpunkt.</span>
+  </a>
+  <a class="reihe" href="kab-funken.html">
+    <span class="name">Funken</span>
+    <span class="was">Ein großer Lichtpunkt verlöscht nicht — er zerspringt in Funken.</span>
+    <span class="baut">baut auf Korn auf</span>
+  </a>
+  <a class="reihe" href="kab-stoss.html">
+    <span class="name">Stoß</span>
+    <span class="was">Ein Lichtpunkt zerspringt, wenn ihn etwas trifft — die Hand oder ein Wirbel.</span>
+    <span class="baut">baut auf Korn auf</span>
+  </a>
+  <a class="reihe" href="kab-sog.html">
+    <span class="name">Sog</span>
+    <span class="was">Was schon liegt, lenkt das Medium — und nimmt weniger Farbe an.</span>
+  </a>
+  <a class="reihe" href="kab-stimmen.html">
+    <span class="name">Zwei Stimmen</span>
+    <span class="was">Links herum und rechts herum werden zwei Farbfamilien.</span>
+  </a>
+  <a class="reihe" href="kab-schleife.html">
+    <span class="name">Schleife</span>
+    <span class="was">Die Größe deiner Schleife bestimmt die Größe des Wirbels.</span>
+  </a>
+  <a class="reihe" href="kab-tempo.html">
+    <span class="name">Tempo</span>
+    <span class="was">Wie schnell die Hand geht, entscheidet über die Farbe: langsam tief, schnell hell.</span>
+  </a>
+  <a class="reihe" href="kab-stroemung.html">
+    <span class="name">Strömung</span>
+    <span class="was">Die Hand streicht ihre Bewegung in die Fläche. Sie wirkt nach, auch ohne Kreis.</span>
+  </a>
+  <a class="reihe" href="kab-verblassen-sacht.html">
+    <span class="name">Verblassen sacht</span>
+    <span class="was">Ganz langsam: Schwaches braucht etwa eine Dreiviertelminute. Starkes bleibt für immer.</span>
+    <span class="baut">baut auf Korn und Strömung auf</span>
+  </a>
+  <a class="reihe" href="kab-verblassen-mittel.html">
+    <span class="name">Verblassen mittel</span>
+    <span class="was">Schwaches geht in etwa zwanzig Sekunden. Starkes bleibt für immer.</span>
+    <span class="baut">baut auf Korn und Strömung auf</span>
+  </a>
+  <a class="reihe" href="kab-verblassen-stark.html">
+    <span class="name">Verblassen stark</span>
+    <span class="was">Schwaches geht in sieben Sekunden, und auch Starkes gibt langsam nach.</span>
+    <span class="baut">baut auf Korn und Strömung auf</span>
+  </a>
+  </div>
+  <h2>Die Fassungen</h2>
+  <div class="liste">
+  <a class="reihe lebt" href="versuch-r.html">
+    <span class="name">Fassung R</span>
+    <span class="was">Schwaches verblasst, Starkes bleibt</span>
+  </a>
+  <a class="reihe" href="versuch-q.html">
+    <span class="name">Fassung Q</span>
+    <span class="was">Der gerade Zug bekommt ein Feld</span>
+  </a>
+  <a class="reihe" href="versuch-p.html">
+    <span class="name">Fassung P</span>
+    <span class="was">Die Funken sind zurück</span>
+  </a>
+  <a class="reihe" href="versuch-o.html">
+    <span class="name">Fassung O</span>
+    <span class="was">Was hinausfliegt, ist fort — auf K</span>
+  </a>
+  <a class="reihe" href="versuch-n.html">
+    <span class="name">Fassung N</span>
+    <span class="was">Was hinausfliegt, ist fort — auf M</span>
+  </a>
+  <a class="reihe" href="versuch-m.html">
+    <span class="name">Fassung M</span>
+    <span class="was">Figuren, die sich Zeit lassen</span>
+  </a>
+  <a class="reihe" href="versuch-l.html">
+    <span class="name">Fassung L</span>
+    <span class="was">Enger Wirbel — am Finger statt um ihn herum</span>
+  </a>
+  <a class="reihe" href="versuch-k.html">
+    <span class="name">Fassung K</span>
+    <span class="was">Zusammenstoß — triff einen Lichtpunkt, und er zerspringt</span>
+  </a>
+  <a class="reihe" href="versuch-j.html">
+    <span class="name">Fassung J</span>
+    <span class="was">Weniger Punkte, und die großen zerspringen</span>
+  </a>
+  <a class="reihe" href="versuch-i.html">
+    <span class="name">Fassung I</span>
+    <span class="was">Tempo färbt — langsam tief, schnell hell</span>
+  </a>
+  <a class="reihe" href="versuch-h.html">
+    <span class="name">Fassung H</span>
+    <span class="was">Lichtpunkte — was langsam ist, bleibt ein Punkt</span>
+  </a>
+  <a class="reihe" href="versuch-g.html">
+    <span class="name">Fassung G</span>
+    <span class="was">Der begonnene Kreis — ein Bogen zieht weiter</span>
+  </a>
+  <a class="reihe" href="versuch-f.html">
+    <span class="name">Fassung F</span>
+    <span class="was">Filament und Knoten — die zweite Handschrift</span>
+  </a>
+  <a class="reihe" href="versuch-e.html">
+    <span class="name">Fassung E</span>
+    <span class="was">Zwei Stimmen — Drehrichtung färbt, Schleifengröße malt</span>
+  </a>
+  <a class="reihe" href="versuch-d.html">
+    <span class="name">Fassung D</span>
+    <span class="was">Das Bild lenkt — die Fläche antwortet mit</span>
+  </a>
+  <a class="reihe" href="versuch-c.html">
+    <span class="name">Fassung C</span>
+    <span class="was">Der Wirbel unter dem Finger — die Spur ist das Bild</span>
+  </a>
+  <a class="reihe" href="versuch-b.html">
+    <span class="name">Fassung B</span>
+    <span class="was">Normalzustand — leicht und häufig</span>
+  </a>
+  <a class="reihe" href="versuch-a.html">
+    <span class="name">Fassung A</span>
+    <span class="was">Höhepunkt — selten und heftig</span>
+  </a>
+  </div>
+  <p class="fuss">Die mit dem blauen Strich ist die, die beim Start kommt. Der Werdegang steht im <a href="https://github.com/pahlborn/resonanz/blob/main/WERDEGANG.md">WERDEGANG</a>.</p>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="symbol-180.png">
+<title>Resonanz — Galerie</title>
+<style>
+  :root{ --grund:#05070C; --text:#D8DCDF; --leise:#7E8B99; --linie:#1B242E; --akzent:#3F7BE8; }
+  html,body{margin:0;padding:0;min-height:100%;background:var(--grund);}
+  body{
+    color:var(--text); display:flex; justify-content:center;
+    padding:max(40px, env(safe-area-inset-top)) 20px 80px;
+    font:400 16px/1.6 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .blatt{width:100%; max-width:34rem; display:flex; flex-direction:column; gap:30px;}
+  h1{margin:0; font:500 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+     letter-spacing:.42em; text-transform:uppercase;}
+  h2{margin:0 0 -16px; font:500 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+     letter-spacing:.3em; text-transform:uppercase; color:var(--leise);}
+  p{margin:0; color:var(--leise); max-width:62ch;}
+  .liste{display:flex; flex-direction:column; gap:1px; background:var(--linie);
+         border:1px solid var(--linie); border-radius:8px; overflow:hidden;}
+  a.reihe{display:flex; flex-direction:column; gap:4px; padding:17px 19px;
+          background:#0C1218; text-decoration:none; color:var(--text);
+          -webkit-tap-highlight-color:transparent;}
+  a.reihe:active{background:#131D27;}
+  a.reihe.lebt{background:#101A22; box-shadow:inset 3px 0 0 var(--akzent);}
+  .name{font:500 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing:.18em; text-transform:uppercase;}
+  .was{color:var(--leise); font-size:14px;}
+  .baut{color:#5B6A86; font-size:12px; font-style:italic;}
+  .fuss{color:var(--leise); font-size:13px; border-top:1px solid var(--linie); padding-top:18px;}
+  .fuss a{color:var(--akzent);}
+  .zurueck{position:fixed; left:max(12px, env(safe-area-inset-left));
+           top:max(10px, env(safe-area-inset-top)); z-index:5;
+           padding:11px 15px; color:#5B6A86; text-decoration:none;
+           font:400 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+           -webkit-tap-highlight-color:transparent;}
+
+  .gitter{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px;}
+  .karte{position:relative; border-radius:6px; overflow:hidden; background:#0C1218;
+         border:1px solid var(--linie); -webkit-tap-highlight-color:transparent;}
+  .karte img{display:block; width:100%; height:auto;}
+  .karte .schild{padding:9px 11px; font-size:11px; color:var(--leise); line-height:1.45;}
+  .leer{color:var(--leise); padding:30px 0; text-align:center;}
+  #gross{position:fixed; inset:0; background:rgba(3,5,9,.97); z-index:9; display:none;
+         flex-direction:column; align-items:center; justify-content:center; gap:16px;
+         padding:max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));}
+  #gross.auf{display:flex;}
+  #gross img{max-width:100%; max-height:70vh; border-radius:4px;}
+  #gross .reihe2{display:flex; gap:1px; background:var(--linie); border-radius:8px;
+                 overflow:hidden; flex-wrap:wrap; justify-content:center;}
+  #gross button, #gross a{appearance:none; border:0; cursor:pointer; background:#0C1218;
+    color:var(--text); padding:13px 18px; text-decoration:none;
+    font:400 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.16em;
+    text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
+  #gross .hin{color:var(--leise); font-size:12px; text-align:center; max-width:40ch;}
+</style>
+</head>
+<body>
+<a class="zurueck" href="index.html">&#8592;</a>
+<div class="blatt">
+  <h1>Galerie</h1>
+  <p>Was du gesichert hast. Ein Bild antippen, um es groß zu sehen — dort kannst du auch die Fassung öffnen, in der es entstanden ist. Zum Sichern aufs Gerät: das große Bild gedrückt halten.</p>
+  <div id="gitter" class="gitter"></div>
+  <p class="fuss">Die Bilder liegen nur auf diesem Gerät, in diesem Browser. Niemand sonst sieht sie, und sie gehen nirgendwohin.</p>
+</div>
+<div id="gross">
+  <img id="gbild" alt="">
+  <p class="hin" id="gschild"></p>
+  <p class="hin">Gedrückt halten, um das Bild in die Fotos zu sichern.</p>
+  <div class="reihe2">
+    <a id="gauf" href="index.html">Fassung öffnen</a>
+    <button id="gweg" type="button">Löschen</button>
+    <button id="gzu" type="button">Zurück</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  function db() {
+    return new Promise(function (ok, fehl) {
+      var a = indexedDB.open('resonanz', 1);
+      a.onupgradeneeded = function () {
+        var d = a.result;
+        if (!d.objectStoreNames.contains('bilder')) d.createObjectStore('bilder', { keyPath: 'id' });
+      };
+      a.onsuccess = function () { ok(a.result); };
+      a.onerror = function () { fehl(a.error); };
+    });
+  }
+  function alle() {
+    return db().then(function (d) { return new Promise(function (ok, fehl) {
+      var t = d.transaction('bilder', 'readonly'), a = t.objectStore('bilder').getAll();
+      a.onsuccess = function () { ok(a.result.sort(function (x, y) { return y.zeit - x.zeit; })); };
+      a.onerror = function () { fehl(a.error); }; }); });
+  }
+  function weg(id) {
+    return db().then(function (d) { return new Promise(function (ok, fehl) {
+      var t = d.transaction('bilder', 'readwrite');
+      t.objectStore('bilder').delete(id);
+      t.oncomplete = function () { ok(); }; t.onerror = function () { fehl(t.error); }; }); });
+  }
+  var gitter = document.getElementById('gitter'), gross = document.getElementById('gross'),
+      gbild = document.getElementById('gbild'), gschild = document.getElementById('gschild'),
+      gauf = document.getElementById('gauf'), gweg = document.getElementById('gweg'),
+      gzu = document.getElementById('gzu');
+  var offen = null;
+  function datum(ms) {
+    var d = new Date(ms);
+    return ('0'+d.getDate()).slice(-2) + '.' + ('0'+(d.getMonth()+1)).slice(-2) + '.' +
+           d.getFullYear() + ', ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2);
+  }
+  function ziel(k) { return k.indexOf('kab-') === 0 ? k + '.html' : 'versuch-' + k + '.html'; }
+  function malen() {
+    alle().then(function (bs) {
+      gitter.innerHTML = '';
+      if (!bs.length) {
+        gitter.innerHTML = '<p class="leer">Noch nichts gesichert. Mal etwas, und tipp unten ' +
+                           'rechts auf den Punkt, dann auf Sichern.</p>';
+        gitter.style.display = 'block'; return;
+      }
+      gitter.style.display = 'grid';
+      bs.forEach(function (b) {
+        var k = document.createElement('div'); k.className = 'karte';
+        var i = document.createElement('img'); i.src = b.bild; i.alt = b.schild; i.loading = 'lazy';
+        var s = document.createElement('div'); s.className = 'schild';
+        s.textContent = b.schild + '\n' + datum(b.zeit);
+        s.style.whiteSpace = 'pre-line';
+        k.appendChild(i); k.appendChild(s); gitter.appendChild(k);
+        k.addEventListener('click', function () {
+          offen = b; gbild.src = b.bild; gschild.textContent = b.schild + ' · ' + datum(b.zeit);
+          gauf.href = ziel(b.fassung); gross.classList.add('auf');
+        });
+      });
+    }, function () { gitter.innerHTML = '<p class="leer">Der Speicher lässt sich nicht öffnen.</p>'; });
+  }
+  gzu.addEventListener('click', function () { gross.classList.remove('auf'); });
+  gweg.addEventListener('click', function () {
+    if (!offen) return;
+    weg(offen.id).then(function () { gross.classList.remove('auf'); malen(); });
+  });
+  malen();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

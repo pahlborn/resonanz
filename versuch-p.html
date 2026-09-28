@@ -159,6 +159,7 @@
     'varying float vA; varying float vH; varying float vAuf; varying float vTon;' +
     'varying float vGr; varying float vHl;' +
     'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
+    'uniform float uFarbwahl; uniform float uKurve;' +
     'void main(){' +
     '  vec3 kA = vec3(0.05, 0.16, 0.62); vec3 kB = vec3(0.42, 0.20, 0.98);' +
     '  vec3 kC = vec3(0.78, 0.92, 1.00);' +
@@ -225,7 +226,9 @@
       uPunkt = gl.getUniformLocation(pFaden, 'uPunkt'),
       uStaerke = gl.getUniformLocation(pFaden, 'uStaerke'),
       uPunktModus = gl.getUniformLocation(pFaden, 'uPunktModus'),
-      uHitzeTor = gl.getUniformLocation(pFaden, 'uHitzeTor');
+      uHitzeTor = gl.getUniformLocation(pFaden, 'uHitzeTor'),
+      uFarbwahl = gl.getUniformLocation(pFaden, 'uFarbwahl'),
+      uKurve = gl.getUniformLocation(pFaden, 'uKurve');
   var lXY = gl.getAttribLocation(pQuad, 'aXY'), uTex = gl.getUniformLocation(pQuad, 'uTex');
   var pBlass = programm(vsQuad, fsBlass);
   var lXY2 = gl.getAttribLocation(pBlass, 'aXY'), uTex2 = gl.getUniformLocation(pBlass, 'uTex'),
@@ -280,7 +283,6 @@
 
   /* Halbwertszeiten in Sekunden: was schwach ist, was stark ist.
      1e9 heißt: bleibt für immer. */
-  var BLASS_SCHWACH = 8, BLASS_STARK = 1e9;
   var blassAkku = 0;
   function verblassen(dt) {
     blassAkku += dt;
@@ -290,8 +292,8 @@
     gl.viewport(0, 0, BW, BH);
     gl.disable(gl.BLEND);
     gl.useProgram(pBlass);
-    gl.uniform1f(uSchwach, Math.pow(0.5, d / BLASS_SCHWACH));
-    gl.uniform1f(uStark, Math.pow(0.5, d / BLASS_STARK));
+    gl.uniform1f(uSchwach, Math.pow(0.5, d / (8)));
+    gl.uniform1f(uStark, Math.pow(0.5, d / (1e9)));
     gl.uniform1f(uAbzug, Math.min(0.02, d * 1.5 / 255));
     gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
     gl.enableVertexAttribArray(lXY2); gl.vertexAttribPointer(lXY2, 2, gl.FLOAT, false, 0, 0);
@@ -313,7 +315,9 @@
          Der Niederschlag ist ein Bild, kein Protokoll — wer weiß, wer etwas gemalt
          hat, muss es beim Auftragen wissen, nachher nicht mehr. */
       art = new Uint8Array(N),
-      ABGABE = [1, 1, 1, 1, 1],   /* wieviel jede Art hinterlässt, 0 = nichts */
+      ABGABE = window.ABGABE || (window.ABGABE = [1, 1, 1, 1, 1]),
+      /* wieviel jede Art hinterlässt, 0 = nichts — draußen sichtbar,
+         damit das Pult daran greifen kann */
       hl = new Float32Array(N);
   var daten = new Float32Array(N * 16);  /* je (x,y,a,h,auf,ton,größe,tempo) */
 
@@ -350,10 +354,12 @@
      Sekunden ab. Damit wirkt ein Zug nach — und weil das Feld in der Mitte
      schnell und daneben still ist, rollt sich der Rand von selbst ein. */
   var sfx = new Float32Array(GX * GY), sfy = new Float32Array(GX * GY);
-  var FELD_R = 180;          /* Pinselbreite der Hand im Feld, in px */
-  var FELD_TAU = 1.5;        /* Abklingzeit in Sekunden */
+  /* Pinselbreite der Hand im Feld und Abklingzeit — als Ausdruck, damit das
+     Pult sie im Lauf verstellen kann; in den festen Fassungen sind es
+     Konstanten, die der Übersetzer wegrechnet. */
 
   function feldStreichen(x, y, vx0, vy0, dt) {
+    var FELD_R = 180;
     var ru = FELD_R / W * GX, rv = FELD_R / H * GY;
     var u0 = Math.max(0, Math.floor(x / W * GX - ru)), u1 = Math.min(GX - 1, Math.ceil(x / W * GX + ru));
     var v0 = Math.max(0, Math.floor(y / H * GY - rv)), v1 = Math.min(GY - 1, Math.ceil(y / H * GY + rv));
@@ -372,7 +378,7 @@
   }
 
   function feldAbklingen(dt) {
-    var f = Math.exp(-dt / FELD_TAU);
+    var f = Math.exp(-dt / (1.5));
     for (var k = 0; k < GX * GY; k++) { sfx[k] *= f; sfy[k] *= f; }
   }
   var glaettZaehler = 0;
@@ -1010,6 +1016,8 @@
     gl.uniform1f(uPunkt, punkt);
     gl.uniform1f(uPunktModus, punkt > 1.5 ? 1 : 0);
     gl.uniform1f(uHitzeTor, tor || 0);
+    gl.uniform1f(uFarbwahl, 0.0);
+    gl.uniform1f(uKurve, 1.0);
     gl.drawArrays(punkt > 1.5 ? gl.POINTS : gl.LINES, 0, N * 2);
   }
 

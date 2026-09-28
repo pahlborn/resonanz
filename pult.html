@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Resonanz A</title>
+<title>Resonanz Pult</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="symbol-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -75,8 +75,121 @@
 </head>
 <body>
 <canvas id="feld"></canvas>
+<style>
+  #pult{
+    position:fixed; right:0; top:0; bottom:0; width:min(92vw, 360px); z-index:8;
+    pointer-events:auto;
+    background:rgba(6,9,15,.93); backdrop-filter:blur(10px);
+    border-left:1px solid rgba(150,170,200,.14);
+    transform:translateX(100%); transition:transform .28s ease;
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:max(16px, env(safe-area-inset-top)) 18px
+            calc(max(16px, env(safe-area-inset-bottom)) + 70px) 18px;
+    font:400 14px/1.5 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    color:#C6D2E4;
+  }
+  #pult.auf{transform:translateX(0);}
+  #pult h3{margin:22px 0 10px; font:500 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+           letter-spacing:.3em; text-transform:uppercase; color:#6C7C96;}
+  #pult h3:first-child{margin-top:4px;}
+  .zeile{display:flex; align-items:flex-start; gap:12px; padding:9px 0;
+         border-bottom:1px solid rgba(150,170,200,.07);}
+  .zeile .txt{flex:1; min-width:0;}
+  .zeile .t1{font:500 12px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+             letter-spacing:.12em; text-transform:uppercase;}
+  .zeile .t2{color:#6C7C96; font-size:12px; line-height:1.4; margin-top:3px;}
+  .knopf{flex:0 0 auto; width:50px; height:28px; border-radius:14px; border:0;
+         background:rgba(150,170,200,.16); position:relative; cursor:pointer;
+         -webkit-tap-highlight-color:transparent; transition:background .18s ease;}
+  .knopf::after{content:''; position:absolute; top:3px; left:3px; width:22px; height:22px;
+                border-radius:11px; background:#7E8B99; transition:transform .18s ease, background .18s ease;}
+  .knopf[aria-pressed="true"]{background:rgba(63,123,232,.38);}
+  .knopf[aria-pressed="true"]::after{transform:translateX(22px); background:#9FC0F5;}
+  .schieber{display:block; width:100%; margin:8px 0 2px; accent-color:#3F7BE8;}
+  .wert{float:right; color:#9FB0CC; font:400 12px ui-monospace, SFMono-Regular, Menlo, monospace;}
+  .wahl{display:flex; gap:1px; background:rgba(150,170,200,.12); border-radius:7px;
+        overflow:hidden; margin-top:8px;}
+  .wahl button{flex:1; appearance:none; border:0; cursor:pointer; padding:11px 6px;
+    background:#0C1218; color:#8A98AE; font:400 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+    -webkit-tap-highlight-color:transparent;}
+  .wahl button[aria-pressed="true"]{background:#16222E; color:#DCE6F5;}
+  .tasten{display:flex; gap:1px; background:rgba(150,170,200,.12); border-radius:7px;
+          overflow:hidden; margin:18px 0 0;}
+  .tasten button, .tasten a{flex:1; appearance:none; border:0; cursor:pointer; padding:13px 6px;
+    background:#0C1218; color:#C6D2E4; text-align:center; text-decoration:none;
+    font:400 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.12em;
+    text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
+  #pultTuer{
+    position:fixed; right:max(12px, env(safe-area-inset-right));
+    bottom:calc(max(12px, env(safe-area-inset-bottom)) + 56px);
+    z-index:9; width:46px; height:46px; border-radius:23px;
+    border:1px solid rgba(160,180,210,.16); background:rgba(10,14,22,.34);
+    backdrop-filter:blur(6px); color:rgba(180,198,224,.5);
+    font:400 15px/1 ui-monospace, SFMono-Regular, Menlo, monospace; cursor:pointer;
+    pointer-events:auto; -webkit-tap-highlight-color:transparent;
+  }
+</style>
 
-<p id="hinweis">Kreise mit dem Finger</p>
+<script>
+/* Die Mischung muss stehen, bevor das Hauptskript loslaeuft: Der Parser darf
+   zwischen zwei Skriptbloecken ein Bild zeichnen, und dann liest die Schleife
+   M, bevor das Pult es angelegt haette. Einmal gemessen, einmal gelernt. */
+(function () {
+  window.VORLAGEN = {"j": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 0, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 26.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "k": {"strang": 1, "wurf": 1, "korn": 1, "funken": 0, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "p": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "q": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "r": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 25.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}};
+  window.__ausAdresse = function () {
+    var h = location.hash.replace(/^#/, '');
+    if (!h) return null;
+    try { return JSON.parse(decodeURIComponent(escape(atob(h)))); } catch (e) { return null; }
+  };
+  window.__inAdresse = function (m) {
+    try {
+      history.replaceState(null, '', '#' + btoa(unescape(encodeURIComponent(JSON.stringify(m)))));
+    } catch (e) {}
+  };
+  window.M = Object.assign({}, window.VORLAGEN.r, window.__ausAdresse() || {});
+  window.ABGABE = (window.M.abgabe || [1, 1, 1, 1, 1]).slice();
+})();
+</script>
+<button id="pultTuer" type="button" aria-label="Mischpult">&#9776;</button>
+<div id="pult">
+<h3>Vorlage</h3><div class="wahl" id="wVorlage"></div>
+<h3>Was es gibt</h3>
+<div class="zeile"><div class="txt"><div class="t1">Strang</div><div class="t2">Der gerade Zug legt ein Filament, Verweilen setzt einen Knoten.</div></div><button class="knopf" type="button" data-schalter="strang" aria-pressed="false" aria-label="Strang"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Wurf</div><div class="t2">Ein unvollendeter Kreis schickt den Wirbel weiter.</div></div><button class="knopf" type="button" data-schalter="wurf" aria-pressed="false" aria-label="Wurf"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Korn</div><div class="t2">Wo es hell ist, gerinnt ein Faden zu einem Lichtpunkt.</div></div><button class="knopf" type="button" data-schalter="korn" aria-pressed="false" aria-label="Korn"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Funken</div><div class="t2">Ein großer Lichtpunkt zerspringt am Ende seines Lebens.</div></div><button class="knopf" type="button" data-schalter="funken" aria-pressed="false" aria-label="Funken"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Stoß</div><div class="t2">Ein Lichtpunkt zerspringt, wenn ihn etwas trifft.</div></div><button class="knopf" type="button" data-schalter="stoss" aria-pressed="false" aria-label="Stoß"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Sog</div><div class="t2">Was schon liegt, lenkt das Medium.</div></div><button class="knopf" type="button" data-schalter="sog" aria-pressed="false" aria-label="Sog"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Zwei Stimmen</div><div class="t2">Drehrichtung wird Farbfamilie.</div></div><button class="knopf" type="button" data-schalter="stimmen" aria-pressed="false" aria-label="Zwei Stimmen"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Schleife</div><div class="t2">Schleifengröße wird Wirbelgröße.</div></div><button class="knopf" type="button" data-schalter="schleife" aria-pressed="false" aria-label="Schleife"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Tempo</div><div class="t2">Handtempo wird Farbe.</div></div><button class="knopf" type="button" data-schalter="tempo" aria-pressed="false" aria-label="Tempo"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Strömung</div><div class="t2">Die Hand streicht ihre Bewegung in die Fläche.</div></div><button class="knopf" type="button" data-schalter="stroemung" aria-pressed="false" aria-label="Strömung"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Umlauf</div><div class="t2">Was hinausfliegt, kommt gegenüber wieder herein.</div></div><button class="knopf" type="button" data-schalter="umlauf" aria-pressed="false" aria-label="Umlauf"></button></div>
+<div class="zeile"><div class="txt"><div class="t1">Verblassen</div><div class="t2">Schwaches vergeht, Starkes bleibt.</div></div><button class="knopf" type="button" data-schalter="verblassen" aria-pressed="false" aria-label="Verblassen"></button></div>
+<h3>Wieviel</h3>
+<div class="zeile"><div class="txt"><div class="t1">Auftrag <span class="wert" id="w_auftrag"></span></div><div class="t2">Wie kräftig überhaupt etwas liegen bleibt</div><input class="schieber" type="range" data-regler="auftrag" data-einheit="" min="0.0" max="0.6" step="0.01"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Zug der Hand <span class="wert" id="w_feldkraft"></span></div><div class="t2">Wieviel Medium die Hand mitnimmt</div><input class="schieber" type="range" data-regler="feldkraft" data-einheit="" min="0.0" max="1.6" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Breite der Hand <span class="wert" id="w_feldr"></span></div><div class="t2">Wie weit die Strömung um den Finger reicht</div><input class="schieber" type="range" data-regler="feldr" data-einheit="px" min="60" max="320" step="10"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Wirbelgröße <span class="wert" id="w_rfaktor"></span></div><div class="t2">Eng am Finger oder weit darum herum</div><input class="schieber" type="range" data-regler="rfaktor" data-einheit="" min="0.3" max="1.8" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Glut <span class="wert" id="w_hitzer"></span></div><div class="t2">Wie weit die Hitze um den Kern reicht</div><input class="schieber" type="range" data-regler="hitzer" data-einheit="" min="0.6" max="2.4" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Korn je Sekunde <span class="wert" id="w_kornrate"></span></div><div class="t2">Wie viele Lichtpunkte entstehen</div><input class="schieber" type="range" data-regler="kornrate" data-einheit="" min="0" max="90" step="2"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Verblassen <span class="wert" id="w_blassSchwach"></span></div><div class="t2">Halbwertszeit des Schwachen</div><input class="schieber" type="range" data-regler="blassSchwach" data-einheit="s" min="2" max="120" step="1"></div></div>
+<h3>Was liegen bleibt</h3>
+<div class="zeile"><div class="txt"><div class="t1">Medium <span class="wert" id="w_ab0"></span></div><div class="t2">Die Fäden des Feldes — sie tragen den Löwenanteil.</div><input class="schieber" type="range" data-abgabe="0" min="0" max="1" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Strang <span class="wert" id="w_ab1"></span></div><div class="t2">Das Filament des geraden Zuges.</div><input class="schieber" type="range" data-abgabe="1" min="0" max="1" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Knoten <span class="wert" id="w_ab2"></span></div><div class="t2">Der Lichtpunkt, der beim Verweilen entsteht.</div><input class="schieber" type="range" data-abgabe="2" min="0" max="1" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Korn <span class="wert" id="w_ab3"></span></div><div class="t2">Die Lichtpunkte entlang der Strahlen.</div><input class="schieber" type="range" data-abgabe="3" min="0" max="1" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Funken <span class="wert" id="w_ab4"></span></div><div class="t2">Was ein zerspringender Lichtpunkt hinterlässt.</div><input class="schieber" type="range" data-abgabe="4" min="0" max="1" step="0.05"></div></div>
+<h3>Farbe</h3><div class="wahl" id="wFarbe">
+<button type="button" data-farbe="0">Kalt · Violett · Gold</button>
+<button type="button" data-farbe="1">Zwei Familien</button>
+<button type="button" data-farbe="2">Tempo färbt</button>
+</div>
+<div class="tasten"><button id="pSichern" type="button">Mischung sichern</button></div>
+<div class="tasten"><button id="pLink" type="button">Adresse kopieren</button><a href="regal.html">Regal</a></div>
+<p class="t2" style="margin-top:14px">Die Fläche bleibt hinter dem Pult lebendig — jede Änderung wirkt sofort. Gesicherte Mischungen stehen im Regal. Die Adresse enthält die ganze Mischung; wer sie öffnet, hat genau dieselbe.</p>
+</div>
+<p id="hinweis"></p>
 <div id="leiste">
   <button id="knSichern" type="button">Sichern</button>
   <a href="galerie.html">Galerie</a>
@@ -89,7 +202,7 @@
   'use strict';
 
   /* ======================================================================
-     Resonanz — Versuch A (Höhepunkt — selten und heftig)
+     Resonanz — Versuch Pult (Misch dir dein Geschehen)
 
      Zwei Schichten:
 
@@ -114,11 +227,11 @@
      ==================================================================== */
 
   var STIMMUNG = {
-    sigma:   1.8,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
-    stoerung:1.4,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
-    zerfall: 0.30, /* Grundzerfall, auch wenn man alles richtig macht */
-    aufbau:  1.3,  /* Wie schnell Treffer Energie sammeln           */
-    schwelle:0.34 /* Ab wann Farbe liegen bleibt                   */
+    sigma:   3.2,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
+    stoerung:0.7,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
+    zerfall: 0.14, /* Grundzerfall, auch wenn man alles richtig macht */
+    aufbau:  1.7,  /* Wie schnell Treffer Energie sammeln           */
+    schwelle:0.20 /* Ab wann Farbe liegen bleibt                   */
   };
 
   /* --- Deterministische Grundlage: fester Zeitschritt, gesäter Zufall.
@@ -161,12 +274,25 @@
     'uniform float uStaerke; uniform float uPunktModus; uniform float uHitzeTor;' +
     'uniform float uFarbwahl; uniform float uKurve;' +
     'void main(){' +
-    '  vec3 kalt = vec3(0.13, 0.42, 0.98);' +
-    '  vec3 violett = vec3(0.58, 0.26, 0.98);' +
-    '  vec3 gold = vec3(1.00, 0.74, 0.28);' +
-    '  vec3 c = vH < 0.5 ? mix(kalt, violett, vH * 2.0) : mix(violett, gold, (vH - 0.5) * 2.0);' +
-    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 0.0);' +
-    '  float a = vA * uStaerke * mix(1.0, vH * vAuf, uHitzeTor);' +
+    '  vec3 aK = vec3(0.13, 0.42, 0.98); vec3 aV = vec3(0.58, 0.26, 0.98);' +
+    '  vec3 aG = vec3(1.00, 0.74, 0.28);' +
+    '  vec3 c0 = vH < 0.5 ? mix(aK, aV, vH * 2.0) : mix(aV, aG, (vH - 0.5) * 2.0);' +
+    '  vec3 kA = vec3(0.11, 0.40, 0.98); vec3 kB = vec3(0.55, 0.24, 0.98);' +
+    '  vec3 kC = vec3(0.74, 0.90, 1.00);' +
+    '  vec3 wA = vec3(0.95, 0.22, 0.10); vec3 wB = vec3(1.00, 0.60, 0.13);' +
+    '  vec3 wC = vec3(1.00, 0.95, 0.78);' +
+    '  vec3 c1 = mix(vH < 0.5 ? mix(kA, kB, vH * 2.0) : mix(kB, kC, (vH - 0.5) * 2.0),' +
+    '               vH < 0.5 ? mix(wA, wB, vH * 2.0) : mix(wB, wC, (vH - 0.5) * 2.0), vTon);' +
+    '  vec3 tA = vec3(0.05, 0.16, 0.62); vec3 tB = vec3(0.42, 0.20, 0.98);' +
+    '  vec3 tC = vec3(0.78, 0.92, 1.00);' +
+    '  vec3 uA = vec3(0.62, 0.08, 0.04); vec3 uB = vec3(1.00, 0.50, 0.10);' +
+    '  vec3 uC = vec3(1.00, 0.96, 0.80);' +
+    '  float r2 = clamp(vH * 0.88 + (vHl - 0.45) * 0.62, 0.0, 1.0);' +
+    '  vec3 c2 = mix(r2 < 0.5 ? mix(tA, tB, r2 * 2.0) : mix(tB, tC, (r2 - 0.5) * 2.0),' +
+    '               r2 < 0.5 ? mix(uA, uB, r2 * 2.0) : mix(uB, uC, (r2 - 0.5) * 2.0), vTon);' +
+    '  vec3 c = uFarbwahl < 0.5 ? c0 : (uFarbwahl < 1.5 ? c1 : c2);' +
+    '  c = mix(c, vec3(1.0, 0.98, 0.95), step(0.001, vGr) * 1.0);' +
+    '  float a = vA * uStaerke * mix(1.0, pow(vH, uKurve) * vAuf, uHitzeTor);' +
     '  if (uPunktModus > 0.5) {' +
     '    float d = length(gl_PointCoord - vec2(0.5));' +
     '    if (vGr > 0.001) { a *= smoothstep(0.34, 0.0, d) * (0.9 + vGr * 1.6); }' +
@@ -256,7 +382,7 @@
   function fboBauen(w, h, erhalten) {
     var altTex = tex, altFbo = fbo, altTex2 = tex2, altFbo2 = fbo2;
     var a = zielBauen(w, h); fbo = a.f; tex = a.t;
-    if (0) { var b2 = zielBauen(w, h); fbo2 = b2.f; tex2 = b2.t; }
+    if (1) { var b2 = zielBauen(w, h); fbo2 = b2.f; tex2 = b2.t; }
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
 
     /* Beim Drehen des iPads wird der Puffer neu angelegt. Das Bild soll das
@@ -288,8 +414,8 @@
     gl.viewport(0, 0, BW, BH);
     gl.disable(gl.BLEND);
     gl.useProgram(pBlass);
-    gl.uniform1f(uSchwach, Math.pow(0.5, d / (8)));
-    gl.uniform1f(uStark, Math.pow(0.5, d / (1e9)));
+    gl.uniform1f(uSchwach, Math.pow(0.5, d / (M.blassSchwach)));
+    gl.uniform1f(uStark, Math.pow(0.5, d / (M.blassStark)));
     gl.uniform1f(uAbzug, Math.min(0.02, d * 1.5 / 255));
     gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
     gl.enableVertexAttribArray(lXY2); gl.vertexAttribPointer(lXY2, 2, gl.FLOAT, false, 0, 0);
@@ -355,7 +481,7 @@
      Konstanten, die der Übersetzer wegrechnet. */
 
   function feldStreichen(x, y, vx0, vy0, dt) {
-    var FELD_R = 180;
+    var FELD_R = M.feldr;
     var ru = FELD_R / W * GX, rv = FELD_R / H * GY;
     var u0 = Math.max(0, Math.floor(x / W * GX - ru)), u1 = Math.min(GX - 1, Math.ceil(x / W * GX + ru));
     var v0 = Math.max(0, Math.floor(y / H * GY - rv)), v1 = Math.min(GY - 1, Math.ceil(y / H * GY + rv));
@@ -374,7 +500,7 @@
   }
 
   function feldAbklingen(dt) {
-    var f = Math.exp(-dt / (1.5));
+    var f = Math.exp(-dt / (M.feldtau));
     for (var k = 0; k < GX * GY; k++) { sfx[k] *= f; sfy[k] *= f; }
   }
   var glaettZaehler = 0;
@@ -413,7 +539,7 @@
       var d = Math.hypot(K.x - x, K.y - y);
       if (d < dist) { dist = d; beste = K; }
     }
-    if (beste && dist < 260) return beste;
+    if (beste && dist < 120) return beste;
     for (var j = 0; j < kerne.length; j++) if (kerne[j].s < 0.02) {
       var N2 = kerne[j];
       N2.x = x; N2.y = y; N2.om = 0; N2.s = 0.001; N2.fest = 0; N2.ton = 0.5; N2.dvx = 0; N2.dvy = 0; N2.hell = 0.45;
@@ -468,7 +594,7 @@
       var ivx = (nx - hx) / dt, ivy = (ny - hy) / dt;
       hvx += (ivx - hvx) * 0.4; hvy += (ivy - hvy) * 0.4;
       hx = nx; hy = ny;
-      if (0) feldStreichen(nx, ny, hvx, hvy, dt);
+      if (M.stroemung) feldStreichen(nx, ny, hvx, hvy, dt);
       bahnX[bahnI] = nx; bahnY[bahnI] = ny; bahnT[bahnI] = t;
       bahnI = (bahnI + 1) % BAHN; if (bahnN < BAHN) bahnN++;
 
@@ -524,7 +650,7 @@
     offen = Math.max(0, offen - 1);
     if (vorher === 2 && performance.now() - zweiZeit2 < 600) vollbild();
     if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
-    if (0 && aktiverKern) {
+    if (M.wurf && aktiverKern) {
       /* Ein begonnener Kreis nimmt Fahrt mit: Je weniger vollendet die Drehung
          ist, desto mehr Zug erbt der Wirbel — und trägt ihn weiter, wenn die
          Hand ihn loslässt. Ein geschlossener Kreis bleibt stehen. Das setzt
@@ -601,7 +727,7 @@
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
     art[i] = 3;
     fest[i] = 1;
-    lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
+    lm[i] = 1.9 + 2.6 * rnd(); lf[i] = lm[i];
   }
 
   function funken(i) {
@@ -625,11 +751,11 @@
 
   function korngeben(dt) {
     if (wach < 0.05) return;
-    var n = Math.round(80 * wach);
+    var n = Math.round(M.kornrate * wach);
     for (var k = 0; k < n; k++) {
       var q = (rnd() * N) | 0;
       if (korn[q] > 0) continue;                 /* nicht aus Korn Korn machen */
-      if (hz[q] < 0.10) continue;      /* nur dort, wo es leuchtet   */
+      if (hz[q] < 0.20) continue;      /* nur dort, wo es leuchtet   */
       kornSetzen(q);
     }
   }
@@ -688,10 +814,10 @@
       bogen *= Math.exp(-2.2 * dt);
     }
     if (unten) {
-      var g = Math.min(1, dt / 0.55);
+      var g = Math.min(1, dt / 0.6);
       m1x += (hx - m1x) * g; m1y += (hy - m1y) * g;
-      if (0 > 0) {
-        var g2 = Math.min(1, dt / 0);
+      if (0.6 > 0) {
+        var g2 = Math.min(1, dt / 0.6);
         mx += (m1x - mx) * g2; my += (m1y - my) * g2;
       } else { mx = m1x; my = m1y; }
 
@@ -699,7 +825,7 @@
     if (unten && aktiverKern) {
       var K = aktiverKern;
       var omH, treiben, d;
-      if (0) {
+      if (1) {
         /* Der Wirbel sitzt unter dem Finger. Getaktet wird mit dem Kringeln —
            der Drehrate der eigenen Bewegungsrichtung. Damit braucht es keinen
            Mittelpunkt, den man umkreisen muss, und die Farbe ist dort, wo die
@@ -734,11 +860,11 @@
            eiert er beim Kreisen mit. Und je mehr Energie er hat, desto
            weniger lässt er sich noch verschieben: ein starker Wirbel steht. */
         if (K.s > K.fest) K.fest = K.s;
-        var folge = 1.4 * (1 - 0.94 * K.fest);
-        var zx = 0 ? hx : mx, zy = 0 ? hy : my;
+        var folge = M.anker;
+        var zx = 1 ? hx : mx, zy = 1 ? hy : my;
         K.x += (zx - K.x) * folge * dt;
         K.y += (zy - K.y) * folge * dt;
-        if (0) {
+        if (M.tempo) {
           /* Das Tempo der Hand bestimmt, wo auf der Farbskala der Wirbel
              liegt: langsam die tiefen, satten Töne, schnell die hellen.
              Die Helligkeit selbst bleibt der Resonanz vorbehalten — sonst
@@ -746,18 +872,18 @@
           var tp = Math.min(1, Math.sqrt(hvx*hvx + hvy*hvy) / 900);
           K.hell += (tp - K.hell) * 1.6 * dt;
         }
-        if (0 && Math.abs(omH) > 0.8) {
+        if (M.stimmen && Math.abs(omH) > 0.8) {
           /* Die Drehrichtung ist die zweite Stimme: links und rechts herum
              werden zwei Farbfamilien. Der Wechsel läuft weich, damit ein
              Richtungswechsel mitten im Zug den Ton wandern lässt. */
           K.ton += ((omH > 0 ? 1 : 0) - K.ton) * 1.6 * dt;
         }
-        var rZiel = !0 ? Math.min(0.34 * Math.min(W, H), Math.max(90, d * 1.25))
-                  : (0
-                      ? Math.max(0.045 * Math.min(W, H),
-                          Math.min(0.26 * Math.min(W, H), schleife * 1.15))
-                      : 0.34 * Math.min(W, H));
-        K.r += (rZiel - K.r) * 0.25 * dt * (1 - 0.9 * K.fest);
+        var rZiel = !1 ? Math.min(0.13 * Math.min(W, H), Math.max(90, d * 1.25))
+                  : (M.schleife
+                      ? Math.max(M.rklein * Math.min(W, H),
+                          Math.min(M.rgross * Math.min(W, H), schleife * M.rfaktor))
+                      : 0.13 * Math.min(W, H));
+        K.r += (rZiel - K.r) * 0.25 * dt * 1.0;
       } else {
         K.s -= STIMMUNG.zerfall * K.s * dt;
       }
@@ -770,10 +896,10 @@
       if (Q !== aktiverKern || !unten) {
         /* Nachhall: der Wirbel läuft weiter und klingt ab. Er beginnt nie
            von selbst etwas Neues — ohne Anregung geht alles zur Ruhe. */
-        var vd2 = 0 ? Math.sqrt(Q.dvx*Q.dvx + Q.dvy*Q.dvy) : 0;
+        var vd2 = M.wurf ? Math.sqrt(Q.dvx*Q.dvx + Q.dvy*Q.dvy) : 0;
         Q.s -= (STIMMUNG.zerfall * (vd2 > 40 ? 0.85 : 1.25)) * Q.s * dt;
         Q.om *= (1 - 0.16 * dt);
-        if (0) {
+        if (M.wurf) {
           Q.x += Q.dvx * dt; Q.y += Q.dvy * dt;
           var br = Math.exp(-0.28 * dt); Q.dvx *= br; Q.dvy *= br;
         }
@@ -785,7 +911,7 @@
     wach += (zielWach - wach) * (zielWach > wach ? 2.4 : 0.45) * dt;
     if (wach < 0.0015) wach = 0;
 
-    schreibt = (maxS > STIMMUNG.schwelle || (0 && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
+    schreibt = (maxS > STIMMUNG.schwelle || (M.strang && (linienWert > 0.34 || knotenAktiv))) ? 1 : 0;
   }
 
   function mediumRechnen(dt) {
@@ -797,7 +923,7 @@
     for (var i = 0; i < N; i++) {
       lf[i] -= dt;
       if (lf[i] <= 0) {
-        if (0 && korn[i] > 1.2 && hz[i] > 0.30 && rnd() < 0.34) funken(i);
+        if (M.funken && korn[i] > 1.2 && hz[i] > 0.30 && rnd() < 0.34) funken(i);
         fest[i] = 0; art[i] = 0;
         if (rnd() < 0.34) {
           var j = (rnd() * N) | 0;
@@ -832,12 +958,12 @@
 
       /* Die Hand schiebt immer, unabhängig von jeder Resonanz. Das ist die
          Rückmeldung, die dem ersten Prüfstück gefehlt hat. */
-      if (0) {
+      if (M.stroemung) {
         if (!fest[i]) {
           var fu = (x / W * GX) | 0, fv = (y / H * GY) | 0;
           if (fu >= 0 && fv >= 0 && fu < GX && fv < GY) {
             var fk = fv * GX + fu;
-            ax += sfx[fk] * 1.1; ay += sfy[fk] * 1.1;
+            ax += sfx[fk] * M.feldkraft; ay += sfy[fk] * M.feldkraft;
           }
         }
       } else if (unten && !fest[i]) {
@@ -863,7 +989,7 @@
 
       if (fest[i]) { ax *= 0.14; ay *= 0.14; }
       var zaeh = 1;
-      if (0) {
+      if (M.sog) {
         var F = dichteAbtasten(x, y);
         if (F) {
           var gl2 = Math.sqrt(F.gx*F.gx + F.gy*F.gy);
@@ -881,7 +1007,7 @@
         }
       }
 
-      if (0 && korn[i] <= 0 && !fest[i]) {
+      if (M.stoss && korn[i] <= 0 && !fest[i]) {
         /* Ein Faden trifft einen Lichtpunkt. */
         var vs2 = vx[i]*vx[i] + vy[i]*vy[i];
         if (vs2 > 67600) {
@@ -896,7 +1022,7 @@
       }
       if (korn[i] > 0) {
         ax = 0; ay = 0;                        /* zuletzt, sonst schiebt das Bild */
-        if (0 && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
+        if (M.stoss && korn[i] > 0.9 && lm[i] - lf[i] > 0.45) {
           var zer = 0;
           if (unten && handTempo > 130) {
             var hx2 = x - hx, hy2 = y - hy;
@@ -923,7 +1049,7 @@
 
       if (korn[i] > 0) {
         if (x < 0 || x > W || y < 0 || y > H) { lf[i] = 0; }
-      } else if (1) {
+      } else if (M.umlauf) {
         if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
         if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
       } else {
@@ -954,7 +1080,7 @@
         if (K.s < 0.05) continue;
         var ex = px[i] - K.x, ey = py[i] - K.y;
         var d = Math.sqrt(ex*ex + ey*ey);
-        var nah = 1 - Math.min(1, d / (K.r * 2.2));
+        var nah = 1 - Math.min(1, d / (K.r * M.hitzer));
         var w = K.s * nah * nah;
         if (w > h) { h = w; tonZiel = K.ton; }
         if (nah > nahBest) { nahBest = nah; hellZiel = K.hell; }
@@ -982,7 +1108,7 @@
          wenig — sonst läuft alles zu. Und was aufgetragen wird, wandert ins
          Raster, damit es beim nächsten Zug lenkt. */
       var auf = ABGABE[art[i]];
-      if (0 && schreibt) {
+      if (M.sog && schreibt) {
         var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
         if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
           var gk = gv * GX + gu;
@@ -1012,8 +1138,8 @@
     gl.uniform1f(uPunkt, punkt);
     gl.uniform1f(uPunktModus, punkt > 1.5 ? 1 : 0);
     gl.uniform1f(uHitzeTor, tor || 0);
-    gl.uniform1f(uFarbwahl, 0.0);
-    gl.uniform1f(uKurve, 1.0);
+    gl.uniform1f(uFarbwahl, M.farbe);
+    gl.uniform1f(uKurve, M.kurve);
     gl.drawArrays(punkt > 1.5 ? gl.POINTS : gl.LINES, 0, N * 2);
   }
 
@@ -1027,13 +1153,13 @@
       gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
       gl.viewport(0, 0, BW, BH);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);   /* deckend, nicht addierend */
-      faedenZeichnen(0.0400, 1.0, 1);
-      faedenZeichnen(0.0400 * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
+      faedenZeichnen(M.auftrag, 1.0, 1);
+      faedenZeichnen(M.auftrag * 0.5, 5.0, 1);        /* weicher Auftrag daneben */
       gl.blendFunc(gl.ONE, gl.ONE);
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
-    if (0) verblassen(rahmenDt);
+    if (M.verblassen) verblassen(rahmenDt);
 
     /* 2) Bildschirm: erst das Liegengebliebene, dann das Lebendige. */
     gl.viewport(0, 0, BW, BH);
@@ -1064,11 +1190,11 @@
     letzterRahmen = t; rahmenDt = dt;
     rest += dt;
     var n = 0;
-    while (rest >= DT && n < MAX_SUB) { if (0) feldAbklingen(DT); kerneRechnen(DT); if (0) filamente(DT);
-      if (0) korngeben(DT);
-      if (0) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
+    while (rest >= DT && n < MAX_SUB) { if (M.stroemung) feldAbklingen(DT); kerneRechnen(DT); if (M.strang) filamente(DT);
+      if (M.korn) korngeben(DT);
+      if (M.stoss) kornRasterFuellen(); mediumRechnen(DT); rest -= DT; n++; }
     if (n === MAX_SUB) rest = 0;
-    if (0 && (glaettZaehler++ % 20) === 0) rasterGlaetten();
+    if (M.sog && (glaettZaehler++ % 20) === 0) rasterGlaetten();
     zeichnen();
     if (window.__bildWunsch) { window.__bildWunsch = false; window.__bildNehmen(); }
     requestAnimationFrame(rahmen);
@@ -1104,7 +1230,7 @@
 
 <script>
 (function () {
-  var KENNUNG = 'a', SCHILD = 'Fassung A — Höhepunkt — selten und heftig';
+  var KENNUNG = 'pult', SCHILD = 'Eigene Mischung';
   try { localStorage.setItem('resonanz.zuletzt', KENNUNG); } catch (e) {}
 
   var tuer = document.getElementById('tuer'), leiste = document.getElementById('leiste'),
@@ -1191,6 +1317,103 @@
     leiste.classList.remove('auf');
     window.__bildWunsch = true;
   });
+})();
+</script>
+
+<script>
+(function () {
+  var VORLAGEN = window.VORLAGEN;
+  var SCHALTER = ["strang", "wurf", "korn", "funken", "stoss", "sog", "stimmen", "schleife", "tempo", "stroemung", "umlauf", "verblassen"];
+  var REGLER   = ["auftrag", "feldkraft", "feldr", "rfaktor", "hitzer", "kornrate", "blassSchwach"];
+  var ABGABE   = window.ABGABE;
+  var M        = window.M;
+  var inAdresse = window.__inAdresse;
+
+  var pult = document.getElementById('pult'), tuer = document.getElementById('pultTuer');
+  tuer.addEventListener('click', function () { pult.classList.toggle('auf'); });
+
+  function zahl(k, v) {
+    var e = document.getElementById('w_' + k);
+    if (!e) return;
+    var s = document.querySelector('[data-regler="' + k + '"]');
+    var eh = s ? s.getAttribute('data-einheit') : '';
+    e.textContent = (v >= 10 ? Math.round(v) : Math.round(v * 100) / 100) + (eh ? ' ' + eh : '');
+  }
+
+  function anzeigen() {
+    SCHALTER.forEach(function (k) {
+      var b = document.querySelector('[data-schalter="' + k + '"]');
+      if (b) b.setAttribute('aria-pressed', M[k] ? 'true' : 'false');
+    });
+    REGLER.forEach(function (k) {
+      var s = document.querySelector('[data-regler="' + k + '"]');
+      if (s) { s.value = M[k]; zahl(k, +M[k]); }
+    });
+    for (var i = 0; i < 5; i++) {
+      var s2 = document.querySelector('[data-abgabe="' + i + '"]');
+      if (s2) { s2.value = ABGABE[i];
+        document.getElementById('w_ab' + i).textContent = Math.round(ABGABE[i] * 100) + ' %'; }
+    }
+    document.querySelectorAll('[data-farbe]').forEach(function (b) {
+      b.setAttribute('aria-pressed', (+b.dataset.farbe === +M.farbe) ? 'true' : 'false');
+    });
+    inAdresse(M);
+  }
+
+  document.querySelectorAll('[data-schalter]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      M[b.dataset.schalter] = M[b.dataset.schalter] ? 0 : 1; anzeigen();
+    });
+  });
+  document.querySelectorAll('[data-regler]').forEach(function (s) {
+    s.addEventListener('input', function () {
+      M[s.dataset.regler] = +s.value; zahl(s.dataset.regler, +s.value); inAdresse(M);
+    });
+  });
+  document.querySelectorAll('[data-abgabe]').forEach(function (s) {
+    s.addEventListener('input', function () {
+      ABGABE[+s.dataset.abgabe] = +s.value;
+      M.abgabe = ABGABE.slice();
+      document.getElementById('w_ab' + s.dataset.abgabe).textContent =
+        Math.round(+s.value * 100) + ' %';
+      inAdresse(M);
+    });
+  });
+  document.querySelectorAll('[data-farbe]').forEach(function (b) {
+    b.addEventListener('click', function () { M.farbe = +b.dataset.farbe; anzeigen(); });
+  });
+
+  /* Vorlagen: immer bei einer Fassung anfangen, nie bei Null. */
+  var wv = document.getElementById('wVorlage');
+  ['r', 'q', 'p', 'k', 'j'].forEach(function (k) {
+    if (!VORLAGEN[k]) return;
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = k.toUpperCase();
+    b.addEventListener('click', function () {
+      Object.assign(M, VORLAGEN[k]);
+      for (var i = 0; i < 5; i++) ABGABE[i] = 1;
+      M.abgabe = ABGABE.slice();
+      anzeigen();
+    });
+    wv.appendChild(b);
+  });
+
+  document.getElementById('pSichern').addEventListener('click', function () {
+    var name = prompt('Wie soll die Mischung heißen?', 'Meine Mischung');
+    if (!name) return;
+    var liste = [];
+    try { liste = JSON.parse(localStorage.getItem('resonanz.mischungen') || '[]'); } catch (e) {}
+    liste.unshift({ name: name, zeit: Date.now(), mischung: Object.assign({}, M) });
+    try { localStorage.setItem('resonanz.mischungen', JSON.stringify(liste.slice(0, 40))); } catch (e) {}
+    pult.classList.remove('auf');
+  });
+  document.getElementById('pLink').addEventListener('click', function () {
+    var a = location.href;
+    if (navigator.clipboard) navigator.clipboard.writeText(a).catch(function () {});
+    else prompt('Adresse:', a);
+  });
+
+  anzeigen();
 })();
 </script>
 

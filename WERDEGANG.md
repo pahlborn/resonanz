@@ -1189,6 +1189,59 @@ Pult braucht deshalb einen Regler fürs Medium, sonst wirken die anderen kaputt.
 Die achtzehn Fassungen verhalten sich unverändert: Alle Werte stehen auf 1, und
 `auf = 1 - x` wurde zu `auf *= 1 - x`, was bei 1 dasselbe ist.
 
+### 36. Das Mischpult
+
+Zwei Nachrichten, nachdem ich davon abgeraten hatte, kam der Wunsch von der
+Hand selbst: „Wie wäre eine Version, in der ich das Geschehen selber mixen
+kann?" Der Einwand von damals gilt weiter — als **Hauptbedienung** wäre es
+falsch, weil zwölf Schalter 4096 Kombinationen sind und die meisten hässlich.
+Als eigene Seite neben den festen Fassungen kostet es nichts.
+
+**Zwei Regeln halten es im Rahmen:**
+
+*Das Pult fängt immer bei einer Fassung an, nie bei Null.* Oben stehen R, Q, P,
+K und J als Vorlagen; man dreht an etwas, das schon eine Hand ausgewählt hat.
+
+*Die Resonanzparameter bleiben draußen.* Takt, Zerfall, Aufbau, Schwelle — also
+wie streng das Feld antwortet — sind nicht einstellbar. Das Pult bestimmt,
+**welche Dinge es gibt**, nicht **wie wählerisch das Feld ist**. Das ist der
+Unterschied zwischen einem Instrument und einem Einstellungsfenster.
+
+Es ist **kein Nachbau**: Dieselbe Vorlage erzeugt die Seite, nur stehen statt
+fester Zahlen Ausdrücke drin, die zur Laufzeit aus `M` lesen. Zwölf Schalter,
+sieben Regler, fünf Abgaben, drei Farbfamilien.
+
+**Zwei Dinge steckten in der Grafikkarte und mussten anders gelöst werden.**
+Die Farbfamilien und die Auftragskurve sind Shader-Quelltext, nicht Programm.
+Im Pult sind deshalb alle drei Farbrampen gleichzeitig im Shader, und ein
+`uFarbwahl` wählt aus; die Kurve wurde zu `pow(vH, uKurve)`. Kostet etwas
+Startzeit, nichts im Betrieb.
+
+**Die Mischung steht in der Adresse.** Base64 hinter dem Doppelkreuz. Damit ist
+eine Einstellung etwas, das man verschicken kann — und das ist die Antwort auf
+das Verständigungsproblem aus Abschnitt 29: Wer mir eine Adresse schickt, muss
+nichts mehr in Worte fassen.
+
+**Ein Fehler, der ohne Messung nicht aufgefallen wäre:** Die Zeichenschleife
+lief los, bevor das Pult-Skript geparst war — der Parser darf zwischen zwei
+Skriptblöcken ein Bild zeichnen. `M is not defined`, und zwar genau einmal, im
+ersten Rahmen; danach lief alles, nur war die Schleife tot. Sichtbar wurde es
+erst an der Bildrate: 60 statt 14, weil nichts mehr gerechnet wurde. Die
+Mischung steht jetzt in einem eigenen Skript **vor** dem Hauptskript.
+
+**Der Preis, gemessen** — dieselbe Bewegung, Pult unberührt auf Vorlage R:
+
+```
+                 Durchgang 1   Durchgang 2   Mittel
+Fassung R              14,3          14,5     14,4
+Pult                   12,5          12,5     12,5   (87 %)
+```
+
+Dreizehn Prozent, und das gegen einen Software-Renderer, wo die Rechenzeit
+besonders schwer wiegt. Die festen Fassungen sind davon nicht betroffen — sie
+tragen weiter Konstanten. Der Preis fällt nur dort an, wo man dafür etwas
+bekommt.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

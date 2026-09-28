@@ -23,6 +23,15 @@ Unten rechts ein Punkt. Ein Tipp öffnet drei Wege:
 * **Galerie** — was du gesichert hast, nur auf diesem Gerät
 * **Regal** — alles, was gebaut wurde
 
+## Das Mischpult
+
+**[Mischpult](https://pahlborn.github.io/resonanz/pult.html)** — misch dir dein
+Geschehen selbst. Zwölf Schalter, sieben Regler, dazu für jedes Element, wieviel
+es überhaupt hinterlässt. Die Fläche bleibt hinter dem Pult lebendig, jede
+Änderung wirkt sofort. Es fängt immer bei einer Fassung an, nie bei Null.
+
+Die Mischung steht in der Adresse — wer den Link öffnet, hat genau dieselbe.
+
 ## Das Regal
 
 **[Die Wirkungen](https://pahlborn.github.io/resonanz/regal.html)** — jede für

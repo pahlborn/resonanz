@@ -1147,6 +1147,48 @@ eine Umleitung bei jedem Start — fragil ohne Netz, und im schlechten Fall
 sperrt sie einen in einer alten Fassung ein. Der Start geht deshalb immer in
 die lebende Fassung; das Regal ist einen Tipp entfernt.
 
+### 35. Jeder Faden weiß jetzt, woher er kommt
+
+Die Frage war: „Jedes Element hinterlässt etwas auf dem Bildschirm. Können wir
+auch das regelbar machen, vielleicht sogar mit einer Zeitbedingung?"
+
+Der erste Teil geht, der zweite nicht so, wie er klingt. **Der Niederschlag ist
+ein Bild, kein Protokoll.** Sobald etwas darin liegt, ist nicht mehr
+herauszulesen, wer es gemalt hat — „Funken nach zehn Sekunden weg, Wirbel
+bleiben" lässt sich nachträglich nicht trennen. Wer je Art verschieden vergehen
+lassen will, braucht je Art einen eigenen Bildspeicher: auf dem iPad rund 60 MB
+und die vierfache Zeichenlast.
+
+**Vorgeschlagen ist deshalb ein Zwischenweg**, noch nicht gebaut: zwei Schichten
+statt fünf Uhren. Je Element *nichts · flüchtig · bleibend*, dazu eine Uhr für
+alles Flüchtige. Eine zusätzliche Schicht statt vier.
+
+**Gebaut ist die erste Hälfte, und die ist verlustfrei.** Jeder Faden trägt
+jetzt ein Kennzeichen — 0 Medium, 1 Strang, 2 Knoten, 3 Korn, 4 Funke — und
+sein Auftrag wird mit einem Wert je Art multipliziert. Der Griff sitzt an
+`aAuf`, das ohnehin nur im Niederschlag wirkt (`uHitzeTor` ist dort 1, auf dem
+Bildschirm 0): Die Bewegung bleibt unangetastet, nur das Liegenbleiben ändert
+sich. Null heißt: bewegt sich weiter, hinterlässt nichts.
+
+Gemessen, derselbe Zug, nur die Abgabe verstellt:
+
+```
+[Medium, Strang, Knoten, Korn, Funke]      Niederschlag
+[1, 1, 1, 1, 1]   alles wie bisher              24,2
+[1, 1, 1, 0, 1]   Korn hinterlässt nichts       23,8
+[1, 0, 0, 0, 0]   nur das Medium                21,2
+[0, 0, 0, 1, 1]   nur Korn und Funken            5,4
+[0, 0, 0, 0, 0]   gar nichts                     0,0
+```
+
+**Ein Befund nebenbei, der fürs Mischpult zählt:** Die Regler sind nicht gleich
+stark. Das Medium allein trägt 21 von 24 — Korn und Funken zusammen gut fünf.
+Wer am Korn dreht, merkt wenig, solange das Medium voll aufgedreht ist. Das
+Pult braucht deshalb einen Regler fürs Medium, sonst wirken die anderen kaputt.
+
+Die achtzehn Fassungen verhalten sich unverändert: Alle Werte stehen auf 1, und
+`auf = 1 - x` wurde zu `auf *= 1 - x`, was bei 1 dasselbe ist.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

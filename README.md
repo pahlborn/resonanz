@@ -32,6 +32,12 @@ es überhaupt hinterlässt. Die Fläche bleibt hinter dem Pult lebendig, jede
 
 Die Mischung steht in der Adresse — wer den Link öffnet, hat genau dieselbe.
 
+Wenn du nicht weißt, wie man eine Wirkung hervorruft: Der Punkt links in der
+Zeile **leuchtet**, sobald sie wirklich feuert, und **„Zeig mir"** führt die
+Bewegung vor, die sie ruft. **„Schauspiel starten"** lässt die Geisterhand von
+selbst weitermalen — bis du die Fläche berührst. Sie sichert nichts; was
+bleiben soll, sicherst du.
+
 ## Das Regal
 
 **[Die Wirkungen](https://pahlborn.github.io/resonanz/regal.html)** — jede für

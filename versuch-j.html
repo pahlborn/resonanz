@@ -113,12 +113,15 @@
      Kern fast jeden Takt an; mit wachsender Energie wird er wählerisch.
      ==================================================================== */
 
+  /* Die Strenge des Feldes. In den festen Fassungen steht sie ein für alle
+     Mal; im Pult wird sie bei jedem Zugriff neu gelesen, damit sich auch
+     daran drehen lässt. */
   var STIMMUNG = {
-    sigma:   3.2,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
-    stoerung:0.7,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
-    zerfall: 0.14, /* Grundzerfall, auch wenn man alles richtig macht */
-    aufbau:  1.7,  /* Wie schnell Treffer Energie sammeln           */
-    schwelle:0.20 /* Ab wann Farbe liegen bleibt                   */
+    get sigma()   { return 3.2; },    /* Wie eng der Takt getroffen sein muss */
+    get stoerung(){ return 0.7; },    /* Wie schnell Danebengreifen zerlegt   */
+    get zerfall() { return 0.14; },  /* Grundzerfall, auch bei allem richtig  */
+    get aufbau()  { return 1.7; },   /* Wie schnell Treffer Energie sammeln   */
+    get schwelle(){ return 0.20; }  /* Ab wann Farbe liegen bleibt           */
   };
 
   /* --- Deterministische Grundlage: fester Zeitschritt, gesäter Zufall.
@@ -127,6 +130,12 @@
   function mulberry32(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};}
   var rnd = mulberry32(SEED);
   var DT = 1/120, MAX_SUB = 4;
+
+  /* Lebenszeichen: Jede Wirkung trägt ein, wann sie zuletzt wirklich gefeuert
+     hat. Das Pult macht daraus ein Leuchten — damit man sieht, welche Bewegung
+     eine Wirkung ruft, statt es erklärt zu bekommen. */
+  var PULS = window.PULS || (window.PULS = {});
+  function puls(k) { PULS[k] = performance.now(); }
 
   var N = 14000;            /* Fäden */
   var SCHWEIF = 0.125;      /* Länge des Schweifs in Sekunden Bewegung */
@@ -288,6 +297,7 @@
     blassAkku += dt;
     if (blassAkku < 0.25) return;            /* höchstens viermal je Sekunde */
     var d = blassAkku; blassAkku = 0;
+    puls('verblassen');
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo2);
     gl.viewport(0, 0, BW, BH);
     gl.disable(gl.BLEND);
@@ -359,6 +369,7 @@
      Konstanten, die der Übersetzer wegrechnet. */
 
   function feldStreichen(x, y, vx0, vy0, dt) {
+    puls('stroemung');
     var FELD_R = 180;
     var ru = FELD_R / W * GX, rv = FELD_R / H * GY;
     var u0 = Math.max(0, Math.floor(x / W * GX - ru)), u1 = Math.min(GX - 1, Math.ceil(x / W * GX + ru));
@@ -461,7 +472,11 @@
   }
   function bewegen(e) {
     if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
-    var pkte = (e.getCoalescedEvents && e.getCoalescedEvents()) || [e];
+    /* Vorsicht: Bei einem künstlich erzeugten Ereignis gibt
+       getCoalescedEvents() eine LEERE Liste zurück — und ein leeres Feld ist
+       wahr. Ohne diese Prüfung liefe die Schleife über nichts. */
+    var pkte = (e.getCoalescedEvents && e.getCoalescedEvents()) || [];
+    if (!pkte.length) pkte = [e];
     for (var i = 0; i < pkte.length; i++) {
       var t = performance.now();
       var dt = (t - letzteZeit) / 1000;
@@ -551,6 +566,7 @@
       var vd = Math.sqrt(dX*dX + dY*dY);
       if (vd > 620) { dX *= 620/vd; dY *= 620/vd; }
       aktiverKern.dvx = dX; aktiverKern.dvy = dY;
+      if (vd > 30) puls('wurf');
     }
     try { cv.releasePointerCapture(e.pointerId); } catch (x) {}
     zeigerId = null; unten = false; hvx = hvy = 0; aktiverKern = null;
@@ -603,7 +619,7 @@
     hz[i] = hz[quelle] * (0.75 + 0.4 * rnd());
     tn[i] = tn[quelle]; hl[i] = hl[quelle];
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
-    art[i] = 3;
+    art[i] = 3; puls('korn');
     fest[i] = 1;
     lm[i] = 2.4 + 3.4 * rnd(); lf[i] = lm[i];
   }
@@ -613,6 +629,7 @@
        Eigenleben: Der Punkt existiert nur, weil ihn jemand erzeugt hat, und
        sein Ende gehört zu seinem Leben wie der Nachhall zum Wirbel. Funken
        sind selbst kein Korn und können deshalb nicht weiterzünden. */
+    puls('funken');
     var n = 9 + ((rnd() * 7) | 0);
     for (var k = 0; k < n; k++) {
       var j = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
@@ -659,6 +676,7 @@
     linieHer += dt;
     if (linienWert > 0.34) {
       linieHer = 0;
+      puls('strang');
       var n = Math.round(30 * linienWert);
       for (var k = 0; k < n; k++) {
         var u = k / n;
@@ -674,6 +692,7 @@
     else knotenLadung = 0;
     knotenAktiv = knotenLadung > 0.14 ? 1 : 0;
     if (knotenAktiv) {
+      puls('knoten');
       for (var m = 0; m < 16; m++) {
         var w = rnd() * 6.2832, rr = 3 + 15 * Math.sqrt(rnd());
         setzen(hx + Math.cos(w) * rr, hy + Math.sin(w) * rr,
@@ -748,6 +767,7 @@
              Die Helligkeit selbst bleibt der Resonanz vorbehalten — sonst
              kämpfen zwei Bedeutungen um dieselbe Anzeige. */
           var tp = Math.min(1, Math.sqrt(hvx*hvx + hvy*hvy) / 900);
+          if (tp > 0.04) puls('tempo');
           K.hell += (tp - K.hell) * 1.6 * dt;
         }
         if (1 && Math.abs(omH) > 0.8) {
@@ -755,12 +775,14 @@
              werden zwei Farbfamilien. Der Wechsel läuft weich, damit ein
              Richtungswechsel mitten im Zug den Ton wandern lässt. */
           K.ton += ((omH > 0 ? 1 : 0) - K.ton) * 1.6 * dt;
+          puls('stimmen');
         }
         var rZiel = !1 ? Math.min(0.13 * Math.min(W, H), Math.max(90, d * 1.25))
                   : (1
                       ? Math.max(0.045 * Math.min(W, H),
                           Math.min(0.26 * Math.min(W, H), schleife * 1.15))
                       : 0.13 * Math.min(W, H));
+        if (1 && Math.abs(rZiel - K.r) > 1.5) puls('schleife');
         K.r += (rZiel - K.r) * 0.25 * dt * 1.0;
       } else {
         K.s -= STIMMUNG.zerfall * K.s * dt;
@@ -893,7 +915,7 @@
           if (u3 >= 0 && v3 >= 0 && u3 < KX && v3 < KY) {
             var t3 = kzelle[v3 * KX + u3];
             if (t3 >= 0 && lf[t3] > 0 && korn[t3] > 0.9) {
-              funken(t3); lf[t3] = 0; korn[t3] = 0; kzelle[v3 * KX + u3] = -1;
+              puls('stoss'); funken(t3); lf[t3] = 0; korn[t3] = 0; kzelle[v3 * KX + u3] = -1;
             }
           }
         }
@@ -914,7 +936,7 @@
             var kx2 = x - W2.x, ky2 = y - W2.y, rr2 = W2.r * 0.5;
             if (kx2*kx2 + ky2*ky2 < rr2*rr2) { zer = 1; break; }
           }
-          if (zer) { funken(i); lf[i] = 0; korn[i] = 0; continue; }
+          if (zer) { puls('stoss'); funken(i); lf[i] = 0; korn[i] = 0; continue; }
         }
       }
       var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib * zaeh;
@@ -928,8 +950,10 @@
       if (korn[i] > 0) {
         if (x < 0 || x > W || y < 0 || y > H) { lf[i] = 0; }
       } else if (1) {
-        if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
-        if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
+        if (x < 0) { x += W; qx[i] = x; puls('umlauf'); }
+        else if (x > W) { x -= W; qx[i] = x; puls('umlauf'); }
+        if (y < 0) { y += H; qy[i] = y; puls('umlauf'); }
+        else if (y > H) { y -= H; qy[i] = y; puls('umlauf'); }
       } else {
         /* Was hinausfliegt, ist fort. Nicht hart an der Kante — ein Rand von
            18 % lässt den Faden sichtbar davonfliegen statt an einer Wand zu
@@ -990,7 +1014,9 @@
         var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
         if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
           var gk = gv * GX + gu;
-          auf *= 1 - Math.min(0.92, dich[gk] * 1.1);
+          var bremse = Math.min(0.92, dich[gk] * 1.1);
+          if (bremse > 0.12) puls('sog');
+          auf *= 1 - bremse;
           if ((i & 7) === 0) {
             dich[gk] += a * hz[i] * auf * 0.115;
             if (dich[gk] > 1.6) dich[gk] = 1.6;

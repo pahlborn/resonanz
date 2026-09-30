@@ -119,6 +119,23 @@
     background:#0C1218; color:#C6D2E4; text-align:center; text-decoration:none;
     font:400 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.12em;
     text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
+  .puls{flex:0 0 auto; width:7px; height:7px; border-radius:4px; margin-top:7px;
+        background:rgba(150,170,200,.16); transition:background .12s ease, box-shadow .12s ease;}
+  .puls.an{background:#7FB2FF; box-shadow:0 0 9px 2px rgba(127,178,255,.55);}
+  .zeig{appearance:none; border:0; background:none; cursor:pointer; padding:5px 0 0;
+        color:#5E82C4; font:400 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing:.1em; -webkit-tap-highlight-color:transparent;}
+  .zeig:active{color:#9FC0F5;}
+  .baut2{flex:0 0 auto; width:50px; text-align:center; color:#4B5A72; font-size:10px;
+         line-height:1.3; font-style:italic; margin-top:4px;}
+  body.geist #tuer, body.geist #pultTuer{opacity:.25;}
+  body.geist::after{
+    content:'Geisterhand — berühre die Fläche, um zu übernehmen';
+    position:fixed; left:0; right:0; bottom:max(14px, env(safe-area-inset-bottom));
+    text-align:center; pointer-events:none; z-index:5; color:#5B6A86;
+    font:400 11px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing:.2em; text-transform:uppercase;
+  }
   #pultTuer{
     position:fixed; right:max(12px, env(safe-area-inset-right));
     bottom:calc(max(12px, env(safe-area-inset-bottom)) + 56px);
@@ -135,7 +152,7 @@
    zwischen zwei Skriptbloecken ein Bild zeichnen, und dann liest die Schleife
    M, bevor das Pult es angelegt haette. Einmal gemessen, einmal gelernt. */
 (function () {
-  window.VORLAGEN = {"j": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 0, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 26.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "k": {"strang": 1, "wurf": 1, "korn": 1, "funken": 0, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "p": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "q": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}, "r": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 25.0, "blassStark": 1000000000.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "abgabe": [1, 1, 1, 1, 1]}};
+  window.VORLAGEN = {"j": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 0, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 26.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "k": {"strang": 1, "wurf": 1, "korn": 1, "funken": 0, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "p": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "q": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "r": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 25.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}};
   window.__ausAdresse = function () {
     var h = location.hash.replace(/^#/, '');
     if (!h) return null;
@@ -154,18 +171,20 @@
 <div id="pult">
 <h3>Vorlage</h3><div class="wahl" id="wVorlage"></div>
 <h3>Was es gibt</h3>
-<div class="zeile"><div class="txt"><div class="t1">Strang</div><div class="t2">Der gerade Zug legt ein Filament, Verweilen setzt einen Knoten.</div></div><button class="knopf" type="button" data-schalter="strang" aria-pressed="false" aria-label="Strang"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Wurf</div><div class="t2">Ein unvollendeter Kreis schickt den Wirbel weiter.</div></div><button class="knopf" type="button" data-schalter="wurf" aria-pressed="false" aria-label="Wurf"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Korn</div><div class="t2">Wo es hell ist, gerinnt ein Faden zu einem Lichtpunkt.</div></div><button class="knopf" type="button" data-schalter="korn" aria-pressed="false" aria-label="Korn"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Funken</div><div class="t2">Ein großer Lichtpunkt zerspringt am Ende seines Lebens.</div></div><button class="knopf" type="button" data-schalter="funken" aria-pressed="false" aria-label="Funken"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Stoß</div><div class="t2">Ein Lichtpunkt zerspringt, wenn ihn etwas trifft.</div></div><button class="knopf" type="button" data-schalter="stoss" aria-pressed="false" aria-label="Stoß"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Sog</div><div class="t2">Was schon liegt, lenkt das Medium.</div></div><button class="knopf" type="button" data-schalter="sog" aria-pressed="false" aria-label="Sog"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Zwei Stimmen</div><div class="t2">Drehrichtung wird Farbfamilie.</div></div><button class="knopf" type="button" data-schalter="stimmen" aria-pressed="false" aria-label="Zwei Stimmen"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Schleife</div><div class="t2">Schleifengröße wird Wirbelgröße.</div></div><button class="knopf" type="button" data-schalter="schleife" aria-pressed="false" aria-label="Schleife"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Tempo</div><div class="t2">Handtempo wird Farbe.</div></div><button class="knopf" type="button" data-schalter="tempo" aria-pressed="false" aria-label="Tempo"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Strömung</div><div class="t2">Die Hand streicht ihre Bewegung in die Fläche.</div></div><button class="knopf" type="button" data-schalter="stroemung" aria-pressed="false" aria-label="Strömung"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Umlauf</div><div class="t2">Was hinausfliegt, kommt gegenüber wieder herein.</div></div><button class="knopf" type="button" data-schalter="umlauf" aria-pressed="false" aria-label="Umlauf"></button></div>
-<div class="zeile"><div class="txt"><div class="t1">Verblassen</div><div class="t2">Schwaches vergeht, Starkes bleibt.</div></div><button class="knopf" type="button" data-schalter="verblassen" aria-pressed="false" aria-label="Verblassen"></button></div>
+<p class="t2" style="margin:-4px 0 6px">Der Punkt links leuchtet, wenn die Wirkung gerade wirklich feuert. „Zeig mir" führt die Bewegung vor, die sie ruft.</p>
+<div class="zeile"><span class="puls" data-puls="strang"></span><div class="txt"><div class="t1">Strang</div><div class="t2">Der gerade Zug legt ein Filament, Verweilen setzt einen Knoten.</div><button class="zeig" type="button" data-zeig="strang">Zeig mir</button></div><button class="knopf" type="button" data-schalter="strang" aria-pressed="false" aria-label="Strang"></button></div>
+<div class="zeile"><span class="puls" data-puls="knoten"></span><div class="txt"><div class="t1">Knoten</div><div class="t2">Wer auf einem frischen Strang wirklich anhält, setzt einen Lichtpunkt.</div><button class="zeig" type="button" data-zeig="knoten">Zeig mir</button></div><span class="baut2">gehört zum Strang</span></div>
+<div class="zeile"><span class="puls" data-puls="wurf"></span><div class="txt"><div class="t1">Wurf</div><div class="t2">Ein unvollendeter Kreis schickt den Wirbel weiter.</div><button class="zeig" type="button" data-zeig="wurf">Zeig mir</button></div><button class="knopf" type="button" data-schalter="wurf" aria-pressed="false" aria-label="Wurf"></button></div>
+<div class="zeile"><span class="puls" data-puls="korn"></span><div class="txt"><div class="t1">Korn</div><div class="t2">Wo es hell ist, gerinnt ein Faden zu einem Lichtpunkt.</div><button class="zeig" type="button" data-zeig="korn">Zeig mir</button></div><button class="knopf" type="button" data-schalter="korn" aria-pressed="false" aria-label="Korn"></button></div>
+<div class="zeile"><span class="puls" data-puls="funken"></span><div class="txt"><div class="t1">Funken</div><div class="t2">Ein großer Lichtpunkt zerspringt am Ende seines Lebens.</div><button class="zeig" type="button" data-zeig="funken">Zeig mir</button></div><button class="knopf" type="button" data-schalter="funken" aria-pressed="false" aria-label="Funken"></button></div>
+<div class="zeile"><span class="puls" data-puls="stoss"></span><div class="txt"><div class="t1">Stoß</div><div class="t2">Ein Lichtpunkt zerspringt, wenn ihn etwas trifft.</div><button class="zeig" type="button" data-zeig="stoss">Zeig mir</button></div><button class="knopf" type="button" data-schalter="stoss" aria-pressed="false" aria-label="Stoß"></button></div>
+<div class="zeile"><span class="puls" data-puls="sog"></span><div class="txt"><div class="t1">Sog</div><div class="t2">Was schon liegt, lenkt das Medium.</div><button class="zeig" type="button" data-zeig="sog">Zeig mir</button></div><button class="knopf" type="button" data-schalter="sog" aria-pressed="false" aria-label="Sog"></button></div>
+<div class="zeile"><span class="puls" data-puls="stimmen"></span><div class="txt"><div class="t1">Zwei Stimmen</div><div class="t2">Drehrichtung wird Farbfamilie.</div><button class="zeig" type="button" data-zeig="stimmen">Zeig mir</button></div><button class="knopf" type="button" data-schalter="stimmen" aria-pressed="false" aria-label="Zwei Stimmen"></button></div>
+<div class="zeile"><span class="puls" data-puls="schleife"></span><div class="txt"><div class="t1">Schleife</div><div class="t2">Schleifengröße wird Wirbelgröße.</div><button class="zeig" type="button" data-zeig="schleife">Zeig mir</button></div><button class="knopf" type="button" data-schalter="schleife" aria-pressed="false" aria-label="Schleife"></button></div>
+<div class="zeile"><span class="puls" data-puls="tempo"></span><div class="txt"><div class="t1">Tempo</div><div class="t2">Handtempo wird Farbe.</div><button class="zeig" type="button" data-zeig="tempo">Zeig mir</button></div><button class="knopf" type="button" data-schalter="tempo" aria-pressed="false" aria-label="Tempo"></button></div>
+<div class="zeile"><span class="puls" data-puls="stroemung"></span><div class="txt"><div class="t1">Strömung</div><div class="t2">Die Hand streicht ihre Bewegung in die Fläche.</div><button class="zeig" type="button" data-zeig="stroemung">Zeig mir</button></div><button class="knopf" type="button" data-schalter="stroemung" aria-pressed="false" aria-label="Strömung"></button></div>
+<div class="zeile"><span class="puls" data-puls="umlauf"></span><div class="txt"><div class="t1">Umlauf</div><div class="t2">Was hinausfliegt, kommt gegenüber wieder herein.</div><button class="zeig" type="button" data-zeig="umlauf">Zeig mir</button></div><button class="knopf" type="button" data-schalter="umlauf" aria-pressed="false" aria-label="Umlauf"></button></div>
+<div class="zeile"><span class="puls" data-puls="verblassen"></span><div class="txt"><div class="t1">Verblassen</div><div class="t2">Schwaches vergeht, Starkes bleibt.</div><button class="zeig" type="button" data-zeig="verblassen">Zeig mir</button></div><button class="knopf" type="button" data-schalter="verblassen" aria-pressed="false" aria-label="Verblassen"></button></div>
 <h3>Wieviel</h3>
 <div class="zeile"><div class="txt"><div class="t1">Auftrag <span class="wert" id="w_auftrag"></span></div><div class="t2">Wie kräftig überhaupt etwas liegen bleibt</div><input class="schieber" type="range" data-regler="auftrag" data-einheit="" min="0.0" max="0.6" step="0.01"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Zug der Hand <span class="wert" id="w_feldkraft"></span></div><div class="t2">Wieviel Medium die Hand mitnimmt</div><input class="schieber" type="range" data-regler="feldkraft" data-einheit="" min="0.0" max="1.6" step="0.05"></div></div>
@@ -174,17 +193,32 @@
 <div class="zeile"><div class="txt"><div class="t1">Glut <span class="wert" id="w_hitzer"></span></div><div class="t2">Wie weit die Hitze um den Kern reicht</div><input class="schieber" type="range" data-regler="hitzer" data-einheit="" min="0.6" max="2.4" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Korn je Sekunde <span class="wert" id="w_kornrate"></span></div><div class="t2">Wie viele Lichtpunkte entstehen</div><input class="schieber" type="range" data-regler="kornrate" data-einheit="" min="0" max="90" step="2"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Verblassen <span class="wert" id="w_blassSchwach"></span></div><div class="t2">Halbwertszeit des Schwachen</div><input class="schieber" type="range" data-regler="blassSchwach" data-einheit="s" min="2" max="120" step="1"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Auch Starkes <span class="wert" id="w_blassStark"></span></div><div class="t2">Ab 600 s bleiben die Figuren praktisch für immer</div><input class="schieber" type="range" data-regler="blassStark" data-einheit="s" min="60" max="600" step="10"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Folgsamkeit <span class="wert" id="w_anker"></span></div><div class="t2">Wie schnell der Wirbel dem Finger folgt</div><input class="schieber" type="range" data-regler="anker" data-einheit="" min="1.0" max="30" step="0.5"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Kleinster Wirbel <span class="wert" id="w_rklein"></span></div><div class="t2">Untere Grenze der Wirbelgröße</div><input class="schieber" type="range" data-regler="rklein" data-einheit="" min="0.02" max="0.12" step="0.005"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Größter Wirbel <span class="wert" id="w_rgross"></span></div><div class="t2">Obere Grenze der Wirbelgröße</div><input class="schieber" type="range" data-regler="rgross" data-einheit="" min="0.08" max="0.4" step="0.01"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Nachwirken <span class="wert" id="w_feldtau"></span></div><div class="t2">Wie lange die Strömung nachläuft</div><input class="schieber" type="range" data-regler="feldtau" data-einheit="s" min="0.2" max="6.0" step="0.1"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Auftragskurve <span class="wert" id="w_kurve"></span></div><div class="t2">Gleichmäßig oder in der Mitte gesammelt</div><input class="schieber" type="range" data-regler="kurve" data-einheit="" min="0.6" max="2.5" step="0.05"></div></div>
 <h3>Was liegen bleibt</h3>
 <div class="zeile"><div class="txt"><div class="t1">Medium <span class="wert" id="w_ab0"></span></div><div class="t2">Die Fäden des Feldes — sie tragen den Löwenanteil.</div><input class="schieber" type="range" data-abgabe="0" min="0" max="1" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Strang <span class="wert" id="w_ab1"></span></div><div class="t2">Das Filament des geraden Zuges.</div><input class="schieber" type="range" data-abgabe="1" min="0" max="1" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Knoten <span class="wert" id="w_ab2"></span></div><div class="t2">Der Lichtpunkt, der beim Verweilen entsteht.</div><input class="schieber" type="range" data-abgabe="2" min="0" max="1" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Korn <span class="wert" id="w_ab3"></span></div><div class="t2">Die Lichtpunkte entlang der Strahlen.</div><input class="schieber" type="range" data-abgabe="3" min="0" max="1" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Funken <span class="wert" id="w_ab4"></span></div><div class="t2">Was ein zerspringender Lichtpunkt hinterlässt.</div><input class="schieber" type="range" data-abgabe="4" min="0" max="1" step="0.05"></div></div>
+<h3>Wie streng das Feld ist</h3>
+<p class="t2" style="margin:-4px 0 6px">Nicht <em>welche</em> Dinge es gibt, sondern <em>wie wählerisch</em> das Feld antwortet. Hier lässt sich das Wesen der Sache verstellen — vorsichtig.</p>
+<div class="zeile"><div class="txt"><div class="t1">Takt <span class="wert" id="w_sigma"></span></div><div class="t2">Wie genau der Takt getroffen sein muss</div><input class="schieber" type="range" data-regler="sigma" data-einheit="" min="0.8" max="8.0" step="0.1"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Störung <span class="wert" id="w_stoer"></span></div><div class="t2">Wie hart Danebengreifen den Wirbel zerlegt</div><input class="schieber" type="range" data-regler="stoer" data-einheit="" min="0.0" max="2.5" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Zerfall <span class="wert" id="w_zerfall"></span></div><div class="t2">Wie schnell ein Wirbel von selbst vergeht</div><input class="schieber" type="range" data-regler="zerfall" data-einheit="" min="0.02" max="0.6" step="0.01"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Aufbau <span class="wert" id="w_aufbau"></span></div><div class="t2">Wie schnell ein Treffer Energie sammelt</div><input class="schieber" type="range" data-regler="aufbau" data-einheit="" min="0.4" max="4.0" step="0.05"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Schwelle <span class="wert" id="w_schwelle"></span></div><div class="t2">Ab wann überhaupt Farbe liegen bleibt</div><input class="schieber" type="range" data-regler="schwelle" data-einheit="" min="0.02" max="0.6" step="0.01"></div></div>
 <h3>Farbe</h3><div class="wahl" id="wFarbe">
 <button type="button" data-farbe="0">Kalt · Violett · Gold</button>
 <button type="button" data-farbe="1">Zwei Familien</button>
 <button type="button" data-farbe="2">Tempo färbt</button>
 </div>
+<div class="tasten"><button id="pSchauspiel" type="button">Schauspiel starten</button></div>
+<p class="t2" style="margin:8px 0 0">Die Geisterhand malt dann von selbst weiter, bis du die Fläche berührst. Sie sichert nichts — was bleiben soll, sicherst du.</p>
 <div class="tasten"><button id="pSichern" type="button">Mischung sichern</button></div>
 <div class="tasten"><button id="pLink" type="button">Adresse kopieren</button><a href="regal.html">Regal</a></div>
 <p class="t2" style="margin-top:14px">Die Fläche bleibt hinter dem Pult lebendig — jede Änderung wirkt sofort. Gesicherte Mischungen stehen im Regal. Die Adresse enthält die ganze Mischung; wer sie öffnet, hat genau dieselbe.</p>
@@ -226,12 +260,15 @@
      Kern fast jeden Takt an; mit wachsender Energie wird er wählerisch.
      ==================================================================== */
 
+  /* Die Strenge des Feldes. In den festen Fassungen steht sie ein für alle
+     Mal; im Pult wird sie bei jedem Zugriff neu gelesen, damit sich auch
+     daran drehen lässt. */
   var STIMMUNG = {
-    sigma:   3.2,   /* Wie eng der Takt getroffen sein muss (rad/s)  */
-    stoerung:0.7,   /* Wie schnell Danebengreifen den Wirbel zerlegt */
-    zerfall: 0.14, /* Grundzerfall, auch wenn man alles richtig macht */
-    aufbau:  1.7,  /* Wie schnell Treffer Energie sammeln           */
-    schwelle:0.20 /* Ab wann Farbe liegen bleibt                   */
+    get sigma()   { return M.sigma; },    /* Wie eng der Takt getroffen sein muss */
+    get stoerung(){ return M.stoer; },    /* Wie schnell Danebengreifen zerlegt   */
+    get zerfall() { return M.zerfall; },  /* Grundzerfall, auch bei allem richtig  */
+    get aufbau()  { return M.aufbau; },   /* Wie schnell Treffer Energie sammeln   */
+    get schwelle(){ return M.schwelle; }  /* Ab wann Farbe liegen bleibt           */
   };
 
   /* --- Deterministische Grundlage: fester Zeitschritt, gesäter Zufall.
@@ -240,6 +277,12 @@
   function mulberry32(a){return function(){a|=0;a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return ((t^(t>>>14))>>>0)/4294967296;};}
   var rnd = mulberry32(SEED);
   var DT = 1/120, MAX_SUB = 4;
+
+  /* Lebenszeichen: Jede Wirkung trägt ein, wann sie zuletzt wirklich gefeuert
+     hat. Das Pult macht daraus ein Leuchten — damit man sieht, welche Bewegung
+     eine Wirkung ruft, statt es erklärt zu bekommen. */
+  var PULS = window.PULS || (window.PULS = {});
+  function puls(k) { PULS[k] = performance.now(); }
 
   var N = 14000;            /* Fäden */
   var SCHWEIF = 0.125;      /* Länge des Schweifs in Sekunden Bewegung */
@@ -410,6 +453,7 @@
     blassAkku += dt;
     if (blassAkku < 0.25) return;            /* höchstens viermal je Sekunde */
     var d = blassAkku; blassAkku = 0;
+    puls('verblassen');
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo2);
     gl.viewport(0, 0, BW, BH);
     gl.disable(gl.BLEND);
@@ -481,6 +525,7 @@
      Konstanten, die der Übersetzer wegrechnet. */
 
   function feldStreichen(x, y, vx0, vy0, dt) {
+    puls('stroemung');
     var FELD_R = M.feldr;
     var ru = FELD_R / W * GX, rv = FELD_R / H * GY;
     var u0 = Math.max(0, Math.floor(x / W * GX - ru)), u1 = Math.min(GX - 1, Math.ceil(x / W * GX + ru));
@@ -583,7 +628,11 @@
   }
   function bewegen(e) {
     if (e.pointerId !== zeigerId) { e.preventDefault(); return; }
-    var pkte = (e.getCoalescedEvents && e.getCoalescedEvents()) || [e];
+    /* Vorsicht: Bei einem künstlich erzeugten Ereignis gibt
+       getCoalescedEvents() eine LEERE Liste zurück — und ein leeres Feld ist
+       wahr. Ohne diese Prüfung liefe die Schleife über nichts. */
+    var pkte = (e.getCoalescedEvents && e.getCoalescedEvents()) || [];
+    if (!pkte.length) pkte = [e];
     for (var i = 0; i < pkte.length; i++) {
       var t = performance.now();
       var dt = (t - letzteZeit) / 1000;
@@ -673,6 +722,7 @@
       var vd = Math.sqrt(dX*dX + dY*dY);
       if (vd > 620) { dX *= 620/vd; dY *= 620/vd; }
       aktiverKern.dvx = dX; aktiverKern.dvy = dY;
+      if (vd > 30) puls('wurf');
     }
     try { cv.releasePointerCapture(e.pointerId); } catch (x) {}
     zeigerId = null; unten = false; hvx = hvy = 0; aktiverKern = null;
@@ -725,7 +775,7 @@
     hz[i] = hz[quelle] * (0.75 + 0.4 * rnd());
     tn[i] = tn[quelle]; hl[i] = hl[quelle];
     korn[i] = rnd() < 0.085 ? 1.7 + 1.1 * rnd() : 0.15 + 0.7 * rnd();
-    art[i] = 3;
+    art[i] = 3; puls('korn');
     fest[i] = 1;
     lm[i] = 1.9 + 2.6 * rnd(); lf[i] = lm[i];
   }
@@ -735,6 +785,7 @@
        Eigenleben: Der Punkt existiert nur, weil ihn jemand erzeugt hat, und
        sein Ende gehört zu seinem Leben wie der Nachhall zum Wirbel. Funken
        sind selbst kein Korn und können deshalb nicht weiterzünden. */
+    puls('funken');
     var n = 9 + ((rnd() * 7) | 0);
     for (var k = 0; k < n; k++) {
       var j = spawnZeiger++; if (spawnZeiger >= N) spawnZeiger = 0;
@@ -781,6 +832,7 @@
     linieHer += dt;
     if (linienWert > 0.34) {
       linieHer = 0;
+      puls('strang');
       var n = Math.round(30 * linienWert);
       for (var k = 0; k < n; k++) {
         var u = k / n;
@@ -796,6 +848,7 @@
     else knotenLadung = 0;
     knotenAktiv = knotenLadung > 0.14 ? 1 : 0;
     if (knotenAktiv) {
+      puls('knoten');
       for (var m = 0; m < 16; m++) {
         var w = rnd() * 6.2832, rr = 3 + 15 * Math.sqrt(rnd());
         setzen(hx + Math.cos(w) * rr, hy + Math.sin(w) * rr,
@@ -870,6 +923,7 @@
              Die Helligkeit selbst bleibt der Resonanz vorbehalten — sonst
              kämpfen zwei Bedeutungen um dieselbe Anzeige. */
           var tp = Math.min(1, Math.sqrt(hvx*hvx + hvy*hvy) / 900);
+          if (tp > 0.04) puls('tempo');
           K.hell += (tp - K.hell) * 1.6 * dt;
         }
         if (M.stimmen && Math.abs(omH) > 0.8) {
@@ -877,12 +931,14 @@
              werden zwei Farbfamilien. Der Wechsel läuft weich, damit ein
              Richtungswechsel mitten im Zug den Ton wandern lässt. */
           K.ton += ((omH > 0 ? 1 : 0) - K.ton) * 1.6 * dt;
+          puls('stimmen');
         }
         var rZiel = !1 ? Math.min(0.13 * Math.min(W, H), Math.max(90, d * 1.25))
                   : (M.schleife
                       ? Math.max(M.rklein * Math.min(W, H),
                           Math.min(M.rgross * Math.min(W, H), schleife * M.rfaktor))
                       : 0.13 * Math.min(W, H));
+        if (M.schleife && Math.abs(rZiel - K.r) > 1.5) puls('schleife');
         K.r += (rZiel - K.r) * 0.25 * dt * 1.0;
       } else {
         K.s -= STIMMUNG.zerfall * K.s * dt;
@@ -1015,7 +1071,7 @@
           if (u3 >= 0 && v3 >= 0 && u3 < KX && v3 < KY) {
             var t3 = kzelle[v3 * KX + u3];
             if (t3 >= 0 && lf[t3] > 0 && korn[t3] > 0.9) {
-              funken(t3); lf[t3] = 0; korn[t3] = 0; kzelle[v3 * KX + u3] = -1;
+              puls('stoss'); funken(t3); lf[t3] = 0; korn[t3] = 0; kzelle[v3 * KX + u3] = -1;
             }
           }
         }
@@ -1036,7 +1092,7 @@
             var kx2 = x - W2.x, ky2 = y - W2.y, rr2 = W2.r * 0.5;
             if (kx2*kx2 + ky2*ky2 < rr2*rr2) { zer = 1; break; }
           }
-          if (zer) { funken(i); lf[i] = 0; korn[i] = 0; continue; }
+          if (zer) { puls('stoss'); funken(i); lf[i] = 0; korn[i] = 0; continue; }
         }
       }
       var nvx = (vx[i] + (ax - vx[i]) * 4.2 * dt) * reib * zaeh;
@@ -1050,8 +1106,10 @@
       if (korn[i] > 0) {
         if (x < 0 || x > W || y < 0 || y > H) { lf[i] = 0; }
       } else if (M.umlauf) {
-        if (x < 0) { x += W; qx[i] = x; } else if (x > W) { x -= W; qx[i] = x; }
-        if (y < 0) { y += H; qy[i] = y; } else if (y > H) { y -= H; qy[i] = y; }
+        if (x < 0) { x += W; qx[i] = x; puls('umlauf'); }
+        else if (x > W) { x -= W; qx[i] = x; puls('umlauf'); }
+        if (y < 0) { y += H; qy[i] = y; puls('umlauf'); }
+        else if (y > H) { y -= H; qy[i] = y; puls('umlauf'); }
       } else {
         /* Was hinausfliegt, ist fort. Nicht hart an der Kante — ein Rand von
            18 % lässt den Faden sichtbar davonfliegen statt an einer Wand zu
@@ -1112,7 +1170,9 @@
         var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
         if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
           var gk = gv * GX + gu;
-          auf *= 1 - Math.min(0.92, dich[gk] * 1.1);
+          var bremse = Math.min(0.92, dich[gk] * 1.1);
+          if (bremse > 0.12) puls('sog');
+          auf *= 1 - bremse;
           if ((i & 7) === 0) {
             dich[gk] += a * hz[i] * auf * 0.115;
             if (dich[gk] > 1.6) dich[gk] = 1.6;
@@ -1322,9 +1382,122 @@
 
 <script>
 (function () {
+  /* Die Geisterhand schickt dieselben Zeigerereignisse wie ein Finger — sie
+     benutzt keinen Sonderweg. Was sie kann, kann die Hand auch, und umgekehrt.
+     Sie hält sofort an, sobald jemand die Fläche berührt, und sie sichert
+     nichts: Sie ist Lehrerin und Schauspiel, nie Urheberin. */
+  var VORFUEHRUNG = {"strang": [["strich", 0.12, 0.5, 0.88, 0.5, 1.6]], "knoten": [["strich", 0.18, 0.45, 0.62, 0.45, 1.2], ["halt", 0.9]], "wurf": [["kreis", 0.34, 0.5, 0.13, 0.72, 1.7], ["loslassen"], ["warten", 2.6]], "korn": [["kreis", 0.5, 0.5, 0.12, 3.0, 2.2], ["warten", 1.0]], "funken": [["kreis", 0.5, 0.5, 0.12, 3.4, 2.2], ["warten", 3.4]], "stoss": [["kreis", 0.5, 0.5, 0.1, 3.4, 2.2], ["warten", 0.6], ["strich", 0.12, 0.46, 0.88, 0.46, 2.4], ["warten", 0.25], ["strich", 0.88, 0.54, 0.12, 0.54, 2.4], ["warten", 0.25], ["strich", 0.12, 0.5, 0.88, 0.5, 2.8]], "sog": [["kreis", 0.5, 0.5, 0.12, 3.0, 2.2], ["warten", 0.4], ["kreis", 0.5, 0.5, 0.12, 3.0, 2.2]], "stimmen": [["kreis", 0.33, 0.5, 0.11, 2.6, 2.2], ["warten", 0.3], ["kreis", 0.67, 0.5, 0.11, -2.6, 2.2]], "schleife": [["kreis", 0.3, 0.5, 0.05, 3.0, 2.6], ["warten", 0.3], ["kreis", 0.68, 0.5, 0.2, 2.0, 1.4]], "tempo": [["kreis", 0.32, 0.5, 0.11, 2.0, 0.7], ["warten", 0.3], ["kreis", 0.68, 0.5, 0.11, 3.0, 3.4]], "stroemung": [["strich", 0.1, 0.42, 0.9, 0.58, 1.8], ["warten", 2.0]], "umlauf": [["kreis", 0.5, 0.5, 0.12, 1.7, 3.0], ["loslassen"], ["warten", 3.0]], "verblassen": [["kreis", 0.34, 0.45, 0.1, 2.4, 2.2], ["warten", 0.3], ["kreis", 0.64, 0.55, 0.1, 2.4, 2.2], ["warten", 6.0]]};
+  var cv = document.getElementById('feld');
+  var ID = 7777, laeuft = null, unten = false;
+
+  function ereignis(art, x, y) {
+    cv.dispatchEvent(new PointerEvent(art, {
+      pointerId: ID, pointerType: 'touch', isPrimary: true,
+      clientX: x, clientY: y, bubbles: true, cancelable: true
+    }));
+  }
+  function runter(x, y) { if (!unten) { unten = true; ereignis('pointerdown', x, y); } }
+  function hoch(x, y)   { if (unten) { unten = false; ereignis('pointerup', x, y); } }
+  function schlaf(s)    { return new Promise(function (ok) { setTimeout(ok, s * 1000); }); }
+  function bild()       { return new Promise(requestAnimationFrame); }
+
+  function W() { return cv.clientWidth; }
+  function H() { return cv.clientHeight; }
+
+  async function kreis(cx, cy, r, umdrehungen, proSekunde, lauf) {
+    var x0 = cx * W(), y0 = cy * H(), R = r * Math.min(W(), H());
+    var dauer = Math.abs(umdrehungen) / proSekunde, t0 = performance.now();
+    runter(x0 + R, y0);
+    while (lauf.an) {
+      var u = (performance.now() - t0) / 1000 / dauer;
+      if (u >= 1) break;
+      var w = u * umdrehungen * 6.2832;
+      ereignis('pointermove', x0 + R * Math.cos(w), y0 + R * Math.sin(w));
+      await bild();
+    }
+    return [x0 + R * Math.cos(umdrehungen * 6.2832), y0 + R * Math.sin(umdrehungen * 6.2832)];
+  }
+
+  async function strich(x1, y1, x2, y2, proSekunde, lauf) {
+    var ax = x1 * W(), ay = y1 * H(), bx = x2 * W(), by = y2 * H();
+    var dauer = 1 / proSekunde, t0 = performance.now();
+    runter(ax, ay);
+    while (lauf.an) {
+      var u = (performance.now() - t0) / 1000 / dauer;
+      if (u >= 1) break;
+      ereignis('pointermove', ax + (bx - ax) * u, ay + (by - ay) * u);
+      await bild();
+    }
+    ereignis('pointermove', bx, by);
+    return [bx, by];
+  }
+
+  async function spielen(schritte, lauf) {
+    var p = [W() / 2, H() / 2];
+    for (var i = 0; i < schritte.length && lauf.an; i++) {
+      var s = schritte[i];
+      if (s[0] === 'kreis')      p = await kreis(s[1], s[2], s[3], s[4], s[5], lauf);
+      else if (s[0] === 'strich')p = await strich(s[1], s[2], s[3], s[4], s[5], lauf);
+      else if (s[0] === 'halt')  { var t1 = performance.now();
+                                   while (lauf.an && performance.now() - t1 < s[1] * 1000) {
+                                     ereignis('pointermove', p[0], p[1]); await bild(); } }
+      else if (s[0] === 'loslassen') hoch(p[0], p[1]);
+      else if (s[0] === 'warten') { hoch(p[0], p[1]); await schlaf(s[1]); }
+    }
+    hoch(p[0], p[1]);
+  }
+
+  function anhalten() { if (laeuft) { laeuft.an = false; laeuft = null; }
+                        if (unten) hoch(0, 0);
+                        document.body.classList.remove('geist'); }
+  window.__geistAnhalten = anhalten;
+
+  async function vorfuehren(k) {
+    anhalten();
+    var lauf = laeuft = { an: true };
+    document.body.classList.add('geist');
+    await spielen(VORFUEHRUNG[k] || [], lauf);
+    if (laeuft === lauf) { laeuft = null; document.body.classList.remove('geist'); }
+  }
+  window.__zeigMir = vorfuehren;
+
+  /* Das Schauspiel: dieselben Bausteine, nur ohne Ende und gewürfelt. */
+  function zufall(a, b) { return a + Math.random() * (b - a); }
+  async function schauspiel() {
+    anhalten();
+    var lauf = laeuft = { an: true };
+    document.body.classList.add('geist');
+    while (lauf.an) {
+      var w = Math.random();
+      if (w < 0.52) {
+        await kreis(zufall(.18, .82), zufall(.2, .8), zufall(.05, .2),
+                    (Math.random() < .5 ? 1 : -1) * zufall(1.4, 4),
+                    zufall(.9, 3.0), lauf);
+        if (Math.random() < 0.45) hoch(0, 0);
+      } else if (w < 0.82) {
+        await strich(zufall(.05, .35), zufall(.15, .85), zufall(.65, .95), zufall(.15, .85),
+                     zufall(.8, 2.2), lauf);
+        hoch(0, 0);
+      } else {
+        hoch(0, 0); await schlaf(zufall(1.2, 3.5));
+      }
+      if (lauf.an) await schlaf(zufall(.2, 1.1));
+    }
+  }
+  window.__schauspiel = schauspiel;
+
+  /* Eine Berührung beendet jede Vorführung. Die Hand hat Vorrang. */
+  cv.addEventListener('pointerdown', function (e) {
+    if (e.pointerId !== ID) anhalten();
+  }, true);
+})();
+</script>
+
+<script>
+(function () {
   var VORLAGEN = window.VORLAGEN;
   var SCHALTER = ["strang", "wurf", "korn", "funken", "stoss", "sog", "stimmen", "schleife", "tempo", "stroemung", "umlauf", "verblassen"];
-  var REGLER   = ["auftrag", "feldkraft", "feldr", "rfaktor", "hitzer", "kornrate", "blassSchwach"];
+  var REGLER   = ["auftrag", "feldkraft", "feldr", "rfaktor", "hitzer", "kornrate", "blassSchwach", "blassStark", "anker", "rklein", "rgross", "feldtau", "kurve"];
   var ABGABE   = window.ABGABE;
   var M        = window.M;
   var inAdresse = window.__inAdresse;
@@ -1412,6 +1585,33 @@
     if (navigator.clipboard) navigator.clipboard.writeText(a).catch(function () {});
     else prompt('Adresse:', a);
   });
+
+  document.querySelectorAll('[data-zeig]').forEach(function (b) {
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      pult.classList.remove('auf');
+      var k = b.dataset.zeig;
+      if (k in M && !M[k]) { M[k] = 1; anzeigen(); }   /* vorführen heißt einschalten */
+      if (window.__zeigMir) window.__zeigMir(k);
+    });
+  });
+  var knSchau = document.getElementById('pSchauspiel');
+  knSchau.addEventListener('click', function () {
+    pult.classList.remove('auf');
+    if (window.__schauspiel) window.__schauspiel();
+  });
+
+  /* Das Lebenszeichen: Jede Wirkung hat eingetragen, wann sie zuletzt gefeuert
+     hat. Leuchtet, solange das keine Dreiviertelsekunde her ist. */
+  var punkte = [].slice.call(document.querySelectorAll('[data-puls]'));
+  (function leuchten() {
+    var jetzt = performance.now(), P = window.PULS || {};
+    for (var i = 0; i < punkte.length; i++) {
+      var k = punkte[i].dataset.puls;
+      punkte[i].classList.toggle('an', jetzt - (P[k] || -1e9) < 750);
+    }
+    requestAnimationFrame(leuchten);
+  })();
 
   anzeigen();
 })();

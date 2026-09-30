@@ -1242,6 +1242,82 @@ besonders schwer wiegt. Die festen Fassungen sind davon nicht betroffen — sie
 tragen weiter Konstanten. Der Preis fällt nur dort an, wo man dafür etwas
 bekommt.
 
+### 37. „Ich weiß nicht, wie ich ihn erzeugen kann"
+
+Der Befund nach dem ersten Gebrauch des Pults: „Manchmal verstehe ich gar nicht,
+welche Auswirkung ein Schieberegler verursacht. Der Effekt ist entweder nur
+minimal oder ich weiß vielleicht nicht, wie ich ihn erzeugen kann."
+
+Das sind zwei verschiedene Sachen, und die Messung trennt sie.
+
+**Zuerst: Sind die Regler schwach?** Gemessen, gleiche Bewegung (drei Kreise,
+ein gerader Zug), je ein Regler von Anschlag zu Anschlag:
+
+```
+                    min      max     Spanne im Niederschlag
+Auftrag             0,0     61,8            308 %
+Glut                5,0     56,4            256 %
+Wirbelgröße        11,4     30,6             96 %
+Verblassen          4,2     20,3             80 %
+Korn je Sekunde    18,4     26,3             39 %   (0 → 5751 Punkte)
+Breite der Hand    22,4     19,7             14 %
+Zug der Hand       21,8     19,6             11 %
+```
+
+Die beiden Strömungsregler sahen schwach aus. **Und wieder war mein Maß
+schuld:** Die Strömung ändert die *Bewegung*, nicht das Liegenbleiben. Mit dem
+richtigen Maß — wieviel Medium binnen 200 px um den Finger mitkommt:
+
+```
+Zug der Hand    min 0     Anteil 0,26      (nur der alte Handschub)
+                Grund     Anteil 0,72
+                max 1,6   Anteil 0,89
+Breite der Hand min 60    Anteil 0,46
+                max 320   Anteil 0,87
+```
+
+Faktor 3,4 und 1,9 — die **größten** Spannen aller Regler. Das ist derselbe
+Fehler wie in Abschnitt 29, zum dritten Mal: Ich messe den Niederschlag, weil
+er leicht zu messen ist, und übersehe, dass die Frage von der Bewegung handelt.
+
+**Dann der wichtigere Teil.** Mehrere Wirkungen erscheinen nur bei einer
+bestimmten Bewegung: Der Strang braucht einen geraden, schnellen Zug; der Knoten
+echtes Anhalten; der Wurf das Loslassen *mitten* in der Drehung; der Stoß einen
+schnellen Strich über einen Lichtpunkt. Das Pult sagte, **was es gibt** — aber
+nicht, **wie man es ruft**. Der Schalter stand auf an, und nichts geschah.
+
+Drei Dinge beheben das:
+
+**Das Lebenszeichen.** Jede Wirkung trägt ein, wann sie zuletzt wirklich
+gefeuert hat; ein Punkt in der Zeile leuchtet für eine Dreiviertelsekunde.
+Man wackelt, die Zeile leuchtet, man hat verstanden — ohne ein Wort.
+
+**„Zeig mir".** Eine Geisterhand führt genau die Bewegung aus, die diese
+Wirkung ruft. Sie schickt dieselben Zeigerereignisse wie ein Finger, benutzt
+also keinen Sonderweg: Was sie kann, kann die Hand auch. Und wer eine Wirkung
+vorführt, schaltet sie damit ein — sonst führt er nichts vor.
+
+**Das Schauspiel.** Dieselben Bausteine, gewürfelt und ohne Ende. Es hält an,
+sobald jemand die Fläche berührt, und es sichert nichts: **Lehrerin und
+Schauspiel, nie Urheberin.** Das ist die Grenze, die den Generate-Knopf
+draußen hält.
+
+Geprüft, zweimal hintereinander: **13 von 13** Vorführungen bringen ihre eigene
+Wirkung wirklich zum Feuern, und der zugehörige Punkt leuchtet.
+
+**Ein Fehler, den erst die Geisterhand ans Licht gebracht hat:** Bei einem
+künstlich erzeugten Zeigerereignis liefert `getCoalescedEvents()` eine **leere**
+Liste — und ein leeres Feld ist in JavaScript wahr. `(… ) || [e]` nahm also die
+leere Liste, und die Bewegungsschleife lief über nichts. Null von dreizehn
+Vorführungen taten irgendetwas, ohne eine einzige Fehlermeldung.
+
+**Und die fünf Resonanzparameter** stehen jetzt auf ausdrücklichen Wunsch mit
+auf dem Pult: Takt, Störung, Zerfall, Aufbau, Schwelle. Es war meine
+Grenzziehung, nicht seine; es ist seine Vorgabe, also seine Entscheidung. Dazu
+sechs Werte, die vorhanden waren, aber keinen Griff hatten — Folgsamkeit des
+Kerns, kleinster und größter Wirbel, Nachwirken der Strömung, Auftragskurve und
+ob auch Starkes verblasst.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

@@ -79,8 +79,10 @@
 <p id="hinweis">Zieh gerade — und sieh, was nachläuft</p>
 <div id="leiste">
   <button id="knSichern" type="button">Sichern</button>
+  <button id="knLeeren" type="button">Fläche leeren</button>
   <a href="galerie.html">Galerie</a>
   <a href="regal.html">Regal</a>
+  <button id="knNeu" type="button">Neu laden</button>
 </div>
 <button id="tuer" type="button" aria-label="Menü">&#9679;</button>
 <p id="ruf"></p>
@@ -339,9 +341,31 @@
       py[i] = qy[i] = rnd() * H;
       vx[i] = vy[i] = 0; hz[i] = 0; tn[i] = 0; fest[i] = 0; hl[i] = 0.45;
       lm[i] = 2.6 + rnd() * 3.6; lf[i] = rnd() * lm[i];
-      korn[i] = 0;
+      korn[i] = 0; art[i] = 0;
     }
   }
+
+  /* Ein leeres Blatt. Nicht nur der Niederschlag muss weg — auch was das Bild
+     über sich selbst weiß (das Dichteraster), was in der Luft liegt (das
+     Strömungsfeld) und die Wirbel selbst. Sonst lenkt ein unsichtbarer Rest
+     den nächsten Zug, und man hält das für die Einstellung, die man gerade
+     verstellt hat. */
+  window.__flaecheLeeren = function () {
+    var alt = gl.getParameter(gl.FRAMEBUFFER_BINDING);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.viewport(0, 0, BW, BH);
+    gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+    if (fbo2) { gl.bindFramebuffer(gl.FRAMEBUFFER, fbo2);
+                gl.clear(gl.COLOR_BUFFER_BIT); }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, alt);
+    for (var k = 0; k < GX * GY; k++) { dich[k] = 0; dichG[k] = 0; sfx[k] = 0; sfy[k] = 0; }
+    for (var c = 0; c < kerne.length; c++) {
+      var K = kerne[c];
+      K.s = 0; K.fest = 0; K.om = 0; K.dvx = 0; K.dvy = 0; K.r = 170;
+    }
+    aktiverKern = null; wach = 0; blassAkku = 0;
+    saeen();
+  };
 
   /* ---------------------------------------------------- Das Bild als Feld --
      Was liegt, ist bisher totes Pigment. Hier bekommt es eine Wirkung: ein
@@ -1132,6 +1156,7 @@
 </script>
 
 
+
 <script>
 (function () {
   var KENNUNG = 'q', SCHILD = 'Fassung Q — Der gerade Zug bekommt ein Feld';
@@ -1221,15 +1246,33 @@
     leiste.classList.remove('auf');
     window.__bildWunsch = true;
   });
-})();
-</script>
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
+  /* Ein leeres Blatt. Das Gesicherte bleibt in der Galerie — nur die Fläche
+     fängt von vorn an. */
+  document.getElementById('knLeeren').addEventListener('click', function () {
+    leiste.classList.remove('auf');
+    if (window.__geistAnhalten) window.__geistAnhalten();
+    if (window.__flaecheLeeren) { window.__flaecheLeeren(); sagen('Leer'); }
   });
-}
+
+  /* Die neueste Fassung holen. Im Vollbild gibt es keine Adresszeile, also
+     keinen Neu-laden-Knopf — und der Offline-Vorrat liefert sonst brav die
+     alte Datei weiter. Deshalb erst den Vorrat wegräumen, dann laden. */
+  document.getElementById('knNeu').addEventListener('click', function () {
+    leiste.classList.remove('auf');
+    sagen('Lade neu …');
+    var fertig = function () { location.reload(); };
+    if (!window.caches) return fertig();
+    caches.keys()
+      .then(function (n) { return Promise.all(n.map(function (k) { return caches.delete(k); })); })
+      .then(function () {
+        if (!navigator.serviceWorker) return null;
+        return navigator.serviceWorker.getRegistration()
+          .then(function (r) { return r ? r.unregister() : null; });
+      })
+      .then(fertig, fertig);
+  });
+})();
 </script>
 </body>
 </html>

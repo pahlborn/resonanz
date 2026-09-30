@@ -1318,6 +1318,50 @@ sechs Werte, die vorhanden waren, aber keinen Griff hatten — Folgsamkeit des
 Kerns, kleinster und größter Wirbel, Nachwirken der Strömung, Auftragskurve und
 ob auch Starkes verblasst.
 
+### 38. Ein leeres Blatt
+
+„Ich bräuchte einen Refresh-Mechanismus in Pult." Das Wort kann dreierlei
+heißen, und die drei brauchen verschiedene Knöpfe. Gebaut sind alle drei, weil
+jeder für sich klein ist und jeder eine echte Lücke schließt.
+
+**Fläche leeren** war die eigentliche Not. Wer eine Einstellung beurteilen
+will, braucht ein leeres Blatt — sonst liegt das Ergebnis der vorigen
+Einstellung noch darunter. Entscheidend ist dabei, dass **nicht nur der
+Niederschlag** weg muss:
+
+```
+der Niederschlag        beide Puffer schwarz
+das Dichteraster        was das Bild über sich selbst weiß
+das Strömungsfeld       was noch in der Luft liegt
+die Wirbel              Energie, Ratsche, Drift, Radius
+das Medium              neu gesät
+```
+
+Bliebe eines davon stehen, lenkte ein unsichtbarer Rest den nächsten Zug — und
+man hielte das für die Einstellung, an der man gerade gedreht hat. Gemessen:
+
+```
+Zustand        Bild  Dichteraster  Strömungsfeld  Wirbel  Korn  Tempo
+am Anfang         0             0              0       0     0      0
+nach 3 Zügen  17,64        1458,1         114565    1,09  1969   72,2
+nach Leeren       0             0              0       0     0      0
+danach malen   5,51         357,2         105405    0,97    76    175
+```
+
+Alles auf null, und danach malt es wieder wie zuvor.
+
+**Neu laden** schließt eine Lücke, die ich selbst aufgerissen habe: Im Vollbild
+auf dem Home-Bildschirm gibt es keine Adresszeile, also keinen Neu-laden-Knopf —
+und der Offline-Vorrat liefert brav die alte Datei weiter. Der Knopf räumt den
+Vorrat weg, meldet den Service Worker ab und lädt dann.
+
+**Zurück zur Vorlage** im Pult, weil achtzehn Regler auch verdreht werden
+können. Es geht zur *zuletzt gewählten* Vorlage zurück, nicht zu einem
+Urzustand, und leert dabei die Fläche.
+
+Die ersten beiden stehen in der Leiste auf **jeder** Seite, nicht nur im Pult —
+ein leeres Blatt braucht man überall.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

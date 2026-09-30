@@ -20,8 +20,10 @@ nicht wissen; alles andere findet die Hand.
 Unten rechts ein Punkt. Ein Tipp öffnet drei Wege:
 
 * **Sichern** — legt das Bild in die Galerie, mit dem Namen der Fassung
+* **Fläche leeren** — ein leeres Blatt; das Gesicherte bleibt
 * **Galerie** — was du gesichert hast, nur auf diesem Gerät
 * **Regal** — alles, was gebaut wurde
+* **Neu laden** — holt die neueste Fassung, auch im Vollbild ohne Adresszeile
 
 ## Das Mischpult
 

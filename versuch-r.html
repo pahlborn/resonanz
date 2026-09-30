@@ -204,15 +204,18 @@
      Bild selbst auf, ohne dass das Werk verschwindet. */
   var fsBlass =
     'precision mediump float; varying vec2 vUV; uniform sampler2D uTex;' +
-    'uniform float uSchwach, uStark, uAbzug;' +
+    'uniform float uSchwach, uStark, uAbzug, uMindest;' +
     'void main(){' +
     '  vec4 c = texture2D(uTex, vUV);' +
     '  float L = max(max(c.r, c.g), c.b);' +
     '  float g = smoothstep(0.04, 0.30, L);' +      /* 0 = schwach, 1 = stark */
     '  float f = mix(uSchwach, uStark, g);' +
-    /* Multiplizieren allein kommt bei 8 Bit nie an: 1/255 mal 0,97 rundet
-       wieder auf 1/255. Ein kleiner Abzug, nur beim Schwachen, räumt auf. */
-    '  vec3 o = c.rgb * f - (1.0 - g) * uAbzug;' +
+    /* Multiplizieren allein kommt bei 8 Bit nie an: Ein Pixel bei 0,4 mal
+       0,9962 rundet auf sich selbst zurück. Beim Schwachen räumt ein kleiner
+       Abzug auf — und wo auch das Starke vergehen SOLL, muss er überall
+       greifen, sonst friert das Bild auf halbem Weg ein und rührt sich nie
+       wieder. Steht das Starke auf „für immer", ist uMindest null. */
+    '  vec3 o = c.rgb * f - ((1.0 - g) * uAbzug + uMindest);' +
     '  gl_FragColor = vec4(max(o, vec3(0.0)), 1.0);' +
     '}';
 
@@ -246,7 +249,8 @@
   var lXY2 = gl.getAttribLocation(pBlass, 'aXY'), uTex2 = gl.getUniformLocation(pBlass, 'uTex'),
       uSchwach = gl.getUniformLocation(pBlass, 'uSchwach'),
       uStark = gl.getUniformLocation(pBlass, 'uStark'),
-      uAbzug = gl.getUniformLocation(pBlass, 'uAbzug');
+      uAbzug = gl.getUniformLocation(pBlass, 'uAbzug'),
+      uMindest = gl.getUniformLocation(pBlass, 'uMindest');
 
   var vboFaden = gl.createBuffer();
   var vboQuad = gl.createBuffer();
@@ -301,6 +305,17 @@
     if (blassAkku < 0.25) return;            /* höchstens viermal je Sekunde */
     var d = blassAkku; blassAkku = 0;
     puls('verblassen');
+    /* Vergeht auch, was das Bild über sich selbst weiß? Ohne diese Zeile
+       erinnert sich das Feld immer — und „alles vergeht" wäre in Wahrheit
+       „das Sichtbare vergeht, das Feld erinnert sich". Die beiden Versuche
+       wären derselbe. */
+    if (!1) {
+      var vg = Math.pow(0.5, d / (25));
+      for (var gq = 0; gq < GX * GY; gq++) {
+        dich[gq] *= vg; if (dich[gq] < 0.004) dich[gq] = 0;
+        dichG[gq] *= vg; if (dichG[gq] < 0.004) dichG[gq] = 0;
+      }
+    }
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo2);
     gl.viewport(0, 0, BW, BH);
     gl.disable(gl.BLEND);
@@ -308,6 +323,7 @@
     gl.uniform1f(uSchwach, Math.pow(0.5, d / (25)));
     gl.uniform1f(uStark, Math.pow(0.5, d / (1e9)));
     gl.uniform1f(uAbzug, Math.min(0.02, d * 1.5 / 255));
+    gl.uniform1f(uMindest, (1e9) < 1e6 ? Math.min(0.02, d * 1.5 / 255) : 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
     gl.enableVertexAttribArray(lXY2); gl.vertexAttribPointer(lXY2, 2, gl.FLOAT, false, 0, 0);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -1050,7 +1066,11 @@
         var gu = (px[i] / W * GX) | 0, gv = (py[i] / H * GY) | 0;
         if (gu >= 0 && gv >= 0 && gu < GX && gv < GY) {
           var gk = gv * GX + gu;
-          var bremse = Math.min(0.92, dich[gk] * 1.1);
+          /* Das Aufnahme-Tor gehört zur sichtbaren Schicht: Es verhindert, dass
+             das Bild zuläuft. Wo das Sichtbare vergeht, gibt es nichts zu
+             schützen — dann verweigerte eine leer aussehende Stelle nur die
+             Farbe, und das läse sich als Fehler statt als Geschichte. */
+          var bremse = 1 ? Math.min(0.92, dich[gk] * 1.1) : 0;
           if (bremse > 0.12) puls('sog');
           auf *= 1 - bremse;
           if ((i & 7) === 0) {

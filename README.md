@@ -50,6 +50,23 @@ Sog · Zwei Stimmen · Schleife · Tempo · Strömung · Verblassen in drei Stä
 **Die Fassungen** — A bis R, in denen mehrere Wirkungen zusammenkommen. Jede
 bleibt für immer erreichbar. R ist die, die beim Start kommt.
 
+## Der Versuch über das Bleibende
+
+Drei Fassungen auf der Grundlage von R, die sich nur in einer Frage
+unterscheiden: **Was bleibt von einem Zug?** Beim Malen sind alle drei gleich
+hell — verglichen wird nur das Vergehen.
+
+* [**S — Alles bleibt**](https://pahlborn.github.io/resonanz/versuch-s.html) ·
+  das Werk ist das Bild
+* [**T — Alles vergeht**](https://pahlborn.github.io/resonanz/versuch-t.html) ·
+  das Werk ist der Vorgang; die Fläche kehrt zur Ruhe zurück
+* [**U — Das Sichtbare vergeht, das Feld erinnert sich**](https://pahlborn.github.io/resonanz/versuch-u.html) ·
+  komm später an dieselbe Stelle zurück
+
+Die Frage dazu lautet nicht „was soll bleiben", sondern: **Bei welcher Fassung
+bedauere ich am wenigsten, was verschwindet — und empfinde das Bleibende nicht
+als Müll?**
+
 ## Der Werdegang
 
 [WERDEGANG.md](WERDEGANG.md) — wie es dazu kam, Abschnitt für Abschnitt, samt

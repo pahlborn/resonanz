@@ -1445,6 +1445,75 @@ Ein Nebenbefund: Zwei Dinge hießen „Verblassen" — der Schalter und der Regl
 Im Unterschiedssatz stand dann „Verblassen an, Verblassen". Der Regler heißt
 jetzt **Verblasszeit**, und Zahlenänderungen tragen ihre Richtung mit.
 
+### 41. Der Versuch über das Bleibende — S, T, U
+
+Der Auftrag kam als Versuchsanordnung, nicht als Wunsch: drei Fassungen auf der
+Grundlage von R, keine neuen Wirkungen, keine neue Grafik, und eine einzige
+Frage an die Hand — *bei welcher Fassung bedauere ich am wenigsten, was
+verschwindet, und empfinde das Bleibende nicht als Müll?*
+
+```
+S   Alles bleibt                     das Werk ist das Bild
+T   Alles vergeht                    das Werk ist der Vorgang
+U   Das Sichtbare vergeht,           komm später an dieselbe Stelle
+    das Feld erinnert sich
+```
+
+**Drei Dinge waren dafür zu klären, und keines war offensichtlich.**
+
+**Erstens: Ohne Eingriff wären T und U dasselbe.** Das Gedächtnis des Bildes
+(das Dichteraster) hängt nicht an der sichtbaren Schicht — es blieb bisher
+immer. „Alles vergeht" wäre also in Wahrheit „das Sichtbare vergeht, das Feld
+erinnert sich" gewesen, und der entscheidende Versuch hätte keinen
+Vergleichsfall gehabt. T lässt das Raster jetzt im selben Takt vergehen wie das
+Bild. Damit unterscheiden sich T und U in **genau einer** Sache.
+
+**Zweitens: Das Gedächtnis tut dreierlei**, und das Dritte musste weg. Es lenkt
+Fäden an alten Strähnen entlang, es bremst sie dort — und es nimmt dort weniger
+Farbe an. Das Letzte existiert, damit das Bild nicht zuläuft: ein Zweck, der zur
+sichtbaren Schicht gehört. In U bliebe sonst eine **leer aussehende Stelle**
+übrig, die keine Farbe mehr annimmt. Das läse sich als Fehler, nicht als
+Geschichte. Abgekoppelt in T *und* U, damit die eine Unterscheidung sauber
+bleibt.
+
+**Drittens, und das fand nur die Messung:** T und U kehrten gar nicht zur Ruhe
+zurück. Das Bild blieb bei 10,3 stehen und rührte sich dann nie wieder —
+derselbe 8-Bit-Boden wie in Abschnitt 33, nur diesmal am **starken** Ende. Ein
+Pixel bei 0,4 mal 0,9962 rundet auf sich selbst zurück; mein Abzug griff aber
+nur beim Schwachen. Wo auch das Starke vergehen *soll*, muss er überall greifen.
+Steht das Starke auf „für immer" (wie in R), bleibt er null — R ist unverändert.
+
+```
+drei Kringel, dann warten      +2 s      +20 s      +60 s     +150 s
+S   Bild / Gedächtnis      23,5/740   23,6/748   23,6/748   23,6/748
+T   Bild / Gedächtnis       8,2/542    2,6/324    0,2/63        0/0
+U   Bild / Gedächtnis       8,2/914    2,5/925    0,1/925       0/925
+R   (unverändert)          23,1/687   23,3/699   18,9/699   18,8/699
+```
+
+**Ein vierter Befund hätte den Versuch verfälscht:** T und U waren beim Malen
+dreimal blasser als S (8,2 gegen 23,5), weil der Abzug auch während des Malens
+frisst. Man hätte sie abgelehnt, weil sie dunkel sind, nicht weil etwas
+vergeht. Der Auftrag in T und U steht deshalb auf 0,28 statt 0,14 — gemessen
+22,97 gegen 23,48. **Alle drei sind beim Malen gleich hell; verglichen wird nur
+das Vergehen.**
+
+**Und erinnert sich U wirklich?** Ein Wirbel links, fünfundsiebzig Sekunden
+warten, bis nichts mehr zu sehen ist, dann ein gerader Zug quer über die ganze
+Fläche. Gemessen wird, wie stark die Fäden von der Waagerechten abweichen:
+
+```
+                        Gedächtnis    an der erinnerten Stelle
+T  (Raster vergeht)             10                       0,064
+U  (Raster bleibt)           283,8                       0,443
+```
+
+**Faktor sieben** — an einer Stelle, an der man nichts sieht. Die Erfahrung, um
+die es in diesem Versuch geht, ist da und deutlich. Ob sie sich als *Geschichte*
+anfühlt oder als *Widerstand*, entscheidet allein die Hand: 0,443 heißt, dass
+fast die Hälfte der Bewegung quer zur eigenen Richtung geht. Das kann sich
+anfühlen, als weiche die Stelle aus.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

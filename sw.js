@@ -3,7 +3,7 @@
    fragt sw.js kaum je neu ab. Was zählt, muss also hier robust sein und darf
    sich nicht auf eine neue Fassung des Workers verlassen. Deshalb: beim Holen
    zuerst aus dem Vorrat antworten, gleichzeitig im Hintergrund erneuern. */
-const VORRAT = 'resonanz-v1-8';
+const VORRAT = 'resonanz-v1-9';
 const DATEIEN = [
   "./",
   "galerie.html",
@@ -46,7 +46,10 @@ const DATEIEN = [
   "versuch-o.html",
   "versuch-p.html",
   "versuch-q.html",
-  "versuch-r.html"
+  "versuch-r.html",
+  "versuch-s.html",
+  "versuch-t.html",
+  "versuch-u.html"
 ];
 
 self.addEventListener('install', e => {

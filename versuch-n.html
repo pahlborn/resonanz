@@ -605,7 +605,18 @@
   /* Ohne das rutscht auf dem iPad die Seite unter dem Finger weg, statt dass
      der Finger das Feld anregt — besonders innerhalb eines eingebetteten
      Rahmens. Der Zug muss hier verbraucht werden. */
-  document.addEventListener('touchmove', function(e){ e.preventDefault(); }, { passive:false });
+  document.addEventListener('touchmove', function (e) {
+    /* Nur die Fläche darf nicht wegrutschen. Eine Liste, die über dem Bild
+       liegt, muss sich weiter mit dem Finger schieben lassen — sonst endet
+       sie am unteren Bildrand, und man hält das für alles, was es gibt.
+       Am Mausrad fällt das nie auf; mit dem Finger sofort. */
+    var z = e.target;
+    while (z && z !== document.body) {
+      if (z.hasAttribute && z.hasAttribute('data-rollbar')) return;
+      z = z.parentNode;
+    }
+    e.preventDefault();
+  }, { passive:false });
 
   var hinweis = document.getElementById('hinweis'), versteckt = false;
   function verstecken(){ if(!versteckt){versteckt=true;hinweis.style.opacity='0';} }

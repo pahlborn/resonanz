@@ -1362,6 +1362,46 @@ Urzustand, und leert dabei die Fläche.
 Die ersten beiden stehen in der Leiste auf **jeder** Seite, nicht nur im Pult —
 ein leeres Blatt braucht man überall.
 
+### 39. Das Pult endete nach zwölf Zeilen — und ich sah es nie
+
+„Das Pult in Pult hat jetzt weniger Elemente, oder?"
+
+Gemessen hatte es **36 Zeilen in sechs Abschnitten** — mehr als je zuvor, von
+sieben Reglern auf achtzehn gewachsen. Die Beobachtung war trotzdem richtig,
+und die Ursache ein echter Fehler:
+
+```js
+document.addEventListener('touchmove', function (e) { e.preventDefault(); },
+                          { passive: false });
+```
+
+Diese Zeile steht seit Abschnitt 13 in der Vorlage und ist dort auch richtig:
+Ohne sie rutscht unter dem Finger die Seite weg, statt dass der Finger das Feld
+anregt. Nur unterdrückt sie **jede** Wischbewegung — auch die im Pult. Das Pult
+ist eine Liste von 3939 px Höhe in einem Fenster von 1100 px, und sie ließ sich
+mit dem Finger nicht schieben. Es endete am unteren Bildrand, und das sah aus
+wie „weniger Elemente".
+
+**Am Mausrad fällt das nie auf.** Mein ganzer Prüfstand rollt mit dem Rad; die
+Zeile trifft nur Berührungen. Wieder ein Befund, den der Roboter nicht finden
+konnte — diesmal nicht, weil er zu ungeschickt ist, sondern weil er das falsche
+Eingabegerät hat. Der Test dafür prüft jetzt ausdrücklich beides:
+
+```
+Wischen im Pult unterdrückt:          false   ← das Pult rollt
+Wischen auf der Fläche unterdrückt:   true    ← die Fläche rutscht nicht
+```
+
+Die Lösung ist eine Auszeichnung statt einer Ausnahme: Wer `data-rollbar`
+trägt, darf wischen; alles andere nicht. Damit bleibt die Regel dort gültig,
+wo sie gebraucht wird.
+
+Dazu zwei kleinere Wünsche aus derselben Nachricht: ein **Kreuz** zum
+Schließen (es klebt oben rechts und rollt nicht mit weg), und **„Zeig mir"
+lässt das Pult offen** — der Sinn der Vorführung ist ja, dabei den Punkt
+leuchten zu sehen. Dass ich es vorher zugeklappt habe, machte die halbe
+Erfindung wieder kaputt.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

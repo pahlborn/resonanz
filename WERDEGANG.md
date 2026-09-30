@@ -1402,6 +1402,49 @@ lässt das Pult offen** — der Sinn der Vorführung ist ja, dabei den Punkt
 leuchten zu sehen. Dass ich es vorher zugeklappt habe, machte die halbe
 Erfindung wieder kaputt.
 
+### 40. Der Zustand war da, der Unterschied nicht
+
+„Bei P, Q und R bleiben die Schalter stehen, wir haben aber dennoch eine andere
+Version. Man weiß nicht um Unterschiede."
+
+Diesmal war nichts kaputt — gemessen, nach Tipp auf die jeweilige Vorlage:
+
+```
+        Strömung   Verblassen   Umlauf   Funken   Stoß
+  P        aus         aus       aus       an      an
+  Q         an         aus       aus       an      an
+  R         an          an       aus       an      an
+```
+
+Die Schalter wechseln korrekt. P→Q ist **ein** Schalter, Q→R ist **einer**.
+Genau darin liegt das Problem: Ein einziger geänderter Schalter unter zwölf
+Zeilen auf 3939 px Höhe ist nicht zu finden. **Das Pult zeigte den Zustand,
+aber nie den Unterschied** — und eine Einstellung ohne Vergleich sagt nichts.
+
+Drei Dinge machen den Unterschied sichtbar:
+
+**Ein Satz unter der Vorlagenreihe**, der den Unterschied zur vorigen Vorlage
+benennt. Er wird **ausgerechnet, nicht aufgeschrieben**, kann also nicht
+veralten:
+
+```
+K:  Wie J, aber: Funken aus, Stoß an, Korn je Sekunde 26 → 24
+P:  Wie K, aber: Funken an, Umlauf aus
+Q:  Wie P, aber: Strömung an
+R:  Wie Q, aber: Verblassen an, Verblasszeit 8 → 25
+```
+
+**Ein kurzes Aufleuchten** der geänderten Zeilen beim Wechsel, und das Pult
+rollt zur ersten davon. Man sieht, wo etwas passiert ist, statt es zu suchen.
+
+**Ein Strich an jeder Zeile, die von der Vorlage abweicht** — dauerhaft. Damit
+ist jederzeit ablesbar, was man selbst verstellt hat. Geprüft: nach Wahl von R
+null Striche, nach dem Umlegen eines Schalters genau einer.
+
+Ein Nebenbefund: Zwei Dinge hießen „Verblassen" — der Schalter und der Regler.
+Im Unterschiedssatz stand dann „Verblassen an, Verblassen". Der Regler heißt
+jetzt **Verblasszeit**, und Zahlenänderungen tragen ihre Richtung mit.
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

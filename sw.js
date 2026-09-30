@@ -3,7 +3,7 @@
    fragt sw.js kaum je neu ab. Was zählt, muss also hier robust sein und darf
    sich nicht auf eine neue Fassung des Workers verlassen. Deshalb: beim Holen
    zuerst aus dem Vorrat antworten, gleichzeitig im Hintergrund erneuern. */
-const VORRAT = 'resonanz-v1-6';
+const VORRAT = 'resonanz-v1-8';
 const DATEIEN = [
   "./",
   "galerie.html",

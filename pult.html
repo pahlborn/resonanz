@@ -127,6 +127,9 @@
     background:#0C1218; color:#C6D2E4; text-align:center; text-decoration:none;
     font:400 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.12em;
     text-transform:uppercase; -webkit-tap-highlight-color:transparent;}
+  .zeile.anders{box-shadow:inset 3px 0 0 #3F7BE8; padding-left:12px; margin-left:-12px;}
+  .zeile.frisch{background:rgba(63,123,232,.14); transition:background 1.4s ease;}
+  #vUnterschied b{color:#9FC0F5; font-weight:400;}
   .puls{flex:0 0 auto; width:7px; height:7px; border-radius:4px; margin-top:7px;
         background:rgba(150,170,200,.16); transition:background .12s ease, box-shadow .12s ease;}
   .puls.an{background:#7FB2FF; box-shadow:0 0 9px 2px rgba(127,178,255,.55);}
@@ -179,6 +182,7 @@
 <div id="pult" data-rollbar>
 <button id="pultZu" type="button" aria-label="Pult schließen">&#10005;</button>
 <h3>Vorlage</h3><div class="wahl" id="wVorlage"></div>
+<p class="t2" id="vUnterschied" style="margin:9px 0 0"></p>
 <h3>Was es gibt</h3>
 <p class="t2" style="margin:-4px 0 6px">Der Punkt links leuchtet, wenn die Wirkung gerade wirklich feuert. „Zeig mir" führt die Bewegung vor, die sie ruft.</p>
 <div class="zeile"><span class="puls" data-puls="strang"></span><div class="txt"><div class="t1">Strang</div><div class="t2">Der gerade Zug legt ein Filament, Verweilen setzt einen Knoten.</div><button class="zeig" type="button" data-zeig="strang">Zeig mir</button></div><button class="knopf" type="button" data-schalter="strang" aria-pressed="false" aria-label="Strang"></button></div>
@@ -201,7 +205,7 @@
 <div class="zeile"><div class="txt"><div class="t1">Wirbelgröße <span class="wert" id="w_rfaktor"></span></div><div class="t2">Eng am Finger oder weit darum herum</div><input class="schieber" type="range" data-regler="rfaktor" data-einheit="" min="0.3" max="1.8" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Glut <span class="wert" id="w_hitzer"></span></div><div class="t2">Wie weit die Hitze um den Kern reicht</div><input class="schieber" type="range" data-regler="hitzer" data-einheit="" min="0.6" max="2.4" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Korn je Sekunde <span class="wert" id="w_kornrate"></span></div><div class="t2">Wie viele Lichtpunkte entstehen</div><input class="schieber" type="range" data-regler="kornrate" data-einheit="" min="0" max="90" step="2"></div></div>
-<div class="zeile"><div class="txt"><div class="t1">Verblassen <span class="wert" id="w_blassSchwach"></span></div><div class="t2">Halbwertszeit des Schwachen</div><input class="schieber" type="range" data-regler="blassSchwach" data-einheit="s" min="2" max="120" step="1"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Verblasszeit <span class="wert" id="w_blassSchwach"></span></div><div class="t2">Halbwertszeit des Schwachen</div><input class="schieber" type="range" data-regler="blassSchwach" data-einheit="s" min="2" max="120" step="1"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Auch Starkes <span class="wert" id="w_blassStark"></span></div><div class="t2">Ab 600 s bleiben die Figuren praktisch für immer</div><input class="schieber" type="range" data-regler="blassStark" data-einheit="s" min="60" max="600" step="10"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Folgsamkeit <span class="wert" id="w_anker"></span></div><div class="t2">Wie schnell der Wirbel dem Finger folgt</div><input class="schieber" type="range" data-regler="anker" data-einheit="" min="1.0" max="30" step="0.5"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Kleinster Wirbel <span class="wert" id="w_rklein"></span></div><div class="t2">Untere Grenze der Wirbelgröße</div><input class="schieber" type="range" data-regler="rklein" data-einheit="" min="0.02" max="0.12" step="0.005"></div></div>
@@ -1574,6 +1578,7 @@
   var ABGABE   = window.ABGABE;
   var M        = window.M;
   var inAdresse = window.__inAdresse;
+  var letzteVorlage = 'r';
 
   var pult = document.getElementById('pult'), tuer = document.getElementById('pultTuer');
   tuer.addEventListener('click', function () { pult.classList.toggle('auf'); });
@@ -1603,6 +1608,14 @@
     document.querySelectorAll('[data-farbe]').forEach(function (b) {
       b.setAttribute('aria-pressed', (+b.dataset.farbe === +M.farbe) ? 'true' : 'false');
     });
+    /* Was du gegenüber der Vorlage verstellt hast, bekommt einen Strich. */
+    var V = VORLAGEN[letzteVorlage] || {};
+    Object.keys(NAMEN).forEach(function (k) {
+      var z = document.querySelector('[data-schalter="' + k + '"], [data-regler="' + k + '"]');
+      if (!z) return;
+      var reihe = z.closest('.zeile'); if (!reihe) return;
+      reihe.classList.toggle('anders', (k in V) && String(V[k]) !== String(M[k]));
+    });
     inAdresse(M);
   }
 
@@ -1629,6 +1642,42 @@
     b.addEventListener('click', function () { M.farbe = +b.dataset.farbe; anzeigen(); });
   });
 
+  /* Was eine Vorlage von der vorigen unterscheidet — ausgerechnet, nicht
+     aufgeschrieben, damit es nicht veralten kann. Ein einzelner geänderter
+     Schalter unter zwölf Zeilen ist sonst nicht zu finden. */
+  var NAMEN = {"strang": "Strang", "wurf": "Wurf", "korn": "Korn", "funken": "Funken", "stoss": "Stoß", "sog": "Sog", "stimmen": "Zwei Stimmen", "schleife": "Schleife", "tempo": "Tempo", "stroemung": "Strömung", "umlauf": "Umlauf", "verblassen": "Verblassen", "auftrag": "Auftrag", "feldkraft": "Zug der Hand", "feldr": "Breite der Hand", "rfaktor": "Wirbelgröße", "hitzer": "Glut", "kornrate": "Korn je Sekunde", "blassSchwach": "Verblasszeit", "blassStark": "Auch Starkes", "anker": "Folgsamkeit", "rklein": "Kleinster Wirbel", "rgross": "Größter Wirbel", "feldtau": "Nachwirken", "kurve": "Auftragskurve", "sigma": "Takt", "stoer": "Störung", "zerfall": "Zerfall", "aufbau": "Aufbau", "schwelle": "Schwelle", "farbe": "Farbe"}, KETTE = ['j', 'k', 'p', 'q', 'r'];
+  function unterschied(a, b) {
+    var raus = [];
+    Object.keys(NAMEN).forEach(function (k) {
+      if (!(k in a) || !(k in b)) return;
+      if (String(a[k]) === String(b[k])) return;
+      if (SCHALTER.indexOf(k) >= 0) raus.push(NAMEN[k] + (b[k] ? ' an' : ' aus'));
+      else raus.push(NAMEN[k] + ' ' + a[k] + ' → ' + b[k]);   /* mit Richtung */
+    });
+    return raus;
+  }
+  function unterschiedZeigen(k) {
+    var e = document.getElementById('vUnterschied');
+    var i = KETTE.indexOf(k);
+    if (i <= 0) { e.innerHTML = 'Die früheste der angebotenen Vorlagen.'; return; }
+    var vor = KETTE[i - 1], d = unterschied(VORLAGEN[vor], VORLAGEN[k]);
+    e.innerHTML = d.length
+      ? 'Wie ' + vor.toUpperCase() + ', aber: <b>' + d.join('</b>, <b>') + '</b>'
+      : 'Wie ' + vor.toUpperCase() + '.';
+  }
+  function frischMarkieren(vorher) {
+    Object.keys(NAMEN).forEach(function (k) {
+      if (String(vorher[k]) === String(M[k])) return;
+      var z = document.querySelector('[data-schalter="' + k + '"], [data-regler="' + k + '"]');
+      if (!z) return;
+      var reihe = z.closest('.zeile'); if (!reihe) return;
+      reihe.classList.remove('frisch');
+      void reihe.offsetWidth;                 /* erzwingt den Neustart der Blende */
+      reihe.classList.add('frisch');
+      setTimeout(function () { reihe.classList.remove('frisch'); }, 1500);
+    });
+  }
+
   /* Vorlagen: immer bei einer Fassung anfangen, nie bei Null. */
   var wv = document.getElementById('wVorlage');
   ['r', 'q', 'p', 'k', 'j'].forEach(function (k) {
@@ -1636,11 +1685,17 @@
     var b = document.createElement('button');
     b.type = 'button'; b.textContent = k.toUpperCase();
     b.addEventListener('click', function () {
+      var vorher = Object.assign({}, M);
       letzteVorlage = k;
       Object.assign(M, VORLAGEN[k]);
       for (var i = 0; i < 5; i++) ABGABE[i] = 1;
       M.abgabe = ABGABE.slice();
       anzeigen();
+      unterschiedZeigen(k);
+      frischMarkieren(vorher);
+      document.querySelectorAll('.zeile.frisch')[0] &&
+        document.querySelectorAll('.zeile.frisch')[0].scrollIntoView(
+          { block: 'center', behavior: 'smooth' });
     });
     wv.appendChild(b);
   });
@@ -1681,7 +1736,6 @@
 
   /* Wer sich verdreht hat, kommt mit einem Tipp zurück — zur zuletzt
      gewählten Vorlage, nicht zu irgendeinem Urzustand. */
-  var letzteVorlage = 'r';
   document.getElementById('pZurueck').addEventListener('click', function () {
     Object.assign(M, VORLAGEN[letzteVorlage]);
     for (var i = 0; i < 5; i++) ABGABE[i] = 1;
@@ -1709,6 +1763,7 @@
   })();
 
   anzeigen();
+  unterschiedZeigen(letzteVorlage);
 })();
 </script>
 </body>

@@ -67,6 +67,10 @@ Die Frage dazu lautet nicht „was soll bleiben", sondern: **Bei welcher Fassung
 bedauere ich am wenigsten, was verschwindet — und empfinde das Bleibende nicht
 als Müll?**
 
+Die drei stehen auch im [Mischpult](https://pahlborn.github.io/resonanz/pult.html)
+als Vorlage, samt den beiden Schaltern, die sie trennen: **Gedächtnis** und
+**Aufnahme-Tor**.
+
 ## Der Werdegang
 
 [WERDEGANG.md](WERDEGANG.md) — wie es dazu kam, Abschnitt für Abschnitt, samt

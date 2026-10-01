@@ -322,7 +322,10 @@
     gl.uniform1f(uSchwach, Math.pow(0.5, d / (8)));
     gl.uniform1f(uStark, Math.pow(0.5, d / (1e9)));
     gl.uniform1f(uAbzug, Math.min(0.02, d * 1.5 / 255));
-    gl.uniform1f(uMindest, (1e9) < 1e6 ? Math.min(0.02, d * 1.5 / 255) : 0);
+    /* 590 statt einer Million: Im Pult ist der Anschlag „für immer" 600 s.
+       Mit der alten Schwelle hätte dort auch das Starke vergehen lassen,
+       was für immer bleiben soll. */
+    gl.uniform1f(uMindest, (1e9) < 590 ? Math.min(0.02, d * 1.5 / 255) : 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
     gl.enableVertexAttribArray(lXY2); gl.vertexAttribPointer(lXY2, 2, gl.FLOAT, false, 0, 0);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);

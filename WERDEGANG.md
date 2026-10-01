@@ -1514,6 +1514,40 @@ anfühlt oder als *Widerstand*, entscheidet allein die Hand: 0,443 heißt, dass
 fast die Hälfte der Bewegung quer zur eigenen Richtung geht. Das kann sich
 anfühlen, als weiche die Stelle aus.
 
+### 42. S, T und U kommen aufs Pult — und bringen zwei Griffe mit
+
+„Wäre es nicht gut, sie auch in Pult zu haben?" Ja — aber nicht als bloße
+Knöpfe. **Zwei der drei Griffe, die S, T und U überhaupt erst trennen, gab es
+im Pult nicht:** das Gedächtnis und das Aufnahme-Tor. Hätte ich nur die
+Vorlagen eingetragen, wären Pult-T und Pult-U wieder dieselbe Fassung gewesen —
+genau die Falle aus Abschnitt 41, einen Schritt später noch einmal.
+
+Das Pult hat deshalb zwei Schalter mehr (jetzt vierzehn), und „Auch Starkes"
+reicht bis 20 Sekunden herunter, weil T und U 45 brauchen. Geprüft, zwei
+Kringel und dann nur warten:
+
+```
+                 +2 s           +30 s           +90 s
+Pult-R    13,98 / 449     13,98 / 450      9,42 / 450   Figuren bleiben
+Pult-S    13,97 / 406     14,61 / 438     14,61 / 438   alles bleibt
+Pult-T    14,52 / 319      2,51 / 147      0,01 / 4,4   alles vergeht
+Pult-U    14,35 / 507      2,33 / 547      0,01 / 547   das Feld erinnert sich
+```
+
+**Ein Fehler, den erst diese Zahlen zeigten:** Im Pult heißt der Anschlag „für
+immer" 600 Sekunden, meine Schwelle für den Abzug prüfte aber auf *unter eine
+Million*. Damit hätte Pult-R vollständig vergehen lassen, was für immer bleiben
+soll. Die Schwelle steht jetzt bei 590.
+
+Nebenbei macht der Unterschiedssatz aus Abschnitt 40 den ganzen Versuch in vier
+Wörtern lesbar:
+
+```
+S:  Wie R, aber: Verblassen aus
+T:  Wie S, aber: Verblassen an, Gedächtnis aus, Aufnahme-Tor aus, …
+U:  Wie T, aber: Gedächtnis an
+```
+
 ---
 
 ## Teil II — Die aktuelle Ausprägung

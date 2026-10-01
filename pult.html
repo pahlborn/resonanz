@@ -115,7 +115,7 @@
   .knopf[aria-pressed="true"]::after{transform:translateX(22px); background:#9FC0F5;}
   .schieber{display:block; width:100%; margin:8px 0 2px; accent-color:#3F7BE8;}
   .wert{float:right; color:#9FB0CC; font:400 12px ui-monospace, SFMono-Regular, Menlo, monospace;}
-  .wahl{display:flex; gap:1px; background:rgba(150,170,200,.12); border-radius:7px;
+  .wahl{display:flex; flex-wrap:wrap; gap:1px; background:rgba(150,170,200,.12); border-radius:7px;
         overflow:hidden; margin-top:8px;}
   .wahl button{flex:1; appearance:none; border:0; cursor:pointer; padding:11px 6px;
     background:#0C1218; color:#8A98AE; font:400 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -163,7 +163,7 @@
    zwischen zwei Skriptbloecken ein Bild zeichnen, und dann liest die Schleife
    M, bevor das Pult es angelegt haette. Einmal gemessen, einmal gelernt. */
 (function () {
-  window.VORLAGEN = {"j": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 0, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 26.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "k": {"strang": 1, "wurf": 1, "korn": 1, "funken": 0, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "p": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "q": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}, "r": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 25.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "abgabe": [1, 1, 1, 1, 1]}};
+  window.VORLAGEN = {"j": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 0, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 26.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 1, "abgabe": [1, 1, 1, 1, 1]}, "k": {"strang": 1, "wurf": 1, "korn": 1, "funken": 0, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 1, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 1, "abgabe": [1, 1, 1, 1, 1]}, "p": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 0, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 1, "abgabe": [1, 1, 1, 1, 1]}, "q": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 8.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 1, "abgabe": [1, 1, 1, 1, 1]}, "r": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 25.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 1, "abgabe": [1, 1, 1, 1, 1]}, "s": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 0, "auftrag": 0.14, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 25.0, "blassStark": 600.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 1, "abgabe": [1, 1, 1, 1, 1]}, "t": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.28, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 12.0, "blassStark": 45.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 0, "aufnahmetor": 0, "abgabe": [1, 1, 1, 1, 1]}, "u": {"strang": 1, "wurf": 1, "korn": 1, "funken": 1, "stoss": 1, "sog": 1, "stimmen": 1, "schleife": 1, "tempo": 1, "stroemung": 1, "umlauf": 0, "verblassen": 1, "auftrag": 0.28, "kornrate": 24.0, "feldkraft": 1.1, "feldr": 180.0, "feldtau": 1.5, "blassSchwach": 12.0, "blassStark": 45.0, "rfaktor": 1.15, "rgross": 0.26, "rklein": 0.045, "hitzer": 1.35, "anker": 9.0, "farbe": 2, "kurve": 1.0, "sigma": 3.2, "stoer": 0.7, "zerfall": 0.14, "aufbau": 1.7, "schwelle": 0.2, "gedaechtnis": 1, "aufnahmetor": 0, "abgabe": [1, 1, 1, 1, 1]}};
   window.__ausAdresse = function () {
     var h = location.hash.replace(/^#/, '');
     if (!h) return null;
@@ -198,6 +198,8 @@
 <div class="zeile"><span class="puls" data-puls="stroemung"></span><div class="txt"><div class="t1">Strömung</div><div class="t2">Die Hand streicht ihre Bewegung in die Fläche.</div><button class="zeig" type="button" data-zeig="stroemung">Zeig mir</button></div><button class="knopf" type="button" data-schalter="stroemung" aria-pressed="false" aria-label="Strömung"></button></div>
 <div class="zeile"><span class="puls" data-puls="umlauf"></span><div class="txt"><div class="t1">Umlauf</div><div class="t2">Was hinausfliegt, kommt gegenüber wieder herein.</div><button class="zeig" type="button" data-zeig="umlauf">Zeig mir</button></div><button class="knopf" type="button" data-schalter="umlauf" aria-pressed="false" aria-label="Umlauf"></button></div>
 <div class="zeile"><span class="puls" data-puls="verblassen"></span><div class="txt"><div class="t1">Verblassen</div><div class="t2">Schwaches vergeht, Starkes bleibt.</div><button class="zeig" type="button" data-zeig="verblassen">Zeig mir</button></div><button class="knopf" type="button" data-schalter="verblassen" aria-pressed="false" aria-label="Verblassen"></button></div>
+<div class="zeile"><span class="puls" data-puls="gedaechtnis"></span><div class="txt"><div class="t1">Gedächtnis</div><div class="t2">Das Feld behält, was einmal da war — auch wenn nichts mehr zu sehen ist.</div><button class="zeig" type="button" data-zeig="gedaechtnis">Zeig mir</button></div><button class="knopf" type="button" data-schalter="gedaechtnis" aria-pressed="false" aria-label="Gedächtnis"></button></div>
+<div class="zeile"><span class="puls" data-puls="aufnahmetor"></span><div class="txt"><div class="t1">Aufnahme-Tor</div><div class="t2">Wo schon viel liegt, nimmt die Fläche weniger an. Schützt vor dem Zulaufen.</div><button class="zeig" type="button" data-zeig="aufnahmetor">Zeig mir</button></div><button class="knopf" type="button" data-schalter="aufnahmetor" aria-pressed="false" aria-label="Aufnahme-Tor"></button></div>
 <h3>Wieviel</h3>
 <div class="zeile"><div class="txt"><div class="t1">Auftrag <span class="wert" id="w_auftrag"></span></div><div class="t2">Wie kräftig überhaupt etwas liegen bleibt</div><input class="schieber" type="range" data-regler="auftrag" data-einheit="" min="0.0" max="0.6" step="0.01"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Zug der Hand <span class="wert" id="w_feldkraft"></span></div><div class="t2">Wieviel Medium die Hand mitnimmt</div><input class="schieber" type="range" data-regler="feldkraft" data-einheit="" min="0.0" max="1.6" step="0.05"></div></div>
@@ -206,7 +208,7 @@
 <div class="zeile"><div class="txt"><div class="t1">Glut <span class="wert" id="w_hitzer"></span></div><div class="t2">Wie weit die Hitze um den Kern reicht</div><input class="schieber" type="range" data-regler="hitzer" data-einheit="" min="0.6" max="2.4" step="0.05"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Korn je Sekunde <span class="wert" id="w_kornrate"></span></div><div class="t2">Wie viele Lichtpunkte entstehen</div><input class="schieber" type="range" data-regler="kornrate" data-einheit="" min="0" max="90" step="2"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Verblasszeit <span class="wert" id="w_blassSchwach"></span></div><div class="t2">Halbwertszeit des Schwachen</div><input class="schieber" type="range" data-regler="blassSchwach" data-einheit="s" min="2" max="120" step="1"></div></div>
-<div class="zeile"><div class="txt"><div class="t1">Auch Starkes <span class="wert" id="w_blassStark"></span></div><div class="t2">Ab 600 s bleiben die Figuren praktisch für immer</div><input class="schieber" type="range" data-regler="blassStark" data-einheit="s" min="60" max="600" step="10"></div></div>
+<div class="zeile"><div class="txt"><div class="t1">Auch Starkes <span class="wert" id="w_blassStark"></span></div><div class="t2">Ab 600 s bleiben die Figuren praktisch für immer</div><input class="schieber" type="range" data-regler="blassStark" data-einheit="s" min="20" max="600" step="10"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Folgsamkeit <span class="wert" id="w_anker"></span></div><div class="t2">Wie schnell der Wirbel dem Finger folgt</div><input class="schieber" type="range" data-regler="anker" data-einheit="" min="1.0" max="30" step="0.5"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Kleinster Wirbel <span class="wert" id="w_rklein"></span></div><div class="t2">Untere Grenze der Wirbelgröße</div><input class="schieber" type="range" data-regler="rklein" data-einheit="" min="0.02" max="0.12" step="0.005"></div></div>
 <div class="zeile"><div class="txt"><div class="t1">Größter Wirbel <span class="wert" id="w_rgross"></span></div><div class="t2">Obere Grenze der Wirbelgröße</div><input class="schieber" type="range" data-regler="rgross" data-einheit="" min="0.08" max="0.4" step="0.01"></div></div>
@@ -479,7 +481,7 @@
        erinnert sich das Feld immer — und „alles vergeht" wäre in Wahrheit
        „das Sichtbare vergeht, das Feld erinnert sich". Die beiden Versuche
        wären derselbe. */
-    if (!1) {
+    if (!M.gedaechtnis) {
       var vg = Math.pow(0.5, d / (M.blassSchwach));
       for (var gq = 0; gq < GX * GY; gq++) {
         dich[gq] *= vg; if (dich[gq] < 0.004) dich[gq] = 0;
@@ -493,7 +495,10 @@
     gl.uniform1f(uSchwach, Math.pow(0.5, d / (M.blassSchwach)));
     gl.uniform1f(uStark, Math.pow(0.5, d / (M.blassStark)));
     gl.uniform1f(uAbzug, Math.min(0.02, d * 1.5 / 255));
-    gl.uniform1f(uMindest, (M.blassStark) < 1e6 ? Math.min(0.02, d * 1.5 / 255) : 0);
+    /* 590 statt einer Million: Im Pult ist der Anschlag „für immer" 600 s.
+       Mit der alten Schwelle hätte dort auch das Starke vergehen lassen,
+       was für immer bleiben soll. */
+    gl.uniform1f(uMindest, (M.blassStark) < 590 ? Math.min(0.02, d * 1.5 / 255) : 0);
     gl.bindBuffer(gl.ARRAY_BUFFER, vboQuad);
     gl.enableVertexAttribArray(lXY2); gl.vertexAttribPointer(lXY2, 2, gl.FLOAT, false, 0, 0);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -1240,7 +1245,7 @@
              das Bild zuläuft. Wo das Sichtbare vergeht, gibt es nichts zu
              schützen — dann verweigerte eine leer aussehende Stelle nur die
              Farbe, und das läse sich als Fehler statt als Geschichte. */
-          var bremse = 1 ? Math.min(0.92, dich[gk] * 1.1) : 0;
+          var bremse = M.aufnahmetor ? Math.min(0.92, dich[gk] * 1.1) : 0;
           if (bremse > 0.12) puls('sog');
           auf *= 1 - bremse;
           if ((i & 7) === 0) {
@@ -1593,7 +1598,7 @@
 <script>
 (function () {
   var VORLAGEN = window.VORLAGEN;
-  var SCHALTER = ["strang", "wurf", "korn", "funken", "stoss", "sog", "stimmen", "schleife", "tempo", "stroemung", "umlauf", "verblassen"];
+  var SCHALTER = ["strang", "wurf", "korn", "funken", "stoss", "sog", "stimmen", "schleife", "tempo", "stroemung", "umlauf", "verblassen", "gedaechtnis", "aufnahmetor"];
   var REGLER   = ["auftrag", "feldkraft", "feldr", "rfaktor", "hitzer", "kornrate", "blassSchwach", "blassStark", "anker", "rklein", "rgross", "feldtau", "kurve"];
   var ABGABE   = window.ABGABE;
   var M        = window.M;
@@ -1665,7 +1670,7 @@
   /* Was eine Vorlage von der vorigen unterscheidet — ausgerechnet, nicht
      aufgeschrieben, damit es nicht veralten kann. Ein einzelner geänderter
      Schalter unter zwölf Zeilen ist sonst nicht zu finden. */
-  var NAMEN = {"strang": "Strang", "wurf": "Wurf", "korn": "Korn", "funken": "Funken", "stoss": "Stoß", "sog": "Sog", "stimmen": "Zwei Stimmen", "schleife": "Schleife", "tempo": "Tempo", "stroemung": "Strömung", "umlauf": "Umlauf", "verblassen": "Verblassen", "auftrag": "Auftrag", "feldkraft": "Zug der Hand", "feldr": "Breite der Hand", "rfaktor": "Wirbelgröße", "hitzer": "Glut", "kornrate": "Korn je Sekunde", "blassSchwach": "Verblasszeit", "blassStark": "Auch Starkes", "anker": "Folgsamkeit", "rklein": "Kleinster Wirbel", "rgross": "Größter Wirbel", "feldtau": "Nachwirken", "kurve": "Auftragskurve", "sigma": "Takt", "stoer": "Störung", "zerfall": "Zerfall", "aufbau": "Aufbau", "schwelle": "Schwelle", "farbe": "Farbe"}, KETTE = ['j', 'k', 'p', 'q', 'r'];
+  var NAMEN = {"strang": "Strang", "wurf": "Wurf", "korn": "Korn", "funken": "Funken", "stoss": "Stoß", "sog": "Sog", "stimmen": "Zwei Stimmen", "schleife": "Schleife", "tempo": "Tempo", "stroemung": "Strömung", "umlauf": "Umlauf", "verblassen": "Verblassen", "gedaechtnis": "Gedächtnis", "aufnahmetor": "Aufnahme-Tor", "auftrag": "Auftrag", "feldkraft": "Zug der Hand", "feldr": "Breite der Hand", "rfaktor": "Wirbelgröße", "hitzer": "Glut", "kornrate": "Korn je Sekunde", "blassSchwach": "Verblasszeit", "blassStark": "Auch Starkes", "anker": "Folgsamkeit", "rklein": "Kleinster Wirbel", "rgross": "Größter Wirbel", "feldtau": "Nachwirken", "kurve": "Auftragskurve", "sigma": "Takt", "stoer": "Störung", "zerfall": "Zerfall", "aufbau": "Aufbau", "schwelle": "Schwelle", "farbe": "Farbe"}, KETTE = ['j', 'k', 'p', 'q', 'r', 's', 't', 'u'];
   function unterschied(a, b) {
     var raus = [];
     Object.keys(NAMEN).forEach(function (k) {
@@ -1700,7 +1705,7 @@
 
   /* Vorlagen: immer bei einer Fassung anfangen, nie bei Null. */
   var wv = document.getElementById('wVorlage');
-  ['r', 'q', 'p', 'k', 'j'].forEach(function (k) {
+  ['u', 't', 's', 'r', 'q', 'p', 'k', 'j'].forEach(function (k) {
     if (!VORLAGEN[k]) return;
     var b = document.createElement('button');
     b.type = 'button'; b.textContent = k.toUpperCase();
